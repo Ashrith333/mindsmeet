@@ -335,15 +335,16 @@
         window.firebaseDB = db;
         window.firebaseStorage = storage;
 
-        // Listen for auth state changes
+        // Global auth state listener for iOS Safari compatibility
         firebase.auth().onAuthStateChanged(function(user) {
-            console.log('Auth state changed:', user ? user.email : 'No user');
-            if (user && user.email) {
-                console.log('User is signed in:', user.email);
-                console.log('Email verified:', user.emailVerified);
-                console.log('User ID:', user.uid);
+            console.log('=== GLOBAL AUTH STATE CHANGE ===');
+            if (user) {
+                console.log('✅ User signed in globally:', user.email);
+                console.log('✅ Email verified:', user.emailVerified);
+                console.log('✅ User ID:', user.uid);
+                console.log('✅ Auth provider:', user.providerData[0]?.providerId);
             } else {
-                console.log('User is signed out');
+                console.log('❌ User signed out globally');
             }
         });
 
@@ -357,48 +358,97 @@
 
         // Load profile data from Firestore on page load
         document.addEventListener('DOMContentLoaded', async function() {
+            // Detect iOS Safari
+            const isIOSSafari = /iPad|iPhone|iPod/.test(navigator.userAgent) && 
+                               /Safari/.test(navigator.userAgent) && 
+                               !/CriOS|FxiOS|OPiOS|mercury/.test(navigator.userAgent);
+            
+            console.log('=== PROFILE SETUP PAGE LOAD ===');
+            console.log('User Agent:', navigator.userAgent);
+            console.log('Is iOS Safari:', isIOSSafari);
+            console.log('Email from URL:', userEmail);
+            
             if (userEmail) {
-                // Wait longer for authentication state to be established after email verification
                 console.log('Waiting for authentication state to be established...');
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Wait longer for iOS Safari
+                const waitTime = isIOSSafari ? 5000 : 3000;
+                console.log(`Waiting ${waitTime}ms for auth state...`);
+                await new Promise(resolve => setTimeout(resolve, waitTime));
                 
                 try {
-                    // Check if user is properly authenticated with email/password
+                    // Use auth state listener to get the most current user state
+                    await new Promise((resolve, reject) => {
+                        const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+                            unsubscribe();
+                            console.log('Auth state changed - User:', user);
+                            
+                            if (user && user.email) {
+                                console.log('✅ User authenticated via listener:', user.email);
+                                console.log('✅ Email verified:', user.emailVerified);
+                                console.log('✅ User ID:', user.uid);
+                                
+                                // Verify the authenticated user matches the email in URL
+                                if (user.email.toLowerCase() !== userEmail.toLowerCase()) {
+                                    console.log('❌ Email mismatch! Expected:', userEmail, 'Got:', user.email);
+                                    reject(new Error('Email mismatch'));
+                                    return;
+                                }
+                                
+                                resolve(user);
+                            } else {
+                                console.log('❌ No user authenticated via listener');
+                                reject(new Error('No user authenticated'));
+                            }
+                        });
+                        
+                        // Timeout after 5 seconds
+                        setTimeout(() => {
+                            unsubscribe();
+                            reject(new Error('Auth state timeout'));
+                        }, 5000);
+                    });
+                    
+                    // Double-check with currentUser as backup
                     const currentUser = firebase.auth().currentUser;
-                    console.log('Current user on page load:', currentUser);
+                    console.log('Current user backup check:', currentUser);
                     
                     if (!currentUser || !currentUser.email || currentUser.isAnonymous) {
-                        console.log('User not properly authenticated, redirecting to login...');
-                        alert('Please log in to continue with profile setup.');
-                        window.location.href = 'login.html';
-                        return;
+                        console.log('❌ Current user check failed, but listener succeeded - continuing anyway');
                     }
                     
-                    // Verify the authenticated user matches the email in URL
-                    if (currentUser.email.toLowerCase() !== userEmail.toLowerCase()) {
-                        console.log('Email mismatch, redirecting to login...');
-                        alert('Authentication mismatch. Please log in again.');
-                        window.location.href = 'login.html';
-                        return;
-                    }
-                    
-                    console.log('✅ User is properly authenticated:', currentUser.email);
-                    console.log('✅ Email verified:', currentUser.emailVerified);
+                    console.log('✅ Authentication successful, loading profile data...');
                     
                     const userDocRef = db.collection('users').doc(userEmail);
                     const userSnap = await userDocRef.get();
                     if (userSnap.exists) {
                         Object.assign(profileData, userSnap.data());
-                        console.log('Profile data loaded successfully');
+                        console.log('✅ Profile data loaded successfully');
+                    } else {
+                        console.log('No existing profile data found - starting fresh');
                     }
+                    
                     loadStepData();
+                    
                 } catch (error) {
-                    console.error('Error loading profile data:', error);
-                    alert('Error loading profile. Please try logging in again.');
+                    console.error('❌ Authentication error:', error);
+                    console.error('Error message:', error.message);
+                    
+                    if (error.message === 'Email mismatch') {
+                        alert('Authentication mismatch. Please log in again.');
+                    } else if (error.message === 'No user authenticated') {
+                        alert('Please log in to continue with profile setup.');
+                    } else if (error.message === 'Auth state timeout') {
+                        alert('Authentication is taking longer than expected. Please try refreshing the page.');
+                    } else {
+                        alert('Error loading profile. Please try logging in again.');
+                    }
+                    
                     window.location.href = 'login.html';
                 }
             } else {
                 // No email in URL, redirect to login
+                console.log('❌ No email in URL parameters');
                 window.location.href = 'login.html';
             }
         });
@@ -448,18 +498,34 @@
             if (!userEmail) return;
             
             try {
-                // Check if user is properly authenticated
-                const currentUser = firebase.auth().currentUser;
-                if (!currentUser || !currentUser.email || currentUser.isAnonymous) {
-                    console.log('User not properly authenticated');
-                    alert('Please log in to save your profile data.');
-                    window.location.href = 'login.html';
-                    return;
-                }
+                // Use auth state listener for more reliable authentication check
+                const user = await new Promise((resolve, reject) => {
+                    const currentUser = firebase.auth().currentUser;
+                    if (currentUser && currentUser.email && !currentUser.isAnonymous) {
+                        resolve(currentUser);
+                    } else {
+                        // Try auth state listener as backup
+                        const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+                            unsubscribe();
+                            if (user && user.email && !user.isAnonymous) {
+                                resolve(user);
+                            } else {
+                                reject(new Error('Not authenticated'));
+                            }
+                        });
+                        
+                        // Timeout after 3 seconds
+                        setTimeout(() => {
+                            unsubscribe();
+                            reject(new Error('Auth timeout'));
+                        }, 3000);
+                    }
+                });
                 
                 // Verify the authenticated user matches the email
-                if (currentUser.email.toLowerCase() !== userEmail.toLowerCase()) {
+                if (user.email.toLowerCase() !== userEmail.toLowerCase()) {
                     console.log('Email mismatch');
+                    showUploadStatus(photoKey, 'error');
                     alert('Authentication mismatch. Please log in again.');
                     window.location.href = 'login.html';
                     return;
@@ -482,7 +548,10 @@
                 console.error('Error message:', error.message);
                 
                 let errorMessage = 'Error saving profile data. ';
-                if (error.code === 'permission-denied') {
+                if (error.message === 'Not authenticated' || error.message === 'Auth timeout') {
+                    errorMessage = 'Please log in to save your profile data.';
+                    window.location.href = 'login.html';
+                } else if (error.code === 'permission-denied') {
                     errorMessage += 'Access denied. Please check Firestore security rules.';
                 } else if (error.code === 'unauthenticated') {
                     errorMessage += 'Not authenticated. Please log in again.';
@@ -513,18 +582,32 @@
             showUploadStatus(photoKey, 'uploading', 0);
             
             try {
-                // Check if user is properly authenticated
-                const currentUser = firebase.auth().currentUser;
-                if (!currentUser || !currentUser.email || currentUser.isAnonymous) {
-                    console.log('User not properly authenticated');
-                    showUploadStatus(photoKey, 'error');
-                    alert('Please log in to upload photos.');
-                    window.location.href = 'login.html';
-                    return;
-                }
+                // Use auth state listener for more reliable authentication check
+                const user = await new Promise((resolve, reject) => {
+                    const currentUser = firebase.auth().currentUser;
+                    if (currentUser && currentUser.email && !currentUser.isAnonymous) {
+                        resolve(currentUser);
+                    } else {
+                        // Try auth state listener as backup
+                        const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+                            unsubscribe();
+                            if (user && user.email && !user.isAnonymous) {
+                                resolve(user);
+                            } else {
+                                reject(new Error('Not authenticated'));
+                            }
+                        });
+                        
+                        // Timeout after 3 seconds
+                        setTimeout(() => {
+                            unsubscribe();
+                            reject(new Error('Auth timeout'));
+                        }, 3000);
+                    }
+                });
                 
                 // Verify the authenticated user matches the email
-                if (currentUser.email.toLowerCase() !== userEmail.toLowerCase()) {
+                if (user.email.toLowerCase() !== userEmail.toLowerCase()) {
                     console.log('Email mismatch');
                     showUploadStatus(photoKey, 'error');
                     alert('Authentication mismatch. Please log in again.');
