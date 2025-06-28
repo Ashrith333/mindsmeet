@@ -21,18 +21,6 @@
         .card-shadow {
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
-        .step-active {
-            background: var(--primary-color);
-            color: white;
-        }
-        .step-completed {
-            background: #10b981;
-            color: white;
-        }
-        .step-pending {
-            background: #e5e7eb;
-            color: #6b7280;
-        }
         .bg-primary { background-color: var(--primary-color); }
         .text-primary { color: var(--text-primary); }
         .text-secondary { color: var(--text-secondary); }
@@ -54,36 +42,13 @@
 
         <!-- Progress Steps -->
         <div class="mb-8">
-            <div class="flex justify-between items-center">
+            <div class="flex items-center justify-center space-x-4">
+                <div class="flex-1 h-0.5 bg-gray-200"></div>
                 <div class="flex flex-col items-center">
-                    <div id="step1" class="step-active w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2">1</div>
-                    <span class="text-xs text-center">Personal Basics</span>
+                    <div class="text-sm font-medium text-primary" id="currentStepName">Personal Basics</div>
+                    <div class="w-1 h-1 bg-primary rounded-full mt-1"></div>
                 </div>
-                <div class="flex-1 h-1 bg-gray-200 mx-2"></div>
-                <div class="flex flex-col items-center">
-                    <div id="step2" class="step-pending w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2">2</div>
-                    <span class="text-xs text-center">Location & Status</span>
-                </div>
-                <div class="flex-1 h-1 bg-gray-200 mx-2"></div>
-                <div class="flex flex-col items-center">
-                    <div id="step3" class="step-pending w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2">3</div>
-                    <span class="text-xs text-center">Intentions & Height</span>
-                </div>
-                <div class="flex-1 h-1 bg-gray-200 mx-2"></div>
-                <div class="flex flex-col items-center">
-                    <div id="step4" class="step-pending w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2">4</div>
-                    <span class="text-xs text-center">Work & Education</span>
-                </div>
-                <div class="flex-1 h-1 bg-gray-200 mx-2"></div>
-                <div class="flex flex-col items-center">
-                    <div id="step5" class="step-pending w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2">5</div>
-                    <span class="text-xs text-center">Lifestyle</span>
-                </div>
-                <div class="flex-1 h-1 bg-gray-200 mx-2"></div>
-                <div class="flex flex-col items-center">
-                    <div id="step6" class="step-pending w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2">6</div>
-                    <span class="text-xs text-center">Photos</span>
-                </div>
+                <div class="flex-1 h-0.5 bg-gray-200"></div>
             </div>
         </div>
 
@@ -318,12 +283,16 @@
         </div>
 
         <!-- Navigation Buttons -->
-        <div class="flex justify-between">
-            <button id="prevBtn" onclick="previousStep()" class="px-6 py-3 text-secondary border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors hidden">
-                Previous
+        <div class="flex justify-between items-center">
+            <button id="prevBtn" onclick="previousStep()" class="p-3 text-secondary border border-gray-300 rounded-full hover:bg-gray-50 transition-colors hidden">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
             </button>
-            <button id="nextBtn" onclick="nextStep()" class="px-6 py-3 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity ml-auto">
-                Next
+            <button id="nextBtn" onclick="nextStep()" class="p-3 bg-primary text-white rounded-full hover:opacity-90 transition-opacity ml-auto">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
             </button>
         </div>
     </div>
@@ -701,17 +670,18 @@
         }
 
         function updateStepDisplay() {
-            // Update step indicators
-            for (let i = 1; i <= totalSteps; i++) {
-                const stepElement = document.getElementById(`step${i}`);
-                if (i < currentStep) {
-                    stepElement.className = 'step-completed w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2';
-                } else if (i === currentStep) {
-                    stepElement.className = 'step-active w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2';
-                } else {
-                    stepElement.className = 'step-pending w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2';
-                }
-            }
+            // Update current step name
+            const stepNames = [
+                'Personal Basics',
+                'Location & Status', 
+                'Intentions & Height',
+                'Work & Education',
+                'Lifestyle',
+                'Photos'
+            ];
+            
+            const currentStepNameElement = document.getElementById('currentStepName');
+            currentStepNameElement.textContent = stepNames[currentStep - 1];
 
             // Show/hide navigation buttons
             const prevBtn = document.getElementById('prevBtn');
@@ -719,10 +689,19 @@
             
             prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
             
+            // Update next button icon for last step
             if (currentStep === totalSteps) {
-                nextBtn.textContent = 'Complete Profile';
+                nextBtn.innerHTML = `
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                `;
             } else {
-                nextBtn.textContent = 'Next';
+                nextBtn.innerHTML = `
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                `;
             }
         }
 
