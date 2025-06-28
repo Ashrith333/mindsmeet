@@ -6,55 +6,340 @@
     <title>Minds Meet - Welcome</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    :root {
+            --primary-color: #3fa2ed;
+            --text-primary: #111518;
+            --text-secondary: #617889;
+            --bg-input: #f0f3f4;
+            --bg-button-disabled: #e0e0e0;
+            --background-start: #7dd3fc;
+            --background-end: #60a5fa;
         }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--background-start) 0%, var(--background-end) 100%);
+        }
+        
         .card-shadow {
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
-    </style>
-</head>
+        
+        .bg-primary { background-color: var(--primary-color); }
+        .text-primary { color: var(--text-primary); }
+        .text-secondary { color: var(--text-secondary); }
+        .bg-input { background-color: var(--bg-input); }
+        .border-primary { border-color: var(--primary-color); }
+        .ring-primary { ring-color: var(--primary-color); }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: #2d8fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(63, 162, 237, 0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(63, 162, 237, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(63, 162, 237, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .profile-section {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .profile-section::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .profile-section::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+        
+        .profile-section::-webkit-scrollbar-thumb {
+            background: rgba(63, 162, 237, 0.3);
+            border-radius: 3px;
+        }
+        
+        .profile-section::-webkit-scrollbar-thumb:hover {
+            background: rgba(63, 162, 237, 0.5);
+        }
+        
+    body {
+            font-family: "Plus Jakarta Sans", sans-serif;
+    }
+  </style>
+  </head>
 <body class="gradient-bg min-h-screen flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl card-shadow p-8 w-full max-w-md text-center">
-        <!-- Success Icon -->
-        <div class="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
-            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-            </svg>
+    <!-- Main Container -->
+    <div class="w-full max-w-4xl">
+        <!-- Welcome Section -->
+        <div id="welcomeSection" class="bg-white rounded-2xl card-shadow p-8 text-center mb-6">
+            <h1 class="text-4xl font-bold text-primary mb-4">Welcome to Minds Meet!</h1>
+            <p class="text-secondary mb-8 text-lg">Your profile has been completed successfully. You're now ready to start your journey!</p>
+
+            <!-- Action Buttons -->
+            <div class="space-y-4">
+                <button class="w-full px-6 py-4 btn-primary text-white rounded-xl font-semibold text-lg">
+                    Start Matching
+                </button>
+                
+                <button onclick="showEditProfile()" class="w-full px-6 py-4 btn-secondary text-primary rounded-xl font-semibold text-lg">
+                    Edit Profile
+                </button>
+                
+                <button onclick="signOut()" class="w-full px-6 py-4 text-red-600 border border-red-300 rounded-xl hover:bg-red-50 transition-colors font-semibold">
+                    Sign Out
+                </button>
+            </div>
         </div>
 
-        <!-- Welcome Message -->
-        <h1 class="text-3xl font-bold text-gray-800 mb-4">Welcome to Minds Meet!</h1>
-        <p class="text-gray-600 mb-8">Your profile has been completed successfully. You're now ready to start your journey!</p>
+        <!-- Profile Edit Section -->
+        <div id="profileEditSection" class="bg-white rounded-2xl card-shadow p-8 hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-primary">Edit Profile</h2>
+                <button onclick="hideEditProfile()" class="text-secondary hover:text-primary">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
 
-        <!-- Action Buttons -->
-        <div class="space-y-4">
-            <button class="w-full px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all font-semibold">
-                Start Matching
-            </button>
-            
-            <button class="w-full px-6 py-3 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                Edit Profile
-            </button>
-            
-            <button onclick="signOut()" class="w-full px-6 py-3 text-red-600 border border-red-300 rounded-lg hover:bg-red-50 transition-colors">
-                Sign Out
-            </button>
-        </div>
+            <div class="profile-section">
+                <!-- Photos Section -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-primary mb-4">Profile Photos</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <label class="block text-sm font-medium text-primary">Photo 1</label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-primary transition-colors cursor-pointer" onclick="document.getElementById('editPhoto1').click()">
+                                <div id="editPhoto1Preview" class="mb-2">
+                                    <img id="editPhoto1Img" class="w-full h-32 object-cover rounded-lg hidden" alt="Profile photo">
+                                    <div id="editPhoto1Placeholder">
+                                        <svg class="mx-auto h-12 w-12 text-gray-400 mb-2" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <p class="text-sm text-secondary">Add Photo 1</p>
+                                    </div>
+                                </div>
+                                <input type="file" id="editPhoto1" accept="image/*" class="hidden" onchange="previewEditPhoto(this, 'editPhoto1Preview', 'editPhoto1Placeholder', 'editPhoto1Img')">
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <label class="block text-sm font-medium text-primary">Photo 2</label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-primary transition-colors cursor-pointer" onclick="document.getElementById('editPhoto2').click()">
+                                <div id="editPhoto2Preview" class="mb-2">
+                                    <img id="editPhoto2Img" class="w-full h-32 object-cover rounded-lg hidden" alt="Profile photo">
+                                    <div id="editPhoto2Placeholder">
+                                        <svg class="mx-auto h-12 w-12 text-gray-400 mb-2" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <p class="text-sm text-secondary">Add Photo 2</p>
+                                    </div>
+                                </div>
+                                <input type="file" id="editPhoto2" accept="image/*" class="hidden" onchange="previewEditPhoto(this, 'editPhoto2Preview', 'editPhoto2Placeholder', 'editPhoto2Img')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        <!-- Footer -->
-        <div class="mt-8 pt-6 border-t border-gray-200">
-            <p class="text-xs text-gray-500">
-                Ready to find your perfect match? Start exploring now!
-            </p>
+                <!-- Personal Information -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-primary mb-4">Personal Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Full Name</label>
+                            <input type="text" id="editFullName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Age</label>
+                            <input type="number" id="editAge" min="18" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Gender</label>
+                            <select id="editGender" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Relationship Status</label>
+                            <select id="editRelationshipStatus" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="">Select Status</option>
+                                <option value="single">Single</option>
+                                <option value="divorced">Divorced</option>
+                                <option value="widowed">Widowed</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-primary mb-4">Location</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Current Location</label>
+                            <input type="text" id="editCurrentLocation" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Hometown</label>
+                            <input type="text" id="editHometown" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dating Preferences -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-primary mb-4">Dating Preferences</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Dating Intentions</label>
+                            <select id="editDatingIntentions" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="">Select Intentions</option>
+                                <option value="serious-relationship">Serious Relationship</option>
+                                <option value="casual-dating">Casual Dating</option>
+                                <option value="friendship">Friendship</option>
+                                <option value="marriage">Marriage</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Height (Feet)</label>
+                            <select id="editHeightFeet" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="">Feet</option>
+                                <option value="4">4'</option>
+                                <option value="5">5'</option>
+                                <option value="6">6'</option>
+                                <option value="7">7'</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Height (Inches)</label>
+                            <select id="editHeightInches" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="">Inches</option>
+                                <option value="0">0"</option>
+                                <option value="1">1"</option>
+                                <option value="2">2"</option>
+                                <option value="3">3"</option>
+                                <option value="4">4"</option>
+                                <option value="5">5"</option>
+                                <option value="6">6"</option>
+                                <option value="7">7"</option>
+                                <option value="8">8"</option>
+                                <option value="9">9"</option>
+                                <option value="10">10"</option>
+                                <option value="11">11"</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Occupation -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-primary mb-4">Occupation</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Occupation</label>
+                            <input type="text" id="editOccupation" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Job Title</label>
+                            <input type="text" id="editJobTitle" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">School/University</label>
+                            <input type="text" id="editSchool" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Highest Degree</label>
+                            <select id="editHighestDegree" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="">Select Degree</option>
+                                <option value="high-school">High School</option>
+                                <option value="associate">Associate's</option>
+                                <option value="bachelor">Bachelor's</option>
+                                <option value="master">Master's</option>
+                                <option value="doctorate">Doctorate</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lifestyle -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-primary mb-4">Lifestyle</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Religion</label>
+                            <select id="editReligion" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="">Select Religion</option>
+                                <option value="christianity">Christianity</option>
+                                <option value="islam">Islam</option>
+                                <option value="hinduism">Hinduism</option>
+                                <option value="buddhism">Buddhism</option>
+                                <option value="judaism">Judaism</option>
+                                <option value="atheist">Atheist</option>
+                                <option value="agnostic">Agnostic</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Smoking</label>
+                            <select id="editSmoking" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="">Select Preference</option>
+                                <option value="never">Never</option>
+                                <option value="occasionally">Occasionally</option>
+                                <option value="regularly">Regularly</option>
+                                <option value="trying-to-quit">Trying to Quit</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Drinking</label>
+                            <select id="editDrinking" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="">Select Preference</option>
+                                <option value="never">Never</option>
+                                <option value="occasionally">Occasionally</option>
+                                <option value="socially">Socially</option>
+                                <option value="regularly">Regularly</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Save Button -->
+                <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+                    <button onclick="hideEditProfile()" class="px-6 py-3 text-secondary border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                        Cancel
+                    </button>
+                    <button onclick="saveProfileChanges()" class="px-6 py-3 btn-primary text-white rounded-lg font-semibold">
+                        Save Changes
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getAuth, signOut as firebaseSignOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    
+    <script>
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBkEbvGk_kxL3d1IB2zgYFpbixUBJ8EV8c",
             authDomain: "mindsmeet-a8945.firebaseapp.com",
@@ -65,27 +350,355 @@
             measurementId: "G-H8QD41XT3P"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
-        // Make signOut function available globally
-        window.signOut = async function() {
+        let userProfileData = {};
+
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            auth.onAuthStateChanged(function(user) {
+                if (user && user.email) {
+                    console.log('User authenticated:', user.email);
+                    loadUserProfile();
+                } else {
+                    console.log('No user authenticated, redirecting to login');
+                    window.location.href = 'login.html';
+                }
+            });
+        });
+
+        // Load user profile data
+        async function loadUserProfile() {
             try {
-                await firebaseSignOut(auth);
-                window.location.href = 'login.html';
+                const currentUser = auth.currentUser;
+                if (!currentUser || !currentUser.email) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const userDocRef = db.collection('users').doc(currentUser.email);
+                const userSnap = await userDocRef.get();
+                
+                if (userSnap.exists) {
+                    userProfileData = userSnap.data();
+                    console.log('Profile data loaded:', userProfileData);
+                } else {
+                    console.log('No profile data found');
+                    window.location.href = 'profile-setup.html?email=' + encodeURIComponent(currentUser.email);
+                }
             } catch (error) {
+                console.error('Error loading profile:', error);
+                alert('Error loading profile data. Please try again.');
+            }
+        }
+
+        // Show edit profile section
+        function showEditProfile() {
+            document.getElementById('welcomeSection').classList.add('hidden');
+            document.getElementById('profileEditSection').classList.remove('hidden');
+            populateEditForm();
+        }
+
+        // Hide edit profile section
+        function hideEditProfile() {
+            document.getElementById('profileEditSection').classList.add('hidden');
+            document.getElementById('welcomeSection').classList.remove('hidden');
+        }
+
+        // Populate edit form with current data
+        function populateEditForm() {
+            // Personal Information
+            document.getElementById('editFullName').value = userProfileData.fullName || '';
+            document.getElementById('editAge').value = userProfileData.age || '';
+            document.getElementById('editGender').value = userProfileData.gender || '';
+            document.getElementById('editRelationshipStatus').value = userProfileData.relationshipStatus || '';
+            
+            // Location
+            document.getElementById('editCurrentLocation').value = userProfileData.currentLocation || '';
+            document.getElementById('editHometown').value = userProfileData.hometown || '';
+            
+            // Dating Preferences
+            document.getElementById('editDatingIntentions').value = userProfileData.datingIntentions || '';
+            document.getElementById('editHeightFeet').value = userProfileData.heightFeet || '';
+            document.getElementById('editHeightInches').value = userProfileData.heightInches || '';
+            
+            // Occupation
+            document.getElementById('editOccupation').value = userProfileData.occupation || '';
+            document.getElementById('editJobTitle').value = userProfileData.jobTitle || '';
+            document.getElementById('editSchool').value = userProfileData.school || '';
+            document.getElementById('editHighestDegree').value = userProfileData.highestDegree || '';
+            
+            // Lifestyle
+            document.getElementById('editReligion').value = userProfileData.religion || '';
+            document.getElementById('editSmoking').value = userProfileData.smoking || '';
+            document.getElementById('editDrinking').value = userProfileData.drinking || '';
+
+            // Display photos
+            displayEditPhoto('photo1', 'editPhoto1Preview', 'editPhoto1Placeholder', 'editPhoto1Img');
+            displayEditPhoto('photo2', 'editPhoto2Preview', 'editPhoto2Placeholder', 'editPhoto2Img');
+        }
+
+        // Display photo in edit form
+        function displayEditPhoto(photoKey, previewId, placeholderId, imgId) {
+            const preview = document.getElementById(previewId);
+            const placeholder = document.getElementById(placeholderId);
+            const img = document.getElementById(imgId);
+            
+            // Check if we have URL data (Firebase Storage - preferred)
+            if (userProfileData[photoKey + 'Url']) {
+                img.src = userProfileData[photoKey + 'Url'];
+                img.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                
+                // Add a note that this is stored in Firebase Storage
+                const note = document.createElement('p');
+                note.textContent = '✓ Firebase Storage';
+                note.className = 'text-xs text-green-600 text-center mt-1';
+                preview.appendChild(note);
+            }
+            // Check if we have base64 data (legacy fallback)
+            else if (userProfileData[photoKey + 'Base64']) {
+                img.src = `data:${userProfileData[photoKey + 'FileType']};base64,${userProfileData[photoKey + 'Base64']}`;
+                img.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                
+                // Add a note that this is legacy storage
+                const note = document.createElement('p');
+                note.textContent = '⚠ Legacy storage';
+                note.className = 'text-xs text-orange-600 text-center mt-1';
+                preview.appendChild(note);
+            } else {
+                img.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+            }
+        }
+
+        // Preview photo in edit form
+        function previewEditPhoto(input, previewId, placeholderId, imgId) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(imgId).src = e.target.result;
+                    document.getElementById(imgId).classList.remove('hidden');
+                    document.getElementById(placeholderId).classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Save profile changes
+        async function saveProfileChanges() {
+            try {
+                const currentUser = auth.currentUser;
+                if (!currentUser || !currentUser.email) {
+                    alert('Please log in to save changes.');
+                    return;
+                }
+
+                // Collect form data
+                const updatedData = {
+                    fullName: document.getElementById('editFullName').value,
+                    age: document.getElementById('editAge').value,
+                    gender: document.getElementById('editGender').value,
+                    relationshipStatus: document.getElementById('editRelationshipStatus').value,
+                    currentLocation: document.getElementById('editCurrentLocation').value,
+                    hometown: document.getElementById('editHometown').value,
+                    datingIntentions: document.getElementById('editDatingIntentions').value,
+                    heightFeet: document.getElementById('editHeightFeet').value,
+                    heightInches: document.getElementById('editHeightInches').value,
+                    occupation: document.getElementById('editOccupation').value,
+                    jobTitle: document.getElementById('editJobTitle').value,
+                    school: document.getElementById('editSchool').value,
+                    highestDegree: document.getElementById('editHighestDegree').value,
+                    religion: document.getElementById('editReligion').value,
+                    smoking: document.getElementById('editSmoking').value,
+                    drinking: document.getElementById('editDrinking').value,
+                    updatedAt: new Date()
+                };
+
+                // Handle photo uploads to Firebase Storage
+                const photo1File = document.getElementById('editPhoto1').files[0];
+                const photo2File = document.getElementById('editPhoto2').files[0];
+
+                if (photo1File) {
+                    const url = await uploadPhotoToStorage(photo1File, 'photo1', currentUser.email);
+                    if (url) {
+                        updatedData.photo1Url = url;
+                        updatedData.photo1FileName = photo1File.name;
+                        updatedData.photo1FileType = 'image/jpeg';
+                        updatedData.photo1UploadedAt = new Date();
+                    }
+                }
+
+                if (photo2File) {
+                    const url = await uploadPhotoToStorage(photo2File, 'photo2', currentUser.email);
+                    if (url) {
+                        updatedData.photo2Url = url;
+                        updatedData.photo2FileName = photo2File.name;
+                        updatedData.photo2FileType = 'image/jpeg';
+                        updatedData.photo2UploadedAt = new Date();
+                    }
+                }
+
+                // Save to Firestore
+                const userDocRef = db.collection('users').doc(currentUser.email);
+                await userDocRef.set(updatedData, { merge: true });
+
+                // Update local data
+                Object.assign(userProfileData, updatedData);
+
+                alert('Profile updated successfully!');
+                hideEditProfile();
+            } catch (error) {
+                console.error('Error saving profile:', error);
+                alert('Error saving profile changes. Please try again.');
+            }
+        }
+
+        // Helper: Upload photo to Firebase Storage
+        async function uploadPhotoToStorage(file, photoKey, userEmail) {
+            try {
+                console.log('Starting photo upload for:', photoKey);
+                console.log('File size:', file.size, 'bytes');
+                console.log('File type:', file.type);
+                
+                // Ensure Firebase Storage is properly initialized
+                if (!firebase.storage) {
+                    console.error('Firebase Storage not available');
+                    alert('Firebase Storage not available. Please refresh the page and try again.');
+                    return null;
+                }
+                
+                // Get storage instance
+                const storage = firebase.storage();
+                console.log('Firebase Storage initialized:', storage);
+                
+                // Optimize image before upload
+                const optimizedFile = await optimizeImageForUpload(file);
+                console.log('Image optimized, new size:', optimizedFile.size, 'bytes');
+                
+                // Upload to Firebase Storage
+                const storagePath = `users/${userEmail}/${photoKey}_${Date.now()}.jpg`;
+                console.log('Storage path:', storagePath);
+                
+                const fileRef = storage.ref(storagePath);
+                console.log('File reference created');
+                
+                console.log('Starting file upload...');
+                
+                // Create a promise-based upload with progress tracking
+                const uploadPromise = new Promise((resolve, reject) => {
+                    const uploadTask = fileRef.put(optimizedFile, {
+                        contentType: 'image/jpeg',
+                        cacheControl: 'public, max-age=31536000' // 1 year cache
+                    });
+                    
+                    uploadTask.on('state_changed', 
+                        (snapshot) => {
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            console.log('Upload progress: ' + progress + '%');
+                        },
+                        (error) => {
+                            console.error('Upload error:', error);
+                            reject(error);
+                        },
+                        () => {
+                            console.log('Upload completed successfully');
+                            resolve(uploadTask);
+                        }
+                    );
+                });
+                
+                await uploadPromise;
+                console.log('File upload completed');
+                
+                console.log('Getting download URL...');
+                const url = await fileRef.getDownloadURL();
+                console.log('Download URL obtained:', url);
+                
+                return url;
+                
+            } catch (error) {
+                console.error('Error uploading photo:', error);
+                console.error('Error code:', error.code);
+                console.error('Error message:', error.message);
+                
+                let errorMessage = 'Error uploading photo. ';
+                if (error.code === 'storage/unauthorized') {
+                    errorMessage += 'Storage access denied. Please check permissions.';
+                } else if (error.code === 'storage/quota-exceeded') {
+                    errorMessage += 'Storage quota exceeded.';
+                } else if (error.code === 'storage/invalid-format') {
+                    errorMessage += 'Invalid file format. Please use JPG, PNG, or GIF.';
+                } else if (error.code === 'storage/network-request-failed') {
+                    errorMessage += 'Network error. Please check your internet connection.';
+                } else {
+                    errorMessage += 'Please try again. Error: ' + error.message;
+                }
+                
+                alert(errorMessage);
+                return null;
+            }
+        }
+
+        // Helper: Optimize image for upload (resize and compress)
+        function optimizeImageForUpload(file) {
+            return new Promise((resolve) => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                
+                img.onload = function() {
+                    // Calculate new dimensions (max 800x800 for profile photos)
+                    const maxSize = 800;
+                    let { width, height } = img;
+                    
+                    if (width > height) {
+                        if (width > maxSize) {
+                            height = (height * maxSize) / width;
+                            width = maxSize;
+                        }
+                    } else {
+                        if (height > maxSize) {
+                            width = (width * maxSize) / height;
+                            height = maxSize;
+                        }
+                    }
+                    
+                    // Set canvas dimensions
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    // Draw and compress image
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Convert to blob with quality 0.8 (good balance of quality and size)
+                    canvas.toBlob((blob) => {
+                        const optimizedFile = new File([blob], file.name.replace(/\.[^/.]+$/, '.jpg'), {
+                            type: 'image/jpeg',
+                            lastModified: Date.now()
+                        });
+                        resolve(optimizedFile);
+                    }, 'image/jpeg', 0.8);
+                };
+                
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        // Sign out function
+        function signOut() {
+            auth.signOut().then(() => {
+                window.location.href = 'login.html';
+            }).catch((error) => {
                 console.error('Error signing out:', error);
                 alert('Error signing out. Please try again.');
-            }
-        };
-
-        // Check if user is authenticated
-        auth.onAuthStateChanged(function(user) {
-            if (!user) {
-                // User is not signed in, redirect to login
-                window.location.href = 'login.html';
-            }
-        });
+            });
+        }
     </script>
 </body>
 </html>

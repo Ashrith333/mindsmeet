@@ -193,6 +193,7 @@ function initializePage() {
   console.log('Raw email parameter:', getQueryParam('email'));
   console.log('Scenario parameter:', scenario);
   console.log('Final userEmail:', userEmail);
+  console.log('Current page URL:', window.location.href);
   
   // Validate that email is present
   if (!userEmail || userEmail.trim() === '') {
@@ -244,16 +245,21 @@ function initializePage() {
       
     case 'otp':
       console.log('✅ Showing EMAIL VERIFICATION section for:', userEmail);
+      console.log('📧 Email verification section should be visible now');
       otpSection.classList.remove('hidden');
       otpSection.classList.add('flex');
       const emailElement = document.getElementById('verification-email');
       if (emailElement) {
         emailElement.textContent = userEmail;
+        console.log('✅ Email element updated with:', userEmail);
+      } else {
+        console.error('❌ Email element not found!');
       }
       break;
       
     default:
       console.log('⚠️ Unknown scenario, defaulting to password for:', userEmail);
+      console.log('⚠️ Scenario was:', scenario);
       passwordSection.classList.remove('hidden');
       passwordSection.classList.add('flex');
   }
@@ -441,9 +447,11 @@ async function handleSignup() {
     await currentUser.sendEmailVerification();
     
     console.log('✅ Verification email sent to:', currentUser.email);
+    console.log('🔄 Redirecting to email verification page...');
+    console.log('🔄 URL will be:', `verify.html?email=${encodeURIComponent(userEmail)}&scenario=otp`);
     
-    // Redirect to profile setup page for new users
-    window.location.href = `profile-setup.html?email=${encodeURIComponent(userEmail)}`;
+    // Redirect to email verification page for new users
+    window.location.href = `verify.html?email=${encodeURIComponent(userEmail)}&scenario=otp`;
     
   } catch (error) {
     console.error('❌ Signup error for email:', userEmail, error);
