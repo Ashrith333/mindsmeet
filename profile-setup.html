@@ -6,14 +6,23 @@
     <title>Profile Setup - Minds Meet</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        :root {
+            --primary-color: #3fa2ed;
+            --text-primary: #111518;
+            --text-secondary: #617889;
+            --bg-input: #f0f3f4;
+            --bg-button-disabled: #e0e0e0;
+            --background-start: #7dd3fc;
+            --background-end: #60a5fa;
+        }
         .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--background-start) 0%, var(--background-end) 100%);
         }
         .card-shadow {
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
         .step-active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--primary-color);
             color: white;
         }
         .step-completed {
@@ -24,14 +33,23 @@
             background: #e5e7eb;
             color: #6b7280;
         }
+        .bg-primary { background-color: var(--primary-color); }
+        .text-primary { color: var(--text-primary); }
+        .text-secondary { color: var(--text-secondary); }
+        .bg-input { background-color: var(--bg-input); }
+        .border-primary { border-color: var(--primary-color); }
+        .ring-primary { ring-color: var(--primary-color); }
+        body {
+            font-family: "Plus Jakarta Sans", sans-serif;
+        }
     </style>
 </head>
 <body class="gradient-bg min-h-screen flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl card-shadow p-8 w-full max-w-2xl">
         <!-- Header -->
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">Complete Your Profile</h1>
-            <p class="text-gray-600">Let's get to know you better to find your perfect match</p>
+            <h1 class="text-3xl font-bold text-primary mb-2">Complete Your Profile</h1>
+            <p class="text-secondary">Let's get to know you better to find your perfect match</p>
         </div>
 
         <!-- Progress Steps -->
@@ -77,18 +95,18 @@
                 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
-                        <input type="text" id="fullName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter your full name">
+                        <label class="block text-sm font-medium text-primary mb-2">Full Name</label>
+                        <input type="text" id="fullName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary" placeholder="Enter your full name">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Age</label>
-                        <input type="number" id="age" min="18" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter your age">
+                        <label class="block text-sm font-medium text-primary mb-2">Age</label>
+                        <input type="number" id="age" min="18" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary" placeholder="Enter your age">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Gender</label>
-                        <select id="gender" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        <label class="block text-sm font-medium text-primary mb-2">Gender</label>
+                        <select id="gender" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
                             <option value="">Select your gender</option>
                             <option value="male">Male</option>
                             <option value="female">Female</option>
@@ -101,12 +119,12 @@
 
             <!-- Step 2: Location & Status -->
             <div id="step2Content" class="step-content hidden">
-                <h2 class="text-2xl font-semibold text-gray-800 mb-6">Where are you located?</h2>
+                <h2 class="text-2xl font-semibold text-primary mb-6">Where are you located?</h2>
                 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Relationship Status</label>
-                        <select id="relationshipStatus" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        <label class="block text-sm font-medium text-primary mb-2">Relationship Status</label>
+                        <select id="relationshipStatus" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
                             <option value="">Select your status</option>
                             <option value="single">Single</option>
                             <option value="divorced">Divorced</option>
@@ -116,25 +134,25 @@
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Current Location</label>
-                        <input type="text" id="currentLocation" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="City, State/Province">
+                        <label class="block text-sm font-medium text-primary mb-2">Current Location</label>
+                        <input type="text" id="currentLocation" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary" placeholder="City, State/Province">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Hometown</label>
-                        <input type="text" id="hometown" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Where you grew up">
+                        <label class="block text-sm font-medium text-primary mb-2">Hometown</label>
+                        <input type="text" id="hometown" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary" placeholder="Where you grew up">
                     </div>
                 </div>
             </div>
 
             <!-- Step 3: Intentions & Height -->
             <div id="step3Content" class="step-content hidden">
-                <h2 class="text-2xl font-semibold text-gray-800 mb-6">What are you looking for?</h2>
+                <h2 class="text-2xl font-semibold text-primary mb-6">What are you looking for?</h2>
                 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Dating Intentions</label>
-                        <select id="datingIntentions" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        <label class="block text-sm font-medium text-primary mb-2">Dating Intentions</label>
+                        <select id="datingIntentions" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
                             <option value="">What are you looking for?</option>
                             <option value="serious-relationship">Serious Relationship</option>
                             <option value="casual-dating">Casual Dating</option>
@@ -145,16 +163,16 @@
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Height</label>
+                        <label class="block text-sm font-medium text-primary mb-2">Height</label>
                         <div class="flex space-x-2">
-                            <select id="heightFeet" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            <select id="heightFeet" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
                                 <option value="">Feet</option>
                                 <option value="4">4'</option>
                                 <option value="5">5'</option>
                                 <option value="6">6'</option>
                                 <option value="7">7'</option>
                             </select>
-                            <select id="heightInches" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            <select id="heightInches" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
                                 <option value="">Inches</option>
                                 <option value="0">0"</option>
                                 <option value="1">1"</option>
@@ -176,27 +194,27 @@
 
             <!-- Step 4: Work & Education -->
             <div id="step4Content" class="step-content hidden">
-                <h2 class="text-2xl font-semibold text-gray-800 mb-6">Tell us about your career</h2>
+                <h2 class="text-2xl font-semibold text-primary mb-6">Tell us about your career</h2>
                 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Occupation</label>
-                        <input type="text" id="occupation" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="What do you do for work?">
+                        <label class="block text-sm font-medium text-primary mb-2">Occupation</label>
+                        <input type="text" id="occupation" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary" placeholder="What do you do for work?">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Job Title</label>
-                        <input type="text" id="jobTitle" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Your job title or designation">
+                        <label class="block text-sm font-medium text-primary mb-2">Job Title</label>
+                        <input type="text" id="jobTitle" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary" placeholder="Your job title or designation">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">School/University</label>
-                        <input type="text" id="school" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Where did you study?">
+                        <label class="block text-sm font-medium text-primary mb-2">School/University</label>
+                        <input type="text" id="school" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary" placeholder="Where did you study?">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Highest Degree</label>
-                        <select id="highestDegree" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        <label class="block text-sm font-medium text-primary mb-2">Highest Degree</label>
+                        <select id="highestDegree" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
                             <option value="">Select your highest degree</option>
                             <option value="high-school">High School</option>
                             <option value="associate">Associate's Degree</option>
@@ -211,12 +229,12 @@
 
             <!-- Step 5: Lifestyle -->
             <div id="step5Content" class="step-content hidden">
-                <h2 class="text-2xl font-semibold text-gray-800 mb-6">What's your lifestyle like?</h2>
+                <h2 class="text-2xl font-semibold text-primary mb-6">What's your lifestyle like?</h2>
                 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Religion</label>
-                        <select id="religion" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        <label class="block text-sm font-medium text-primary mb-2">Religion</label>
+                        <select id="religion" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
                             <option value="">Select your religion</option>
                             <option value="christianity">Christianity</option>
                             <option value="islam">Islam</option>
@@ -232,8 +250,8 @@
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Smoking</label>
-                        <select id="smoking" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        <label class="block text-sm font-medium text-primary mb-2">Smoking</label>
+                        <select id="smoking" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
                             <option value="">Select your smoking preference</option>
                             <option value="never">Never</option>
                             <option value="occasionally">Occasionally</option>
@@ -243,8 +261,8 @@
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Drinking</label>
-                        <select id="drinking" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        <label class="block text-sm font-medium text-primary mb-2">Drinking</label>
+                        <select id="drinking" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
                             <option value="">Select your drinking preference</option>
                             <option value="never">Never</option>
                             <option value="socially">Socially</option>
@@ -257,15 +275,15 @@
 
             <!-- Step 6: Photos -->
             <div id="step6Content" class="step-content hidden">
-                <h2 class="text-2xl font-semibold text-gray-800 mb-6">Add your photos</h2>
+                <h2 class="text-2xl font-semibold text-primary mb-6">Add your photos</h2>
                 
                 <div class="space-y-6">
                     <div class="text-center">
-                        <p class="text-gray-600 mb-4">Upload at least one photo to complete your profile</p>
+                        <p class="text-secondary mb-4">Upload at least one photo to complete your profile</p>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-purple-400 transition-colors cursor-pointer" onclick="document.getElementById('photo1').click()">
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors cursor-pointer" onclick="document.getElementById('photo1').click()">
                             <div id="photo1Preview" class="hidden">
                                 <img id="photo1Img" class="w-full h-32 object-cover rounded-lg mb-2" alt="Profile photo">
                             </div>
@@ -273,12 +291,12 @@
                                 <svg class="mx-auto h-12 w-12 text-gray-400 mb-2" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                                     <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
-                                <p class="text-sm text-gray-600">Add Photo 1</p>
+                                <p class="text-sm text-secondary">Add Photo 1</p>
                             </div>
                             <input type="file" id="photo1" accept="image/*" class="hidden" onchange="previewPhoto(this, 'photo1Preview', 'photo1Placeholder', 'photo1Img')">
                         </div>
                         
-                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-purple-400 transition-colors cursor-pointer" onclick="document.getElementById('photo2').click()">
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors cursor-pointer" onclick="document.getElementById('photo2').click()">
                             <div id="photo2Preview" class="hidden">
                                 <img id="photo2Img" class="w-full h-32 object-cover rounded-lg mb-2" alt="Profile photo">
                             </div>
@@ -286,7 +304,7 @@
                                 <svg class="mx-auto h-12 w-12 text-gray-400 mb-2" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                                     <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
-                                <p class="text-sm text-gray-600">Add Photo 2</p>
+                                <p class="text-sm text-secondary">Add Photo 2</p>
                             </div>
                             <input type="file" id="photo2" accept="image/*" class="hidden" onchange="previewPhoto(this, 'photo2Preview', 'photo2Placeholder', 'photo2Img')">
                         </div>
@@ -301,10 +319,10 @@
 
         <!-- Navigation Buttons -->
         <div class="flex justify-between">
-            <button id="prevBtn" onclick="previousStep()" class="px-6 py-3 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors hidden">
+            <button id="prevBtn" onclick="previousStep()" class="px-6 py-3 text-secondary border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors hidden">
                 Previous
             </button>
-            <button id="nextBtn" onclick="nextStep()" class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all ml-auto">
+            <button id="nextBtn" onclick="nextStep()" class="px-6 py-3 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity ml-auto">
                 Next
             </button>
         </div>
@@ -313,13 +331,14 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getFirestore, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyBkEbvGk_kxL3d1IB2zgYFpbixUBJ8EV8c",
             authDomain: "mindsmeet-a8945.firebaseapp.com",
             projectId: "mindsmeet-a8945",
-            storageBucket: "mindsmeet-a8945.firebasestorage.app",
+            storageBucket: "mindsmeet-a8945.appspot.com",
             messagingSenderId: "273248409523",
             appId: "1:273248409523:web:88fc2d8eefacc665c8ddc6",
             measurementId: "G-H8QD41XT3P"
@@ -327,11 +346,16 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
-        // Make Firebase available globally
         window.firebaseDB = db;
         window.setDoc = setDoc;
         window.doc = doc;
+        window.getDoc = getDoc;
+        window.firebaseStorage = storage;
+        window.storageRef = storageRef;
+        window.uploadBytes = uploadBytes;
+        window.getDownloadURL = getDownloadURL;
     </script>
 
     <script>
@@ -342,6 +366,36 @@
         // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const userEmail = urlParams.get('email');
+
+        // Load profile data from Firestore on page load
+        document.addEventListener('DOMContentLoaded', async function() {
+            if (userEmail) {
+                const userDocRef = window.doc(window.firebaseDB, 'users', userEmail);
+                const userSnap = await window.getDoc(userDocRef);
+                if (userSnap.exists()) {
+                    Object.assign(profileData, userSnap.data());
+                }
+                loadStepData();
+            }
+        });
+
+        // Helper: Save profile data to Firestore after each step
+        async function saveProfileDataToFirestore() {
+            if (!userEmail) return;
+            const userDocRef = window.doc(window.firebaseDB, 'users', userEmail);
+            await window.setDoc(userDocRef, profileData, { merge: true });
+        }
+
+        // Helper: Upload photo to Firebase Storage and save URL in profileData
+        async function uploadPhotoAndSaveUrl(file, photoKey) {
+            if (!file || !userEmail) return;
+            const storagePath = `users/${userEmail}/${photoKey}`;
+            const fileRef = window.storageRef(window.firebaseStorage, storagePath);
+            await window.uploadBytes(fileRef, file);
+            const url = await window.getDownloadURL(fileRef);
+            profileData[photoKey + 'Url'] = url;
+            await saveProfileDataToFirestore();
+        }
 
         function updateStepDisplay() {
             // Update step indicators
@@ -556,11 +610,9 @@
 
         async function nextStep() {
             if (!validateCurrentStep()) return;
-            
             saveCurrentStepData();
-            
+            await saveProfileDataToFirestore();
             if (currentStep === totalSteps) {
-                // Complete profile setup
                 await completeProfile();
             } else {
                 currentStep++;
@@ -573,6 +625,7 @@
         function previousStep() {
             if (currentStep > 1) {
                 saveCurrentStepData();
+                saveProfileDataToFirestore();
                 currentStep--;
                 updateStepDisplay();
                 loadStepContent();
@@ -606,6 +659,9 @@
                     document.getElementById(imgId).src = e.target.result;
                 };
                 reader.readAsDataURL(file);
+                // Upload photo to Firebase Storage and save URL
+                const photoKey = input.id;
+                uploadPhotoAndSaveUrl(file, photoKey);
             }
         }
 
