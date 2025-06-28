@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Minds Meet - Love with Depth</title>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;family=Pacifico&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+    :root {
+      --light-blue: #87cefa;
+      --white: #FFFFFF;
+      --dark-blue-text: #1E40AF;
+      --primary-color: #3fa2ed;
+    }
+    body {
+      font-family: "Plus Jakarta Sans", sans-serif;
+    }
+    .gradient-overlay {
+      background: linear-gradient(to bottom, rgba(135, 206, 250, 0) 0%, rgba(135, 206, 250, 0.6) 70%, var(--light-blue) 100%);
+    }
+    .animation-placeholder {
+      animation: gentlePulse 8s infinite alternate ease-in-out;
+    }
+    @keyframes gentlePulse {
+      0% { 
+        opacity: 0.8; 
+        transform: scale(1); 
+      }
+      25% { 
+        opacity: 0.9; 
+        transform: scale(1.05); 
+      }
+      50% { 
+        opacity: 1; 
+        transform: scale(1.1); 
+      }
+      75% { 
+        opacity: 0.95; 
+        transform: scale(1.03); 
+      }
+      100% { 
+        opacity: 0.8; 
+        transform: scale(1); 
+      }
+    }
+    .app-name {
+      font-family: 'Pacifico', cursive;
+    }
+    .btn-primary {
+      background: var(--primary-color);
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background: #2d8fd8;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(63, 162, 237, 0.3);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[var(--light-blue)]">
+<div class="relative flex flex-col min-h-screen overflow-hidden">
+<div class="absolute inset-0 w-full h-full animation-placeholder">
+<img alt="Diverse couples forming connections" class="object-cover w-full h-full opacity-70" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzG54B1AWrtT73XN7By5PHB9Erk816_i2UUIirH7XxJaF_dLmUL8OIxhkftGqDMx4kQdbAYY9qq2gGaEok7uEBD9LGGesOZSB6YBN3WEXlNDKVd1-sj9a5EHzUbgjD9UAUHQ3-CK4VfgGJEWqdzd_bw01ApvdqOHu2paXfVGiC6QG1tUVGdRQna7vzrhYagbAxxnKYzehdr0LPgF3RA9xSykJfG7L8Mi7Pr3vJwOD605zypRZ9Il7VgJqOKZ3_z0juFAx1WWhztiA"/>
+<div class="absolute inset-0 gradient-overlay"></div>
+</div>
+<div class="relative z-10 flex flex-col items-center justify-between flex-grow p-6 text-center">
+<div class="w-full pt-8 sm:pt-12">
+</div>
+<div class="flex-grow"></div>
+<div class="mb-auto">
+<h2 class="text-7xl font-bold text-[var(--white)] drop-shadow-lg app-name mb-4">Minds Meet</h2>
+<h1 class="text-lg font-bold text-[var(--white)] drop-shadow-md leading-tight">Verified Hearts, Real Stories</h1>
+</div>
+<div class="w-full max-w-xs mt-8">
+<button onclick="getStarted()" class="w-full py-4 text-lg font-bold tracking-wide text-white transition-all duration-300 ease-in-out rounded-full shadow-lg btn-primary focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:ring-opacity-50">
+          Continue
+        </button>
+</div>
+<div class="h-10"></div>
+</div>
+</div>
+
+<script>
+    function getStarted() {
+        // Redirect to login page
+        window.location.href = 'login.html';
+    }
+</script>
+
+</body></html> 

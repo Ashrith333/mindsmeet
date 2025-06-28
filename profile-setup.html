@@ -448,6 +448,12 @@
                     continue;
                 }
                 
+                // Skip base64 data (no longer used)
+                if (key.includes('Base64')) {
+                    console.log('Skipping base64 data:', key);
+                    continue;
+                }
+                
                 // Recursively clean objects
                 if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
                     cleaned[key] = cleanProfileDataForFirestore(value);
@@ -606,9 +612,6 @@
                 profileData[photoKey + 'FileSize'] = optimizedFile.size;
                 profileData[photoKey + 'UploadedAt'] = new Date();
                 
-                // Remove any existing base64 data
-                delete profileData[photoKey + 'Base64'];
-                
                 console.log('URL saved to profile data');
                 
                 await saveProfileDataToFirestore();
@@ -739,7 +742,7 @@
                     profileData.drinking = document.getElementById('drinking').value;
                     break;
                 case 6:
-                    // Don't save File objects directly - they're handled by uploadPhotoAndSaveUrl
+                    // Photos are handled by uploadPhotoAndSaveUrl function
                     // Just save metadata about the photos
                     const photo1File = document.getElementById('photo1').files[0];
                     const photo2File = document.getElementById('photo2').files[0];
@@ -1021,7 +1024,7 @@
             // Clear previous content
             container.innerHTML = '';
             
-            // Check if we have URL data (Firebase Storage - preferred)
+            // Check if we have URL data (Firebase Storage)
             if (profileData[photoKey + 'Url']) {
                 const img = document.createElement('img');
                 img.src = profileData[photoKey + 'Url'];
@@ -1029,25 +1032,24 @@
                 img.alt = 'Profile photo';
                 container.appendChild(img);
                 
-                // Add a note that this is stored in Firebase Storage
+                // Add a simple green checkmark
                 const note = document.createElement('p');
-                note.textContent = '✓ Photo stored in Firebase Storage';
+                note.textContent = '✓ Uploaded';
                 note.className = 'text-xs text-green-600 text-center';
                 container.appendChild(note);
-            }
-            // Check if we have base64 data (legacy fallback)
-            else if (profileData[photoKey + 'Base64']) {
-                const img = document.createElement('img');
-                img.src = `data:${profileData[photoKey + 'FileType']};base64,${profileData[photoKey + 'Base64']}`;
-                img.className = 'w-full h-32 object-cover rounded-lg mb-2';
-                img.alt = 'Profile photo';
-                container.appendChild(img);
-                
-                // Add a note that this is legacy storage
-                const note = document.createElement('p');
-                note.textContent = '⚠ Legacy storage (will be migrated to Firebase Storage)';
-                note.className = 'text-xs text-orange-600 text-center';
-                container.appendChild(note);
+            } else {
+                // Show placeholder if no photo
+                const placeholder = document.createElement('div');
+                placeholder.className = 'w-full h-32 bg-gray-200 rounded-lg mb-2 flex items-center justify-center';
+                placeholder.innerHTML = `
+                    <div class="text-center">
+                        <svg class="mx-auto h-8 w-8 text-gray-400 mb-2" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <p class="text-sm text-gray-500">No photo uploaded</p>
+                    </div>
+                `;
+                container.appendChild(placeholder);
             }
         }
     </script>

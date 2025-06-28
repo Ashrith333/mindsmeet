@@ -85,7 +85,7 @@
 </button>
 </div>
 </div>
-<a class="text-sm font-medium text-primary hover:underline text-right" href="#">Forgot password?</a>
+<a class="text-sm font-medium text-primary hover:underline text-right cursor-pointer" onclick="handleForgotPassword()">Forgot password?</a>
 <button class="flex min-w-[84px] w-full cursor-pointer items-center justify-center overflow-hidden rounded-full h-14 px-5 bg-primary text-white text-base font-semibold leading-normal tracking-[0.015em] hover:opacity-90 transition-opacity" onclick="handlePasswordLogin()">
 <span class="truncate">Continue</span>
 </button>
@@ -561,6 +561,49 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+
+// Handle forgot password
+async function handleForgotPassword() {
+  console.log('=== FORGOT PASSWORD REQUEST ===');
+  console.log('Email from URL parameter:', userEmail);
+  
+  // Validate email is present
+  if (!userEmail || userEmail.trim() === '') {
+    console.error('❌ No email available for password reset!');
+    alert('Error: Email missing. Please go back and enter your email.');
+    window.location.href = 'login.html';
+    return;
+  }
+  
+  try {
+    console.log('📧 Sending password reset email to:', userEmail);
+    
+    // Send password reset email using Firebase
+    await firebase.auth().sendPasswordResetEmail(userEmail);
+    
+    console.log('✅ Password reset email sent successfully to:', userEmail);
+    alert(`Password reset email sent to ${userEmail}. Please check your inbox and spam folder for instructions to reset your password.`);
+    
+    // Optionally redirect back to login page
+    window.location.href = 'login.html';
+    
+  } catch (error) {
+    console.error('❌ Password reset error for email:', userEmail, error);
+    
+    let errorMessage = 'Failed to send password reset email. ';
+    if (error.code === 'auth/user-not-found') {
+      errorMessage += 'No account found with this email address.';
+    } else if (error.code === 'auth/invalid-email') {
+      errorMessage += 'Invalid email address.';
+    } else if (error.code === 'auth/too-many-requests') {
+      errorMessage += 'Too many requests. Please try again later.';
+    } else {
+      errorMessage += 'Please try again.';
+    }
+    
+    alert(errorMessage);
+  }
+}
 </script>
 
 </body></html> 

@@ -130,6 +130,7 @@ async function handleFormSubmit(event) {
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     alert('Please enter a valid email address.');
     console.error("❌ Error: Invalid email format.");
+    resetButtonState(); // Reset button state on validation error
     return;
   }
   console.log("✅ Step 3: Email format is valid.");
@@ -146,8 +147,7 @@ async function handleFormSubmit(event) {
   if (!window.firebaseAuth) {
     console.error("❌ CRITICAL: Firebase is not properly loaded!");
     alert("Firebase is not properly loaded. Please refresh the page and try again.");
-    submitButton.disabled = false;
-    submitButton.innerHTML = 'Continue';
+    resetButtonState(); // Reset button state on Firebase error
     return;
   }
 
@@ -155,8 +155,7 @@ async function handleFormSubmit(event) {
   if (!navigator.onLine) {
     console.error("❌ CRITICAL: No internet connection!");
     alert("No internet connection. Please check your network and try again.");
-    submitButton.disabled = false;
-    submitButton.innerHTML = 'Continue';
+    resetButtonState(); // Reset button state on network error
     return;
   }
   console.log("✅ Step 5: Network connection is available.");
@@ -190,14 +189,12 @@ async function handleFormSubmit(event) {
       // Invalid email format
       console.error("❌ Error: Invalid email format.");
       alert('Please enter a valid email address.');
-      submitButton.disabled = false;
-      submitButton.innerHTML = 'Continue';
+      resetButtonState(); // Reset button state on validation error
     } else if (error.code === 'auth/network-request-failed') {
       // Network error
       console.error("❌ Error: Network request failed.");
       alert('Network error. Please check your internet connection and try again.');
-      submitButton.disabled = false;
-      submitButton.innerHTML = 'Continue';
+      resetButtonState(); // Reset button state on network error
     } else {
       // For any other error, assume email doesn't exist and go to signup
       console.log("✅ Step 7: Error occurred, assuming email does not exist. Redirecting to SIGN UP page.");
@@ -210,6 +207,21 @@ async function handleFormSubmit(event) {
 // Global error handler to catch any unexpected issues
 window.addEventListener('error', function(event) {
   console.error('🚨 UNEXPECTED GLOBAL ERROR:', event.message, event.error);
+  resetButtonState(); // Reset button state on any global error
+});
+
+// Handle page visibility changes (when user navigates back/forward)
+document.addEventListener('visibilitychange', function() {
+  if (!document.hidden) {
+    console.log('🔄 Page became visible - resetting button state');
+    resetButtonState();
+  }
+});
+
+// Handle beforeunload event (when user is about to leave the page)
+window.addEventListener('beforeunload', function() {
+  console.log('🔄 User is leaving page - resetting button state');
+  resetButtonState();
 });
 
 // Log to confirm the script file itself is loaded
@@ -217,6 +229,9 @@ console.log("🔑 Login page script loaded and ready.");
 
 // This is the modern, reliable way to run code after the HTML page is loaded.
 document.addEventListener('DOMContentLoaded', () => {
+  // Reset button state when page loads
+  resetButtonState();
+  
   // Find the form on the page
   const loginForm = document.getElementById('login-form');
   
@@ -228,6 +243,16 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error("❌ CRITICAL: Could not find the login form on the page to attach event listener.");
   }
 });
+
+// Function to reset button state
+function resetButtonState() {
+  const submitButton = document.querySelector('button[type="submit"]');
+  if (submitButton) {
+    submitButton.disabled = false;
+    submitButton.innerHTML = 'Continue';
+    console.log("✅ Button state reset to normal.");
+  }
+}
 
 // Manual test function - you can run this in console
 window.testEmail = async function(email) {

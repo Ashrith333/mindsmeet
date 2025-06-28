@@ -447,28 +447,16 @@
             const placeholder = document.getElementById(placeholderId);
             const img = document.getElementById(imgId);
             
-            // Check if we have URL data (Firebase Storage - preferred)
+            // Check if we have URL data (Firebase Storage)
             if (userProfileData[photoKey + 'Url']) {
                 img.src = userProfileData[photoKey + 'Url'];
                 img.classList.remove('hidden');
                 placeholder.classList.add('hidden');
                 
-                // Add a note that this is stored in Firebase Storage
+                // Add a simple green checkmark
                 const note = document.createElement('p');
-                note.textContent = '✓ Firebase Storage';
+                note.textContent = '✓ Uploaded';
                 note.className = 'text-xs text-green-600 text-center mt-1';
-                preview.appendChild(note);
-            }
-            // Check if we have base64 data (legacy fallback)
-            else if (userProfileData[photoKey + 'Base64']) {
-                img.src = `data:${userProfileData[photoKey + 'FileType']};base64,${userProfileData[photoKey + 'Base64']}`;
-                img.classList.remove('hidden');
-                placeholder.classList.add('hidden');
-                
-                // Add a note that this is legacy storage
-                const note = document.createElement('p');
-                note.textContent = '⚠ Legacy storage';
-                note.className = 'text-xs text-orange-600 text-center mt-1';
                 preview.appendChild(note);
             } else {
                 img.classList.add('hidden');
