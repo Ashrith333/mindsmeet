@@ -464,6 +464,53 @@
             }
         }
 
+        // Show upload status in edit form
+        function showEditUploadStatus(photoKey, status, progress = 0) {
+            const previewId = 'edit' + photoKey.charAt(0).toUpperCase() + photoKey.slice(1) + 'Preview';
+            const preview = document.getElementById(previewId);
+            if (!preview) return;
+            
+            // Clear previous content
+            preview.innerHTML = '';
+            
+            if (status === 'uploading') {
+                const uploadDiv = document.createElement('div');
+                uploadDiv.className = 'w-full h-32 bg-blue-50 border-2 border-blue-200 rounded-lg mb-2 flex items-center justify-center';
+                uploadDiv.innerHTML = `
+                    <div class="text-center">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                        <p class="text-sm text-blue-600 font-medium">Uploading...</p>
+                        <p class="text-xs text-blue-500">${progress}%</p>
+                    </div>
+                `;
+                preview.appendChild(uploadDiv);
+            } else if (status === 'success') {
+                const successDiv = document.createElement('div');
+                successDiv.className = 'w-full h-32 bg-green-50 border-2 border-green-200 rounded-lg mb-2 flex items-center justify-center';
+                successDiv.innerHTML = `
+                    <div class="text-center">
+                        <svg class="mx-auto h-8 w-8 text-green-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <p class="text-sm text-green-600 font-medium">Uploaded!</p>
+                    </div>
+                `;
+                preview.appendChild(successDiv);
+            } else if (status === 'error') {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'w-full h-32 bg-red-50 border-2 border-red-200 rounded-lg mb-2 flex items-center justify-center';
+                errorDiv.innerHTML = `
+                    <div class="text-center">
+                        <svg class="mx-auto h-8 w-8 text-red-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                        <p class="text-sm text-red-600 font-medium">Upload Failed</p>
+                    </div>
+                `;
+                preview.appendChild(errorDiv);
+            }
+        }
+
         // Preview photo in edit form
         function previewEditPhoto(input, previewId, placeholderId, imgId) {
             const file = input.files[0];
@@ -554,9 +601,13 @@
                 console.log('File size:', file.size, 'bytes');
                 console.log('File type:', file.type);
                 
+                // Show uploading status immediately
+                showEditUploadStatus(photoKey, 'uploading', 0);
+                
                 // Ensure Firebase Storage is properly initialized
                 if (!firebase.storage) {
                     console.error('Firebase Storage not available');
+                    showEditUploadStatus(photoKey, 'error');
                     alert('Firebase Storage not available. Please refresh the page and try again.');
                     return null;
                 }
@@ -587,15 +638,18 @@
                     
                     uploadTask.on('state_changed', 
                         (snapshot) => {
-                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
                             console.log('Upload progress: ' + progress + '%');
+                            showEditUploadStatus(photoKey, 'uploading', progress);
                         },
                         (error) => {
                             console.error('Upload error:', error);
+                            showEditUploadStatus(photoKey, 'error');
                             reject(error);
                         },
                         () => {
                             console.log('Upload completed successfully');
+                            showEditUploadStatus(photoKey, 'success');
                             resolve(uploadTask);
                         }
                     );
@@ -608,12 +662,19 @@
                 const url = await fileRef.getDownloadURL();
                 console.log('Download URL obtained:', url);
                 
+                // Show success status for 2 seconds, then display the photo
+                setTimeout(() => {
+                    displayEditPhoto(photoKey, 'edit' + photoKey.charAt(0).toUpperCase() + photoKey.slice(1) + 'Preview', 'edit' + photoKey.charAt(0).toUpperCase() + photoKey.slice(1) + 'Placeholder', 'edit' + photoKey.charAt(0).toUpperCase() + photoKey.slice(1) + 'Img');
+                }, 2000);
+                
                 return url;
                 
             } catch (error) {
                 console.error('Error uploading photo:', error);
                 console.error('Error code:', error.code);
                 console.error('Error message:', error.message);
+                
+                showEditUploadStatus(photoKey, 'error');
                 
                 let errorMessage = 'Error uploading photo. ';
                 if (error.code === 'storage/unauthorized') {
