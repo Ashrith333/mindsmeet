@@ -162,7 +162,7 @@
 <span class="truncate">I've Verified My Email</span>
 </button>
 <div class="text-center">
-<button class="text-sm text-secondary hover:text-primary underline" onclick="window.location.href='index.html'">Continue without verification (not recommended)</button>
+<button class="text-sm text-secondary hover:text-primary underline" onclick="window.location.href='profile.html'">Continue without verification (not recommended)</button>
 </div>
 </div>
 </main>
@@ -340,7 +340,7 @@ async function handlePasswordLogin() {
     if (currentUser.emailVerified) {
       console.log('✅ Email is verified - redirecting to main app');
       alert('Login successful! Welcome back!');
-      window.location.href = 'index.html';
+      window.location.href = 'profile.html';
     } else {
       console.log('⚠️ Email not verified - redirecting to verification page');
       alert('Please verify your email before continuing. Check your inbox for the verification link.');
