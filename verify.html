@@ -25,6 +25,15 @@
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   
+  // Set persistence to LOCAL for better iOS Safari support
+  firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    .then(() => {
+      console.log('Firebase persistence set to LOCAL');
+    })
+    .catch((error) => {
+      console.error('Error setting persistence:', error);
+    });
+  
   console.log('Firebase initialized successfully on verify page');
 </script>
 <style type="text/tailwindcss">
@@ -194,7 +203,7 @@
 <span class="truncate">I've Verified My Email</span>
 </button>
 <div class="text-center">
-<button class="text-sm text-secondary hover:text-primary underline mobile-text" onclick="window.location.href='profile.html'">Continue without verification (not recommended)</button>
+<button class="text-sm text-secondary hover:text-primary underline mobile-text" onclick="proceedWithoutVerification()">Continue without verification (not recommended)</button>
 </div>
 </div>
 </main>
@@ -535,9 +544,27 @@ async function checkEmailVerification() {
   button.querySelector('span').textContent = 'Checking...';
   
   try {
-    const user = firebase.auth().currentUser;
+    // Wait a bit for auth state to stabilize on iOS Safari
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    let user = firebase.auth().currentUser;
     
     if (!user) {
+      console.log('No current user, trying to get user from auth state...');
+      // Try to get user from auth state
+      await new Promise(resolve => {
+        const unsubscribe = firebase.auth().onAuthStateChanged((authUser) => {
+          unsubscribe();
+          user = authUser;
+          resolve();
+        });
+        // Timeout after 3 seconds
+        setTimeout(resolve, 3000);
+      });
+    }
+    
+    if (!user) {
+      console.log('Still no user, redirecting to login...');
       alert('Please sign in again to verify your email status.');
       window.location.href = 'login.html';
       return;
@@ -634,6 +661,20 @@ async function handleForgotPassword() {
     }
     
     alert(errorMessage);
+  }
+}
+
+// Handle proceeding without verification
+function proceedWithoutVerification() {
+  console.log('=== PROCEEDING WITHOUT VERIFICATION ===');
+  console.log('Current user:', currentUser);
+  
+  if (currentUser) {
+    console.log('User is signed in, redirecting to profile setup');
+    window.location.href = `profile-setup.html?email=${encodeURIComponent(currentUser.email)}`;
+  } else {
+    console.log('No current user, redirecting to login');
+    window.location.href = 'login.html';
   }
 }
 </script>

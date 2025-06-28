@@ -89,6 +89,20 @@
             <h1 class="text-4xl font-bold text-primary mb-4">Welcome to Minds Meet!</h1>
             <p class="text-secondary mb-8 text-lg">Your profile has been completed successfully. You're now ready to start your journey!</p>
 
+            <!-- Email Verification Status -->
+            <div id="emailVerificationStatus" class="mb-6 p-4 rounded-lg border-2 hidden">
+                <div class="flex items-center justify-center space-x-2 mb-2">
+                    <svg id="verificationIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span id="verificationText" class="font-medium">Email Verification</span>
+                </div>
+                <p id="verificationMessage" class="text-sm mb-3">Please verify your email address to access all features.</p>
+                <button id="resendVerificationBtn" onclick="resendVerificationEmail()" class="text-sm text-primary hover:underline font-medium">
+                    Resend verification email
+                </button>
+            </div>
+
             <!-- Action Buttons -->
             <div class="space-y-4">
                 <button class="w-full px-6 py-4 btn-primary text-white rounded-xl font-semibold text-lg">
@@ -355,6 +369,15 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
+        // Set persistence to LOCAL for better iOS Safari support
+        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+            .then(() => {
+                console.log('Firebase persistence set to LOCAL');
+            })
+            .catch((error) => {
+                console.error('Error setting persistence:', error);
+            });
+
         let userProfileData = {};
 
         // Check authentication on page load
@@ -362,13 +385,81 @@
             auth.onAuthStateChanged(function(user) {
                 if (user && user.email) {
                     console.log('User authenticated:', user.email);
+                    console.log('Email verified:', user.emailVerified);
                     loadUserProfile();
+                    checkEmailVerificationStatus(user);
                 } else {
                     console.log('No user authenticated, redirecting to login');
                     window.location.href = 'login.html';
                 }
             });
         });
+
+        // Check and display email verification status
+        function checkEmailVerificationStatus(user) {
+            const verificationStatus = document.getElementById('emailVerificationStatus');
+            const verificationIcon = document.getElementById('verificationIcon');
+            const verificationText = document.getElementById('verificationText');
+            const verificationMessage = document.getElementById('verificationMessage');
+            const resendBtn = document.getElementById('resendVerificationBtn');
+
+            if (!user.emailVerified) {
+                // Show unverified status
+                verificationStatus.classList.remove('hidden');
+                verificationStatus.className = 'mb-6 p-4 rounded-lg border-2 border-yellow-200 bg-yellow-50';
+                verificationIcon.className = 'w-5 h-5 text-yellow-600';
+                verificationIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
+                verificationText.textContent = 'Email Not Verified';
+                verificationText.className = 'font-medium text-yellow-800';
+                verificationMessage.textContent = 'Please verify your email address to access all features.';
+                verificationMessage.className = 'text-sm mb-3 text-yellow-700';
+                resendBtn.className = 'text-sm text-yellow-700 hover:text-yellow-800 font-medium';
+                resendBtn.textContent = 'Resend verification email';
+            } else {
+                // Show verified status
+                verificationStatus.classList.remove('hidden');
+                verificationStatus.className = 'mb-6 p-4 rounded-lg border-2 border-green-200 bg-green-50';
+                verificationIcon.className = 'w-5 h-5 text-green-600';
+                verificationIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
+                verificationText.textContent = 'Email Verified';
+                verificationText.className = 'font-medium text-green-800';
+                verificationMessage.textContent = 'Your email has been verified successfully!';
+                verificationMessage.className = 'text-sm mb-3 text-green-700';
+                resendBtn.style.display = 'none';
+            }
+        }
+
+        // Resend verification email
+        async function resendVerificationEmail() {
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    alert('Please sign in first to resend verification email');
+                    return;
+                }
+
+                const resendBtn = document.getElementById('resendVerificationBtn');
+                const originalText = resendBtn.textContent;
+                resendBtn.textContent = 'Sending...';
+                resendBtn.disabled = true;
+
+                console.log('Resending verification email to:', user.email);
+                await user.sendEmailVerification();
+                
+                alert('Verification email sent! Please check your inbox and spam folder.');
+                
+                resendBtn.textContent = originalText;
+                resendBtn.disabled = false;
+                
+            } catch (error) {
+                console.error('Error sending verification email:', error);
+                alert('Failed to send verification email. Please try again.');
+                
+                const resendBtn = document.getElementById('resendVerificationBtn');
+                resendBtn.textContent = 'Resend verification email';
+                resendBtn.disabled = false;
+            }
+        }
 
         // Load user profile data
         async function loadUserProfile() {

@@ -321,6 +321,15 @@
         const db = firebase.firestore();
         const storage = firebase.storage();
 
+        // Set persistence to LOCAL for better iOS Safari support
+        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+            .then(() => {
+                console.log('Firebase persistence set to LOCAL');
+            })
+            .catch((error) => {
+                console.error('Error setting persistence:', error);
+            });
+
         // Make Firebase available globally
         window.firebaseAuth = auth;
         window.firebaseDB = db;
