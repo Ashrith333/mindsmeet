@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minds Meet - Welcome</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl card-shadow p-8 w-full max-w-md text-center">
+        <!-- Success Icon -->
+        <div class="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+        </div>
+
+        <!-- Welcome Message -->
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">Welcome to Minds Meet!</h1>
+        <p class="text-gray-600 mb-8">Your profile has been completed successfully. You're now ready to start your journey!</p>
+
+        <!-- Action Buttons -->
+        <div class="space-y-4">
+            <button class="w-full px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all font-semibold">
+                Start Matching
+            </button>
+            
+            <button class="w-full px-6 py-3 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                Edit Profile
+            </button>
+            
+            <button onclick="signOut()" class="w-full px-6 py-3 text-red-600 border border-red-300 rounded-lg hover:bg-red-50 transition-colors">
+                Sign Out
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-8 pt-6 border-t border-gray-200">
+            <p class="text-xs text-gray-500">
+                Ready to find your perfect match? Start exploring now!
+            </p>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, signOut as firebaseSignOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBkEbvGk_kxL3d1IB2zgYFpbixUBJ8EV8c",
+            authDomain: "mindsmeet-a8945.firebaseapp.com",
+            projectId: "mindsmeet-a8945",
+            storageBucket: "mindsmeet-a8945.firebasestorage.app",
+            messagingSenderId: "273248409523",
+            appId: "1:273248409523:web:88fc2d8eefacc665c8ddc6",
+            measurementId: "G-H8QD41XT3P"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Make signOut function available globally
+        window.signOut = async function() {
+            try {
+                await firebaseSignOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Error signing out:', error);
+                alert('Error signing out. Please try again.');
+            }
+        };
+
+        // Check if user is authenticated
+        auth.onAuthStateChanged(function(user) {
+            if (!user) {
+                // User is not signed in, redirect to login
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Setup - Minds Meet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .step-active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .step-completed {
+            background: #10b981;
+            color: white;
+        }
+        .step-pending {
+            background: #e5e7eb;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl card-shadow p-8 w-full max-w-2xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Complete Your Profile</h1>
+            <p class="text-gray-600">Let's get to know you better to find your perfect match</p>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="mb-8">
+            <div class="flex justify-between items-center">
+                <div class="flex flex-col items-center">
+                    <div id="step1" class="step-active w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2">1</div>
+                    <span class="text-xs text-center">Personal Basics</span>
+                </div>
+                <div class="flex-1 h-1 bg-gray-200 mx-2"></div>
+                <div class="flex flex-col items-center">
+                    <div id="step2" class="step-pending w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2">2</div>
+                    <span class="text-xs text-center">Location & Status</span>
+                </div>
+                <div class="flex-1 h-1 bg-gray-200 mx-2"></div>
+                <div class="flex flex-col items-center">
+                    <div id="step3" class="step-pending w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2">3</div>
+                    <span class="text-xs text-center">Intentions & Height</span>
+                </div>
+                <div class="flex-1 h-1 bg-gray-200 mx-2"></div>
+                <div class="flex flex-col items-center">
+                    <div id="step4" class="step-pending w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2">4</div>
+                    <span class="text-xs text-center">Work & Education</span>
+                </div>
+                <div class="flex-1 h-1 bg-gray-200 mx-2"></div>
+                <div class="flex flex-col items-center">
+                    <div id="step5" class="step-pending w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2">5</div>
+                    <span class="text-xs text-center">Lifestyle</span>
+                </div>
+                <div class="flex-1 h-1 bg-gray-200 mx-2"></div>
+                <div class="flex flex-col items-center">
+                    <div id="step6" class="step-pending w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2">6</div>
+                    <span class="text-xs text-center">Photos</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step Content Container -->
+        <div id="stepContent" class="mb-6">
+            <!-- Step 1: Personal Basics -->
+            <div id="step1Content" class="step-content">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">Tell us about yourself</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                        <input type="text" id="fullName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter your full name">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Age</label>
+                        <input type="number" id="age" min="18" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter your age">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Gender</label>
+                        <select id="gender" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            <option value="">Select your gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="non-binary">Non-binary</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Location & Status -->
+            <div id="step2Content" class="step-content hidden">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">Where are you located?</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Relationship Status</label>
+                        <select id="relationshipStatus" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            <option value="">Select your status</option>
+                            <option value="single">Single</option>
+                            <option value="divorced">Divorced</option>
+                            <option value="widowed">Widowed</option>
+                            <option value="separated">Separated</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Current Location</label>
+                        <input type="text" id="currentLocation" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="City, State/Province">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Hometown</label>
+                        <input type="text" id="hometown" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Where you grew up">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Intentions & Height -->
+            <div id="step3Content" class="step-content hidden">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">What are you looking for?</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Dating Intentions</label>
+                        <select id="datingIntentions" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            <option value="">What are you looking for?</option>
+                            <option value="serious-relationship">Serious Relationship</option>
+                            <option value="casual-dating">Casual Dating</option>
+                            <option value="marriage">Marriage</option>
+                            <option value="friendship">Friendship</option>
+                            <option value="not-sure">Not Sure Yet</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Height</label>
+                        <div class="flex space-x-2">
+                            <select id="heightFeet" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                <option value="">Feet</option>
+                                <option value="4">4'</option>
+                                <option value="5">5'</option>
+                                <option value="6">6'</option>
+                                <option value="7">7'</option>
+                            </select>
+                            <select id="heightInches" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                <option value="">Inches</option>
+                                <option value="0">0"</option>
+                                <option value="1">1"</option>
+                                <option value="2">2"</option>
+                                <option value="3">3"</option>
+                                <option value="4">4"</option>
+                                <option value="5">5"</option>
+                                <option value="6">6"</option>
+                                <option value="7">7"</option>
+                                <option value="8">8"</option>
+                                <option value="9">9"</option>
+                                <option value="10">10"</option>
+                                <option value="11">11"</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Work & Education -->
+            <div id="step4Content" class="step-content hidden">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">Tell us about your career</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Occupation</label>
+                        <input type="text" id="occupation" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="What do you do for work?">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Job Title</label>
+                        <input type="text" id="jobTitle" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Your job title or designation">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">School/University</label>
+                        <input type="text" id="school" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Where did you study?">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Highest Degree</label>
+                        <select id="highestDegree" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            <option value="">Select your highest degree</option>
+                            <option value="high-school">High School</option>
+                            <option value="associate">Associate's Degree</option>
+                            <option value="bachelor">Bachelor's Degree</option>
+                            <option value="master">Master's Degree</option>
+                            <option value="doctorate">Doctorate</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5: Lifestyle -->
+            <div id="step5Content" class="step-content hidden">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">What's your lifestyle like?</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Religion</label>
+                        <select id="religion" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            <option value="">Select your religion</option>
+                            <option value="christianity">Christianity</option>
+                            <option value="islam">Islam</option>
+                            <option value="hinduism">Hinduism</option>
+                            <option value="buddhism">Buddhism</option>
+                            <option value="judaism">Judaism</option>
+                            <option value="sikhism">Sikhism</option>
+                            <option value="atheist">Atheist</option>
+                            <option value="agnostic">Agnostic</option>
+                            <option value="other">Other</option>
+                            <option value="prefer-not-to-say">Prefer not to say</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Smoking</label>
+                        <select id="smoking" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            <option value="">Select your smoking preference</option>
+                            <option value="never">Never</option>
+                            <option value="occasionally">Occasionally</option>
+                            <option value="regularly">Regularly</option>
+                            <option value="trying-to-quit">Trying to quit</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Drinking</label>
+                        <select id="drinking" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            <option value="">Select your drinking preference</option>
+                            <option value="never">Never</option>
+                            <option value="socially">Socially</option>
+                            <option value="occasionally">Occasionally</option>
+                            <option value="regularly">Regularly</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 6: Photos -->
+            <div id="step6Content" class="step-content hidden">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">Add your photos</h2>
+                
+                <div class="space-y-6">
+                    <div class="text-center">
+                        <p class="text-gray-600 mb-4">Upload at least one photo to complete your profile</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-purple-400 transition-colors cursor-pointer" onclick="document.getElementById('photo1').click()">
+                            <div id="photo1Preview" class="hidden">
+                                <img id="photo1Img" class="w-full h-32 object-cover rounded-lg mb-2" alt="Profile photo">
+                            </div>
+                            <div id="photo1Placeholder">
+                                <svg class="mx-auto h-12 w-12 text-gray-400 mb-2" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <p class="text-sm text-gray-600">Add Photo 1</p>
+                            </div>
+                            <input type="file" id="photo1" accept="image/*" class="hidden" onchange="previewPhoto(this, 'photo1Preview', 'photo1Placeholder', 'photo1Img')">
+                        </div>
+                        
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-purple-400 transition-colors cursor-pointer" onclick="document.getElementById('photo2').click()">
+                            <div id="photo2Preview" class="hidden">
+                                <img id="photo2Img" class="w-full h-32 object-cover rounded-lg mb-2" alt="Profile photo">
+                            </div>
+                            <div id="photo2Placeholder">
+                                <svg class="mx-auto h-12 w-12 text-gray-400 mb-2" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <p class="text-sm text-gray-600">Add Photo 2</p>
+                            </div>
+                            <input type="file" id="photo2" accept="image/*" class="hidden" onchange="previewPhoto(this, 'photo2Preview', 'photo2Placeholder', 'photo2Img')">
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <p class="text-xs text-gray-500">Upload clear, recent photos for better matches</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="flex justify-between">
+            <button id="prevBtn" onclick="previousStep()" class="px-6 py-3 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors hidden">
+                Previous
+            </button>
+            <button id="nextBtn" onclick="nextStep()" class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all ml-auto">
+                Next
+            </button>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBkEbvGk_kxL3d1IB2zgYFpbixUBJ8EV8c",
+            authDomain: "mindsmeet-a8945.firebaseapp.com",
+            projectId: "mindsmeet-a8945",
+            storageBucket: "mindsmeet-a8945.firebasestorage.app",
+            messagingSenderId: "273248409523",
+            appId: "1:273248409523:web:88fc2d8eefacc665c8ddc6",
+            measurementId: "G-H8QD41XT3P"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Make Firebase available globally
+        window.firebaseDB = db;
+        window.setDoc = setDoc;
+        window.doc = doc;
+    </script>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 6;
+        const profileData = {};
+
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const userEmail = urlParams.get('email');
+
+        function updateStepDisplay() {
+            // Update step indicators
+            for (let i = 1; i <= totalSteps; i++) {
+                const stepElement = document.getElementById(`step${i}`);
+                if (i < currentStep) {
+                    stepElement.className = 'step-completed w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2';
+                } else if (i === currentStep) {
+                    stepElement.className = 'step-active w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2';
+                } else {
+                    stepElement.className = 'step-pending w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm mb-2';
+                }
+            }
+
+            // Show/hide navigation buttons
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
+            
+            if (currentStep === totalSteps) {
+                nextBtn.textContent = 'Complete Profile';
+            } else {
+                nextBtn.textContent = 'Next';
+            }
+        }
+
+        function saveCurrentStepData() {
+            switch(currentStep) {
+                case 1:
+                    profileData.fullName = document.getElementById('fullName').value;
+                    profileData.age = document.getElementById('age').value;
+                    profileData.gender = document.getElementById('gender').value;
+                    break;
+                case 2:
+                    profileData.relationshipStatus = document.getElementById('relationshipStatus').value;
+                    profileData.currentLocation = document.getElementById('currentLocation').value;
+                    profileData.hometown = document.getElementById('hometown').value;
+                    break;
+                case 3:
+                    profileData.datingIntentions = document.getElementById('datingIntentions').value;
+                    profileData.heightFeet = document.getElementById('heightFeet').value;
+                    profileData.heightInches = document.getElementById('heightInches').value;
+                    break;
+                case 4:
+                    profileData.occupation = document.getElementById('occupation').value;
+                    profileData.jobTitle = document.getElementById('jobTitle').value;
+                    profileData.school = document.getElementById('school').value;
+                    profileData.highestDegree = document.getElementById('highestDegree').value;
+                    break;
+                case 5:
+                    profileData.religion = document.getElementById('religion').value;
+                    profileData.smoking = document.getElementById('smoking').value;
+                    profileData.drinking = document.getElementById('drinking').value;
+                    break;
+                case 6:
+                    profileData.photo1 = document.getElementById('photo1').files[0];
+                    profileData.photo2 = document.getElementById('photo2').files[0];
+                    break;
+            }
+        }
+
+        function loadStepData() {
+            switch(currentStep) {
+                case 1:
+                    if (profileData.fullName) document.getElementById('fullName').value = profileData.fullName;
+                    if (profileData.age) document.getElementById('age').value = profileData.age;
+                    if (profileData.gender) document.getElementById('gender').value = profileData.gender;
+                    break;
+                case 2:
+                    if (profileData.relationshipStatus) document.getElementById('relationshipStatus').value = profileData.relationshipStatus;
+                    if (profileData.currentLocation) document.getElementById('currentLocation').value = profileData.currentLocation;
+                    if (profileData.hometown) document.getElementById('hometown').value = profileData.hometown;
+                    break;
+                case 3:
+                    if (profileData.datingIntentions) document.getElementById('datingIntentions').value = profileData.datingIntentions;
+                    if (profileData.heightFeet) document.getElementById('heightFeet').value = profileData.heightFeet;
+                    if (profileData.heightInches) document.getElementById('heightInches').value = profileData.heightInches;
+                    break;
+                case 4:
+                    if (profileData.occupation) document.getElementById('occupation').value = profileData.occupation;
+                    if (profileData.jobTitle) document.getElementById('jobTitle').value = profileData.jobTitle;
+                    if (profileData.school) document.getElementById('school').value = profileData.school;
+                    if (profileData.highestDegree) document.getElementById('highestDegree').value = profileData.highestDegree;
+                    break;
+                case 5:
+                    if (profileData.religion) document.getElementById('religion').value = profileData.religion;
+                    if (profileData.smoking) document.getElementById('smoking').value = profileData.smoking;
+                    if (profileData.drinking) document.getElementById('drinking').value = profileData.drinking;
+                    break;
+                case 6:
+                    if (profileData.photo1) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            document.getElementById('photo1Preview').innerHTML = `<img id="photo1Img" class="w-full h-32 object-cover rounded-lg mb-2" src="${e.target.result}" alt="Profile photo">`;
+                        };
+                        reader.readAsDataURL(profileData.photo1);
+                    }
+                    if (profileData.photo2) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            document.getElementById('photo2Preview').innerHTML = `<img id="photo2Img" class="w-full h-32 object-cover rounded-lg mb-2" src="${e.target.result}" alt="Profile photo">`;
+                        };
+                        reader.readAsDataURL(profileData.photo2);
+                    }
+                    break;
+            }
+        }
+
+        function validateCurrentStep() {
+            switch(currentStep) {
+                case 1:
+                    const fullName = document.getElementById('fullName').value.trim();
+                    const age = document.getElementById('age').value;
+                    const gender = document.getElementById('gender').value;
+                    
+                    if (!fullName) {
+                        alert('Please enter your full name');
+                        return false;
+                    }
+                    if (!age || age < 18 || age > 100) {
+                        alert('Please enter a valid age (18-100)');
+                        return false;
+                    }
+                    if (!gender) {
+                        alert('Please select your gender');
+                        return false;
+                    }
+                    break;
+                case 2:
+                    const relationshipStatus = document.getElementById('relationshipStatus').value;
+                    const currentLocation = document.getElementById('currentLocation').value;
+                    const hometown = document.getElementById('hometown').value;
+                    
+                    if (!relationshipStatus) {
+                        alert('Please select your relationship status');
+                        return false;
+                    }
+                    if (!currentLocation) {
+                        alert('Please enter your current location');
+                        return false;
+                    }
+                    if (!hometown) {
+                        alert('Please enter your hometown');
+                        return false;
+                    }
+                    break;
+                case 3:
+                    const datingIntentions = document.getElementById('datingIntentions').value;
+                    const heightFeet = document.getElementById('heightFeet').value;
+                    const heightInches = document.getElementById('heightInches').value;
+                    
+                    if (!datingIntentions) {
+                        alert('Please select your dating intentions');
+                        return false;
+                    }
+                    if (!heightFeet || !heightInches) {
+                        alert('Please select your height');
+                        return false;
+                    }
+                    break;
+                case 4:
+                    const occupation = document.getElementById('occupation').value.trim();
+                    const jobTitle = document.getElementById('jobTitle').value.trim();
+                    const school = document.getElementById('school').value.trim();
+                    const highestDegree = document.getElementById('highestDegree').value;
+                    
+                    if (!occupation) {
+                        alert('Please enter your occupation');
+                        return false;
+                    }
+                    if (!jobTitle) {
+                        alert('Please enter your job title');
+                        return false;
+                    }
+                    if (!school) {
+                        alert('Please enter your school or university');
+                        return false;
+                    }
+                    if (!highestDegree) {
+                        alert('Please select your highest degree');
+                        return false;
+                    }
+                    break;
+                case 5:
+                    const religion = document.getElementById('religion').value;
+                    const smoking = document.getElementById('smoking').value;
+                    const drinking = document.getElementById('drinking').value;
+                    
+                    if (!religion) {
+                        alert('Please select your religion');
+                        return false;
+                    }
+                    if (!smoking) {
+                        alert('Please select your smoking preference');
+                        return false;
+                    }
+                    if (!drinking) {
+                        alert('Please select your drinking preference');
+                        return false;
+                    }
+                    break;
+                case 6:
+                    if (!document.getElementById('photo1').files.length && !document.getElementById('photo2').files.length) {
+                        alert('Please upload at least one photo');
+                        return false;
+                    }
+                    break;
+            }
+            return true;
+        }
+
+        async function nextStep() {
+            if (!validateCurrentStep()) return;
+            
+            saveCurrentStepData();
+            
+            if (currentStep === totalSteps) {
+                // Complete profile setup
+                await completeProfile();
+            } else {
+                currentStep++;
+                updateStepDisplay();
+                loadStepContent();
+                loadStepData();
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                saveCurrentStepData();
+                currentStep--;
+                updateStepDisplay();
+                loadStepContent();
+                loadStepData();
+            }
+        }
+
+        function loadStepContent() {
+            const stepContent = document.getElementById('stepContent');
+            
+            // Hide all step contents
+            for (let i = 1; i <= totalSteps; i++) {
+                const stepDiv = document.getElementById(`step${i}Content`);
+                if (stepDiv) stepDiv.classList.add('hidden');
+            }
+            
+            // Show current step content
+            const currentStepDiv = document.getElementById(`step${currentStep}Content`);
+            if (currentStepDiv) {
+                currentStepDiv.classList.remove('hidden');
+            }
+        }
+
+        function previewPhoto(input, previewId, placeholderId, imgId) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(previewId).classList.remove('hidden');
+                    document.getElementById(placeholderId).classList.add('hidden');
+                    document.getElementById(imgId).src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function completeProfile() {
+            try {
+                // Show loading state
+                const nextBtn = document.getElementById('nextBtn');
+                const originalText = nextBtn.textContent;
+                nextBtn.textContent = 'Saving...';
+                nextBtn.disabled = true;
+
+                // Prepare profile data
+                const finalProfileData = {
+                    ...profileData,
+                    email: userEmail,
+                    profileCompleted: true,
+                    createdAt: new Date(),
+                    height: `${profileData.heightFeet}'${profileData.heightInches}"`
+                };
+
+                // Remove individual height fields
+                delete finalProfileData.heightFeet;
+                delete finalProfileData.heightInches;
+
+                // Save profile data to Firebase
+                const userDocRef = doc(window.firebaseDB, 'users', userEmail);
+                await window.setDoc(userDocRef, finalProfileData, { merge: true });
+
+                // Show success message
+                alert('Profile completed successfully!');
+                
+                // Redirect to main app
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Error saving profile:', error);
+                alert('Error saving profile. Please try again.');
+                
+                // Reset button
+                const nextBtn = document.getElementById('nextBtn');
+                nextBtn.textContent = 'Complete Profile';
+                nextBtn.disabled = false;
+            }
+        }
+
+        // Initialize
+        updateStepDisplay();
+    </script>
+</body>
+</html> 
