@@ -307,14 +307,7 @@
   </div>
 
   <!-- Global Notification for New Messages -->
-  <div id="globalNotification" class="fixed top-4 right-4 bg-primary text-white px-4 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300">
-    <div class="flex items-center space-x-2">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8s-9-3.582-9-8a9 9 0 1118 0z"/>
-      </svg>
-      <span class="font-medium">New message received!</span>
-    </div>
-  </div>
+  <!-- Removed - using blue dot indicator instead -->
 
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -369,6 +362,12 @@
         if (userSnap.exists) {
           const userData = userSnap.data();
           console.log('User profile data:', userData);
+          
+          // Check if essential profile data exists
+          if (!userData.fullName || !userData.age) {
+            window.location.href = 'profile-setup.html';
+            return;
+          }
           
           // Check if profile has essential data (name, age, etc.)
           // For existing profiles, dating preferences is optional
@@ -435,11 +434,11 @@
         });
         
         // Get existing conversations to filter out matched users
-        const conversationsSnapshot = await db.collection('conversations').where('users', 'array-contains', currentUser.email).get();
+        const conversationsSnapshot = await db.collection('conversations').where('participants', 'array-contains', currentUser.email).get();
         const matchedUsers = new Set();
         conversationsSnapshot.forEach(doc => {
           const conversationData = doc.data();
-          conversationData.users.forEach(userEmail => {
+          conversationData.participants.forEach(userEmail => {
             if (userEmail !== currentUser.email) {
               matchedUsers.add(userEmail);
             }
@@ -702,16 +701,27 @@
     // Check for mutual match
     async function checkForMatch(userEmail) {
       try {
+        console.log('=== CHECKING FOR MATCH ===');
         const currentUser = auth.currentUser;
-        if (!currentUser) return;
+        if (!currentUser) {
+          console.log('No current user found');
+          return;
+        }
+        
+        console.log('Checking match between:', currentUser.email, 'and', userEmail);
         
         // Check if the other user also liked current user
         const otherUserLikeRef = db.collection('likes').doc(`${userEmail}_${currentUser.email}`);
         const otherUserLikeDoc = await otherUserLikeRef.get();
         
+        console.log('Other user like document exists:', otherUserLikeDoc.exists);
+        if (otherUserLikeDoc.exists) {
+          console.log('Other user like data:', otherUserLikeDoc.data());
+        }
+        
         if (otherUserLikeDoc.exists && otherUserLikeDoc.data().status === 'like') {
           // It's a match!
-          console.log('Match found!');
+          console.log('🎉 MATCH FOUND!');
           
           // Create match document
           const matchRef = db.collection('matches').doc(`${currentUser.email}_${userEmail}`);
@@ -721,37 +731,51 @@
             status: 'active'
           });
           
+          console.log('Match document created');
+          
           // Create conversation for messaging
           await createConversation(currentUser.email, userEmail);
           
           // Show match notification
           showMatchNotification(userEmail);
+        } else {
+          console.log('No match - other user has not liked current user or status is not "like"');
         }
         
       } catch (error) {
-        console.error('Error checking for match:', error);
+        console.error('❌ Error checking for match:', error);
       }
     }
 
     // Create conversation for matched users
     async function createConversation(user1Email, user2Email) {
       try {
+        console.log('=== CREATING CONVERSATION ===');
+        console.log('User 1:', user1Email);
+        console.log('User 2:', user2Email);
+        
         // Create conversation document
         const conversationId = [user1Email, user2Email].sort().join('_');
+        console.log('Conversation ID:', conversationId);
+        
         const conversationRef = db.collection('conversations').doc(conversationId);
         
         // Check if conversation already exists
         const conversationDoc = await conversationRef.get();
         
         if (!conversationDoc.exists) {
+          console.log('Creating new conversation...');
+          
           // Create new conversation
           await conversationRef.set({
-            users: [user1Email, user2Email].sort(),
+            participants: [user1Email, user2Email].sort(),
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             lastMessage: null,
             lastMessageTime: null,
             lastMessageSender: 'system'
           });
+          
+          console.log('Conversation document created');
           
           // Create initial welcome message
           const messageRef = conversationRef.collection('messages').doc();
@@ -762,6 +786,8 @@
             type: 'system'
           });
           
+          console.log('Welcome message created');
+          
           // Update conversation with last message
           await conversationRef.update({
             lastMessage: 'You matched! Start a conversation! 💕',
@@ -769,11 +795,14 @@
             lastMessageSender: 'system'
           });
           
-          console.log('Conversation created for match:', conversationId);
+          console.log('Conversation updated with last message');
+          console.log('✅ Conversation created for match:', conversationId);
+        } else {
+          console.log('Conversation already exists:', conversationId);
         }
         
       } catch (error) {
-        console.error('Error creating conversation:', error);
+        console.error('❌ Error creating conversation:', error);
       }
     }
 
@@ -837,7 +866,7 @@
         const userData = userDoc.data();
         
         // Check if essential profile data exists
-        if (!userData.fullName || !userData.age || !userData.currentLocation) {
+        if (!userData.fullName || !userData.age) {
           window.location.href = 'profile-setup.html';
           return;
         }
@@ -865,7 +894,7 @@
       checkForUnreadMessages();
 
       // Listen for new conversations (messages)
-      db.collection('conversations').where('users', 'array-contains', user.email)
+      db.collection('conversations').where('participants', 'array-contains', user.email)
         .onSnapshot(snapshot => {
           console.log('Browse: Conversation changes detected:', snapshot.docChanges().length);
           
@@ -884,14 +913,16 @@
                 console.log('Browse: New message detected:', change.doc.id);
                 
                 // Get sender's name for notification
-                const otherUserEmail = conversationData.users.find(email => email !== user.email);
+                const otherUserEmail = conversationData.participants.find(email => email !== user.email);
                 if (otherUserEmail) {
                   db.collection('users').doc(otherUserEmail).get().then(userDoc => {
                     if (userDoc.exists) {
                       const senderProfile = userDoc.data();
-                      showNewMessageNotification(senderProfile.fullName);
-                      updateMessagesIndicator(true);
-                      console.log('Browse: Blue dot indicator updated');
+                      // Don't immediately set blue dot to true, check unread status instead
+                      setTimeout(() => {
+                        checkForUnreadMessages();
+                      }, 100);
+                      console.log('Browse: Checking unread messages instead of setting blue dot');
                     }
                   });
                 }
@@ -916,7 +947,7 @@
       try {
         console.log('Checking for unread messages...');
         
-        const conversationsSnapshot = await db.collection('conversations').where('users', 'array-contains', user.email).get();
+        const conversationsSnapshot = await db.collection('conversations').where('participants', 'array-contains', user.email).get();
         let hasUnread = false;
         
         conversationsSnapshot.forEach(doc => {
@@ -926,8 +957,23 @@
               conversationData.lastMessageSender && 
               conversationData.lastMessageSender !== 'system' &&
               conversationData.lastMessageSender !== user.email) {
-            hasUnread = true;
-            console.log('Found unread message in conversation:', doc.id);
+            
+            // Check if the current user has read this message
+            const readBy = conversationData.readBy || {};
+            const lastMessageTime = conversationData.lastMessageTime;
+            const userReadTime = readBy[user.email];
+            
+            // Message is unread if:
+            // 1. There's a last message from someone else
+            // 2. AND either no read timestamp OR read timestamp is before last message time
+            const isUnread = !userReadTime || 
+                            (lastMessageTime && userReadTime.toDate && lastMessageTime.toDate && 
+                             userReadTime.toDate() < lastMessageTime.toDate());
+            
+            if (isUnread) {
+              hasUnread = true;
+              console.log('Found unread message in conversation:', doc.id);
+            }
           }
         });
         
@@ -939,42 +985,10 @@
       }
     }
 
-    // Show notification for new message
+    // Show notification for new message (removed - using blue dot indicator instead)
     function showNewMessageNotification(senderName) {
-      console.log('Showing notification for:', senderName);
-      
-      const notification = document.getElementById('globalNotification');
-      const notificationText = notification?.querySelector('span');
-      
-      if (!notification || !notificationText) {
-        console.error('Notification elements not found');
-        // Fallback: show browser notification if available
-        if ('Notification' in window && Notification.permission === 'granted') {
-          new Notification('New Message', {
-            body: `New message from ${senderName}!`,
-            icon: '/favicon.ico'
-          });
-        }
-        return;
-      }
-      
-      // Update notification text
-      notificationText.textContent = `New message from ${senderName}!`;
-      
-      // Ensure notification is visible
-      notification.style.display = 'block';
-      notification.style.transform = 'translateX(0)';
-      notification.classList.remove('translate-x-full');
-      
-      console.log('Notification shown');
-      
-      // Hide notification after 3 seconds
-      setTimeout(() => {
-        notification.classList.add('translate-x-full');
-        setTimeout(() => {
-          notification.style.display = 'none';
-        }, 300);
-      }, 3000);
+      // Notification popup removed - using blue dot indicator in messages section
+      console.log('New message from:', senderName, '- notification suppressed');
     }
 
     // Update messages indicator in navigation
@@ -1011,6 +1025,23 @@
       } else {
         document.title = 'Browse - Minds Meet';
       }
+    }
+
+    // Check if message is unread
+    function checkIfUnread(conversationData) {
+      const currentUser = auth.currentUser;
+      if (!currentUser || !conversationData.lastMessageSender) return false;
+      
+      // Message is unread if:
+      // 1. It's from the other person (not system or current user)
+      // 2. Current user hasn't read it yet (no readBy timestamp)
+      const isFromOtherPerson = conversationData.lastMessageSender !== 'system' && 
+                               conversationData.lastMessageSender !== currentUser.email;
+      
+      const hasReadTimestamp = conversationData.readBy && 
+                              conversationData.readBy[currentUser.email];
+      
+      return isFromOtherPerson && !hasReadTimestamp;
     }
   </script>
 </body>

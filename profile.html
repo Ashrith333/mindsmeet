@@ -397,15 +397,6 @@
             Profile
         </button>
     </nav>
-    <!-- Global Notification for New Messages -->
-    <div id="globalNotification" class="fixed top-4 right-4 bg-primary text-white px-4 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300">
-        <div class="flex items-center space-x-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8s-9-3.582-9-8a9 9 0 1118 0z"/>
-            </svg>
-            <span class="font-medium">New message received!</span>
-        </div>
-    </div>
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -543,7 +534,7 @@
         const userData = userDoc.data();
         
         // Check if essential profile data exists
-        if (!userData.fullName || !userData.age || !userData.currentLocation) {
+        if (!userData.fullName || !userData.age) {
           window.location.href = 'profile-setup.html';
           return;
         }
@@ -603,7 +594,7 @@
       checkForUnreadMessages();
 
       // Listen for new conversations (messages)
-      db.collection('conversations').where('users', 'array-contains', user.email)
+      db.collection('conversations').where('participants', 'array-contains', user.email)
         .onSnapshot(snapshot => {
           console.log('Profile: Conversation changes detected:', snapshot.docChanges().length);
           
@@ -622,14 +613,16 @@
                 console.log('Profile: New message detected:', change.doc.id);
                 
                 // Get sender's name for notification
-                const otherUserEmail = conversationData.users.find(email => email !== user.email);
+                const otherUserEmail = conversationData.participants.find(email => email !== user.email);
                 if (otherUserEmail) {
                   db.collection('users').doc(otherUserEmail).get().then(userDoc => {
                     if (userDoc.exists) {
                       const senderProfile = userDoc.data();
-                      showNewMessageNotification(senderProfile.fullName);
-                      updateMessagesIndicator(true);
-                      console.log('Profile: Blue dot indicator updated');
+                      // Don't immediately set blue dot to true, check unread status instead
+                      setTimeout(() => {
+                        checkForUnreadMessages();
+                      }, 100);
+                      console.log('Profile: Checking unread messages instead of setting blue dot');
                     }
                   });
                 }
@@ -654,7 +647,7 @@
       try {
         console.log('Checking for unread messages...');
         
-        const conversationsSnapshot = await db.collection('conversations').where('users', 'array-contains', user.email).get();
+        const conversationsSnapshot = await db.collection('conversations').where('participants', 'array-contains', user.email).get();
         let hasUnread = false;
         
         conversationsSnapshot.forEach(doc => {
@@ -664,8 +657,23 @@
               conversationData.lastMessageSender && 
               conversationData.lastMessageSender !== 'system' &&
               conversationData.lastMessageSender !== user.email) {
-            hasUnread = true;
-            console.log('Found unread message in conversation:', doc.id);
+            
+            // Check if the current user has read this message
+            const readBy = conversationData.readBy || {};
+            const lastMessageTime = conversationData.lastMessageTime;
+            const userReadTime = readBy[user.email];
+            
+            // Message is unread if:
+            // 1. There's a last message from someone else
+            // 2. AND either no read timestamp OR read timestamp is before last message time
+            const isUnread = !userReadTime || 
+                            (lastMessageTime && userReadTime.toDate && lastMessageTime.toDate && 
+                             userReadTime.toDate() < lastMessageTime.toDate());
+            
+            if (isUnread) {
+              hasUnread = true;
+              console.log('Found unread message in conversation:', doc.id);
+            }
           }
         });
         
@@ -677,42 +685,10 @@
       }
     }
 
-    // Show notification for new message
+    // Show notification for new message (removed - using blue dot indicator instead)
     function showNewMessageNotification(senderName) {
-      console.log('Showing notification for:', senderName);
-      
-      const notification = document.getElementById('globalNotification');
-      const notificationText = notification?.querySelector('span');
-      
-      if (!notification || !notificationText) {
-        console.error('Notification elements not found');
-        // Fallback: show browser notification if available
-        if ('Notification' in window && Notification.permission === 'granted') {
-          new Notification('New Message', {
-            body: `New message from ${senderName}!`,
-            icon: '/favicon.ico'
-          });
-        }
-        return;
-      }
-      
-      // Update notification text
-      notificationText.textContent = `New message from ${senderName}!`;
-      
-      // Ensure notification is visible
-      notification.style.display = 'block';
-      notification.style.transform = 'translateX(0)';
-      notification.classList.remove('translate-x-full');
-      
-      console.log('Notification shown');
-      
-      // Hide notification after 3 seconds
-      setTimeout(() => {
-        notification.classList.add('translate-x-full');
-        setTimeout(() => {
-          notification.style.display = 'none';
-        }, 300);
-      }, 3000);
+      // Notification popup removed - using blue dot indicator in messages section
+      console.log('New message from:', senderName, '- notification suppressed');
     }
 
     // Update messages indicator in navigation

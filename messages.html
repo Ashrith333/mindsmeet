@@ -149,9 +149,15 @@
 
     // Authentication state observer
     auth.onAuthStateChanged(function(user) {
-      if (user) {
+      if (user && user.email) {
         console.log('User authenticated:', user.email);
-        loadUserProfile();
+        loadMessages();
+        setupGlobalMessageNotifications();
+        
+        // Check for unread messages on page load
+        setTimeout(() => {
+          checkUnreadMessages();
+        }, 1000);
       } else {
         console.log('No user authenticated, redirecting to login');
         window.location.href = 'login.html';
@@ -173,7 +179,7 @@
         const userData = userDoc.data();
         
         // Check if essential profile data exists
-        if (!userData.fullName || !userData.age || !userData.currentLocation) {
+        if (!userData.fullName || !userData.age) {
           window.location.href = 'profile-setup.html';
           return;
         }
@@ -197,12 +203,19 @@
     // Load messages
     async function loadMessages() {
       try {
-        console.log('Loading messages...');
+        console.log('=== LOADING MESSAGES ===');
         const user = auth.currentUser;
-        if (!user) return;
+        if (!user) {
+          console.log('No user authenticated');
+          return;
+        }
+
+        console.log('Current user:', user.email);
 
         // Fetch conversations where current user is a participant
-        const conversationsSnapshot = await db.collection('conversations').where('users', 'array-contains', user.email).get();
+        const conversationsSnapshot = await db.collection('conversations').where('participants', 'array-contains', user.email).get();
+        
+        console.log('Conversations query result:', conversationsSnapshot.size, 'conversations found');
         
         const messagesList = document.getElementById('messagesList');
         const emptyState = document.getElementById('emptyState');
@@ -220,14 +233,20 @@
           userProfiles[doc.id] = doc.data();
         });
         
+        console.log('User profiles loaded:', Object.keys(userProfiles).length, 'profiles');
+        
         // Collect all conversations with their data
         const conversations = [];
         conversationsSnapshot.forEach(doc => {
           const conversationData = doc.data();
-          const otherUserEmail = conversationData.users.find(email => email !== user.email);
+          console.log('Conversation data:', doc.id, conversationData);
+          
+          const otherUserEmail = conversationData.participants.find(email => email !== user.email);
+          console.log('Other user email:', otherUserEmail);
           
           if (otherUserEmail && userProfiles[otherUserEmail]) {
             const otherUserProfile = userProfiles[otherUserEmail];
+            console.log('Other user profile found:', otherUserProfile.fullName);
             
             if (otherUserProfile.fullName && otherUserProfile.age) {
               conversations.push({
@@ -236,9 +255,16 @@
                 otherUserEmail: otherUserEmail,
                 otherUserProfile: otherUserProfile
               });
+              console.log('Added conversation to list:', doc.id);
+            } else {
+              console.log('Other user profile missing required fields:', otherUserProfile);
             }
+          } else {
+            console.log('Other user not found or no profile:', otherUserEmail);
           }
         });
+        
+        console.log('Valid conversations to display:', conversations.length);
         
         // Sort conversations by last message time (most recent first)
         conversations.sort((a, b) => {
@@ -260,9 +286,11 @@
         
         // Show empty state if no conversations
         if (conversationsFound === 0) {
+          console.log('No conversations found, showing empty state');
           messagesList.classList.add('hidden');
           emptyState.classList.remove('hidden');
         } else {
+          console.log('Showing conversations list');
           messagesList.classList.remove('hidden');
           emptyState.classList.add('hidden');
         }
@@ -315,23 +343,20 @@
       // Format last message time
       const lastMessageTime = conversationData.lastMessageTime ? formatTimeAgo(conversationData.lastMessageTime) : 'recently';
       
-      // Check if message is unread (last message is not from current user AND there is a last message)
-      const isUnread = conversationData.lastMessage && 
-                      conversationData.lastMessageSender && 
-                      conversationData.lastMessageSender !== 'system' &&
-                      conversationData.lastMessageSender !== currentUser.email;
+      // Check if message is unread
+      const hasUnreadMessages = checkIfUnread(conversationData);
       
       console.log('Creating message item:', {
         conversationId,
         lastMessage: conversationData.lastMessage,
         lastMessageSender: conversationData.lastMessageSender,
         currentUser: currentUser.email,
-        isUnread
+        hasUnreadMessages
       });
       
       // Create message item
       const messageItem = document.createElement('div');
-      messageItem.className = `message-item flex items-center p-4 cursor-pointer border-b border-gray-50 hover:bg-gray-50 transition-colors ${isUnread ? 'bg-blue-50' : ''}`;
+      messageItem.className = `message-item flex items-center p-4 cursor-pointer border-b border-gray-50 hover:bg-gray-50 transition-colors ${hasUnreadMessages ? 'bg-blue-50' : ''}`;
       messageItem.dataset.conversationId = conversationId;
       messageItem.dataset.otherUser = otherUserEmail;
       messageItem.onclick = () => handleMessageClick(conversationId, otherUserEmail, otherUserProfile.fullName);
@@ -346,17 +371,17 @@
             <h3 class="text-sm font-semibold text-primary truncate">${otherUserProfile.fullName}, ${age}</h3>
             <span class="text-xs text-gray-500">${lastMessageTime}</span>
           </div>
-          <p class="text-sm ${isUnread ? 'text-primary font-semibold' : 'text-gray-600'} truncate">${conversationData.lastMessage || 'Start a conversation!'}</p>
+          <p class="text-sm ${hasUnreadMessages ? 'text-primary font-semibold' : 'text-gray-600'} truncate">${conversationData.lastMessage || 'Start a conversation!'}</p>
         </div>
         <div class="ml-2">
-          ${isUnread ? '<div class="w-3 h-3 bg-blue-500 rounded-full"></div>' : ''}
+          ${hasUnreadMessages ? '<div class="w-3 h-3 bg-blue-500 rounded-full"></div>' : ''}
         </div>
       `;
       
       messagesList.appendChild(messageItem);
       
       // Update navigation indicator if this is unread
-      if (isUnread) {
+      if (hasUnreadMessages) {
         updateMessagesIndicator(true);
       }
     }
@@ -396,7 +421,7 @@
       console.log('Currently displayed conversations:', Array.from(displayedConversations));
 
       // Listen for changes in conversations
-      conversationsListener = db.collection('conversations').where('users', 'array-contains', user.email)
+      conversationsListener = db.collection('conversations').where('participants', 'array-contains', user.email)
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
             console.log('Conversation change detected:', change.type, change.doc.id);
@@ -416,7 +441,7 @@
               
               // Get user profile and create message item
               const conversationData = change.doc.data();
-              const otherUserEmail = conversationData.users.find(email => email !== user.email);
+              const otherUserEmail = conversationData.participants.find(email => email !== user.email);
               
               if (otherUserEmail) {
                 db.collection('users').doc(otherUserEmail).get().then(userDoc => {
@@ -470,9 +495,9 @@
         });
     }
 
-    // Show notification for new message
+    // Show notification for new message (removed - using blue dot indicator instead)
     function showNewMessageNotification(senderName) {
-      // Remove the notification popup - we'll just use the blue highlighting instead
+      // Notification popup removed - using blue dot indicator in messages section
       console.log('New message from:', senderName, '- notification suppressed');
     }
 
@@ -484,7 +509,7 @@
       const messageItem = document.querySelector(`[data-conversation-id="${conversationId}"]`);
       if (!messageItem) return;
 
-      const otherUserEmail = conversationData.users.find(email => email !== user.email);
+      const otherUserEmail = conversationData.participants.find(email => email !== user.email);
       
       // Get user profile
       const userDoc = await db.collection('users').doc(otherUserEmail).get();
@@ -507,18 +532,15 @@
       // Format last message time
       const lastMessageTime = conversationData.lastMessageTime ? formatTimeAgo(conversationData.lastMessageTime) : 'recently';
       
-      // Check if message is unread (last message is not from current user AND there is a last message)
-      const isUnread = conversationData.lastMessage && 
-                      conversationData.lastMessageSender && 
-                      conversationData.lastMessageSender !== 'system' &&
-                      conversationData.lastMessageSender !== user.email;
+      // Check if message is unread
+      const hasUnreadMessages = checkIfUnread(conversationData);
       
       console.log('Updating conversation UI:', {
         conversationId,
         lastMessage: conversationData.lastMessage,
         lastMessageSender: conversationData.lastMessageSender,
         currentUser: user.email,
-        isUnread
+        hasUnreadMessages
       });
       
       // Get profile photo
@@ -526,7 +548,7 @@
       const mainPhoto = photos.length > 0 ? photos[0].url : 'https://randomuser.me/api/portraits/lego/1.jpg';
       
       // Update the message item
-      messageItem.className = `message-item flex items-center p-4 cursor-pointer border-b border-gray-50 hover:bg-gray-50 transition-colors ${isUnread ? 'bg-blue-50' : ''}`;
+      messageItem.className = `message-item flex items-center p-4 cursor-pointer border-b border-gray-50 hover:bg-gray-50 transition-colors ${hasUnreadMessages ? 'bg-blue-50' : ''}`;
       
       messageItem.innerHTML = `
         <div class="relative">
@@ -538,10 +560,10 @@
             <h3 class="text-sm font-semibold text-primary truncate">${otherUserProfile.fullName}, ${age}</h3>
             <span class="text-xs text-gray-500">${lastMessageTime}</span>
           </div>
-          <p class="text-sm ${isUnread ? 'text-primary font-semibold' : 'text-gray-600'} truncate">${conversationData.lastMessage || 'Start a conversation!'}</p>
+          <p class="text-sm ${hasUnreadMessages ? 'text-primary font-semibold' : 'text-gray-600'} truncate">${conversationData.lastMessage || 'Start a conversation!'}</p>
         </div>
         <div class="ml-2">
-          ${isUnread ? '<div class="w-3 h-3 bg-blue-500 rounded-full"></div>' : ''}
+          ${hasUnreadMessages ? '<div class="w-3 h-3 bg-blue-500 rounded-full"></div>' : ''}
         </div>
       `;
       
@@ -553,7 +575,7 @@
       messagesList.insertBefore(messageItem, messagesList.firstChild);
       
       // Update navigation indicator if this is unread
-      if (isUnread) {
+      if (hasUnreadMessages) {
         updateMessagesIndicator(true);
       }
     }
@@ -562,6 +584,16 @@
     window.addEventListener('beforeunload', function() {
       if (conversationsListener) {
         conversationsListener();
+      }
+    });
+
+    // Check for unread messages when page becomes visible (returning from chat)
+    document.addEventListener('visibilitychange', function() {
+      if (!document.hidden) {
+        console.log('Page became visible, checking for unread messages');
+        setTimeout(() => {
+          checkUnreadMessages();
+        }, 500);
       }
     });
 
@@ -594,26 +626,49 @@
     }
 
     // Check for unread messages and update indicator
-    function checkUnreadMessages() {
+    async function checkUnreadMessages() {
       const user = auth.currentUser;
       if (!user) return;
 
-      let hasUnread = false;
-      const messageItems = document.querySelectorAll('.message-item');
-      
-      messageItems.forEach(item => {
-        const conversationId = item.dataset.conversationId;
-        if (conversationId && displayedConversations.has(conversationId)) {
-          // Check if this conversation has unread messages
-          const unreadDot = item.querySelector('.w-3.h-3.bg-blue-500');
-          if (unreadDot) {
-            hasUnread = true;
+      try {
+        console.log('Checking for unread messages in database...');
+        
+        const conversationsSnapshot = await db.collection('conversations').where('participants', 'array-contains', user.email).get();
+        let hasUnread = false;
+        
+        conversationsSnapshot.forEach(doc => {
+          const conversationData = doc.data();
+          // Check if this conversation has unread messages (last message is not from current user, not system)
+          if (conversationData.lastMessage && 
+              conversationData.lastMessageSender && 
+              conversationData.lastMessageSender !== 'system' &&
+              conversationData.lastMessageSender !== user.email) {
+            
+            // Check if the current user has read this message
+            const readBy = conversationData.readBy || {};
+            const lastMessageTime = conversationData.lastMessageTime;
+            const userReadTime = readBy[user.email];
+            
+            // Message is unread if:
+            // 1. There's a last message from someone else
+            // 2. AND either no read timestamp OR read timestamp is before last message time
+            const isUnread = !userReadTime || 
+                            (lastMessageTime && userReadTime.toDate && lastMessageTime.toDate && 
+                             userReadTime.toDate() < lastMessageTime.toDate());
+            
+            if (isUnread) {
+              hasUnread = true;
+              console.log('Found unread message in conversation:', doc.id);
+            }
           }
-        }
-      });
-      
-      console.log('Unread messages found:', hasUnread);
-      updateMessagesIndicator(hasUnread);
+        });
+        
+        console.log('Unread messages found:', hasUnread);
+        updateMessagesIndicator(hasUnread);
+        
+      } catch (error) {
+        console.error('Error checking for unread messages:', error);
+      }
     }
 
     // Setup global message notifications that work across all pages
@@ -624,32 +679,57 @@
       console.log('Setting up global message notifications');
 
       // Listen for new conversations (messages)
-      db.collection('conversations').where('users', 'array-contains', user.email)
+      db.collection('conversations').where('participants', 'array-contains', user.email)
         .onSnapshot(snapshot => {
           snapshot.docChanges().forEach(change => {
             if (change.type === 'modified') {
               const conversationData = change.doc.data();
-              // Check if this is a new message (not from current user)
-              if (conversationData.lastMessage && conversationData.lastMessageSender !== user.email) {
-                console.log('New message detected in conversation:', change.doc.id);
+              // Check if this is a new message (not from current user, not system)
+              if (conversationData.lastMessage && 
+                  conversationData.lastMessageSender && 
+                  conversationData.lastMessageSender !== 'system' &&
+                  conversationData.lastMessageSender !== user.email) {
+                console.log('New unread message detected in conversation:', change.doc.id);
                 
                 // Get sender's name for notification
-                const otherUserEmail = conversationData.users.find(email => email !== user.email);
+                const otherUserEmail = conversationData.participants.find(email => email !== user.email);
                 if (otherUserEmail) {
                   db.collection('users').doc(otherUserEmail).get().then(userDoc => {
                     if (userDoc.exists) {
                       const senderProfile = userDoc.data();
-                      showNewMessageNotification(senderProfile.fullName);
                       updateMessagesIndicator(true);
                     }
                   });
                 }
+              } else if (conversationData.lastMessageSender === user.email) {
+                // If the last message is from current user, check if we should remove blue dot
+                console.log('Last message is from current user, checking if blue dot should be removed');
+                setTimeout(() => {
+                  checkUnreadMessages();
+                }, 100);
               }
             }
           });
         }, error => {
           console.error('Error setting up global message notifications:', error);
         });
+    }
+
+    // Check if message is unread
+    function checkIfUnread(conversationData) {
+      const currentUser = auth.currentUser;
+      if (!currentUser || !conversationData.lastMessageSender) return false;
+      
+      // Message is unread if:
+      // 1. It's from the other person (not system or current user)
+      // 2. Current user hasn't read it yet (no readBy timestamp)
+      const isFromOtherPerson = conversationData.lastMessageSender !== 'system' && 
+                               conversationData.lastMessageSender !== currentUser.email;
+      
+      const hasReadTimestamp = conversationData.readBy && 
+                              conversationData.readBy[currentUser.email];
+      
+      return isFromOtherPerson && !hasReadTimestamp;
     }
   </script>
 </body>

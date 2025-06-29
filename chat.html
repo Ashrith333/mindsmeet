@@ -169,6 +169,11 @@
           loadOtherUserProfile();
           loadMessages();
           setupMessageListener();
+          
+          // Mark conversation as read when chat is opened
+          setTimeout(() => {
+            markConversationAsRead();
+          }, 1000);
         } else {
           console.log('No user authenticated, redirecting to login');
           window.location.href = 'login.html';
@@ -223,6 +228,11 @@
         setTimeout(() => {
           scrollToBottom();
         }, 200);
+        
+        // Mark conversation as read when chat is opened
+        setTimeout(() => {
+          markConversationAsRead();
+        }, 500);
         
       } catch (error) {
         console.error('Error loading messages:', error);
@@ -302,49 +312,38 @@
       messagesContainer.appendChild(messageDiv);
     }
 
-    // Send a message
+    // Send message
     async function sendMessage() {
       const messageInput = document.getElementById('messageInput');
-      const sendButton = document.getElementById('sendButton');
       const message = messageInput.value.trim();
       
-      if (!message) return;
+      if (!message || !currentConversationId) return;
       
       try {
-        // Disable send button
-        sendButton.disabled = true;
-        
         const currentUser = auth.currentUser;
         if (!currentUser) return;
         
-        // Add message to Firestore
-        const messageRef = await db.collection('conversations').doc(currentConversationId)
-          .collection('messages')
-          .add({
-            sender: currentUser.email,
-            text: message,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            type: 'user'
-          });
+        // Add message to conversation
+        await db.collection('conversations').doc(currentConversationId).collection('messages').add({
+          text: message,
+          sender: currentUser.email,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
         
         // Update conversation with last message
         await db.collection('conversations').doc(currentConversationId).update({
           lastMessage: message,
-          lastMessageTime: firebase.firestore.FieldValue.serverTimestamp(),
-          lastMessageSender: currentUser.email // This marks the conversation as read for the sender
+          lastMessageSender: currentUser.email,
+          lastMessageTime: firebase.firestore.FieldValue.serverTimestamp()
         });
         
-        // Clear input
-        messageInput.value = '';
+        // Mark conversation as read when sending a message
+        await markConversationAsRead();
         
-        console.log('Message sent:', message);
+        messageInput.value = '';
         
       } catch (error) {
         console.error('Error sending message:', error);
-        alert('Error sending message. Please try again.');
-      } finally {
-        // Re-enable send button
-        sendButton.disabled = false;
       }
     }
 
@@ -393,44 +392,64 @@
         console.log('Conversation ID:', currentConversationId);
         console.log('Current user:', currentUser.email);
         
-        // First, get the current conversation data to check if there's an unread message
-        const conversationDoc = await db.collection('conversations').doc(currentConversationId).get();
+        // Simply add a read timestamp for the current user
+        // This will remove the blue dot for the current user only
+        await db.collection('conversations').doc(currentConversationId).update({
+          [`readBy.${currentUser.email}`]: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        console.log('✅ Conversation marked as read for current user');
+        
+      } catch (error) {
+        console.error('❌ Error marking conversation as read:', error);
+      }
+    }
+
+    // Load conversation
+    async function loadConversation(conversationId) {
+      try {
+        currentConversationId = conversationId;
+        
+        // Get conversation data
+        const conversationDoc = await db.collection('conversations').doc(conversationId).get();
         if (!conversationDoc.exists) {
-          console.log('Conversation does not exist');
+          console.error('Conversation not found');
           return;
         }
         
         const conversationData = conversationDoc.data();
-        console.log('Conversation data:', conversationData);
-        console.log('Last message:', conversationData.lastMessage);
-        console.log('Last message sender:', conversationData.lastMessageSender);
-        console.log('Current user email:', currentUser.email);
         
-        // Check if there's actually a message from the other person (not system, not current user)
-        const hasUnreadMessage = conversationData.lastMessage && 
-                                conversationData.lastMessageSender && 
-                                conversationData.lastMessageSender !== 'system' &&
-                                conversationData.lastMessageSender !== currentUser.email;
+        // Load other user's profile
+        const otherUserEmail = conversationData.participants.find(email => email !== auth.currentUser.email);
+        const otherUserDoc = await db.collection('users').doc(otherUserEmail).get();
         
-        console.log('Has unread message:', hasUnreadMessage);
-        
-        if (hasUnreadMessage) {
-          console.log('✅ Marking conversation as read - unread message found');
-          
-          // Update the conversation to mark it as read by setting lastMessageSender to current user
-          await db.collection('conversations').doc(currentConversationId).update({
-            lastMessageSender: currentUser.email, // This will clear the unread status
-            lastReadTime: firebase.firestore.FieldValue.serverTimestamp()
-          });
-          
-          console.log('✅ Conversation marked as read successfully');
-        } else {
-          console.log('❌ No unread message to mark as read - skipping');
-          console.log('Reason: Either no message, system message, no sender, or message is from current user');
+        if (otherUserDoc.exists) {
+          const otherUserData = otherUserDoc.data();
+          document.getElementById('chatHeader').innerHTML = `
+            <div class="chat-header">
+              <button onclick="goBack()" class="back-btn">←</button>
+              <div class="user-info">
+                <img src="${otherUserData.photoURL || 'https://via.placeholder.com/40'}" alt="Profile" class="profile-pic">
+                <div>
+                  <div class="name">${otherUserData.fullName || 'Unknown'}</div>
+                  <div class="status">${otherUserData.currentLocation || ''}</div>
+                </div>
+              </div>
+            </div>
+          `;
         }
         
+        // Load messages
+        loadMessages();
+        
+        // Set up real-time listener for new messages
+        setupMessageListener();
+        
+        // Mark conversation as read when opening chat
+        await markConversationAsRead();
+        
       } catch (error) {
-        console.error('❌ Error marking conversation as read:', error);
+        console.error('Error loading conversation:', error);
       }
     }
   </script>
