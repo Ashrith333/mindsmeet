@@ -590,9 +590,42 @@
     function createProfileCard(profile) {
       const { email, data } = profile;
       
-      // Get profile photo - don't use default placeholder
-      const photos = data.photos || [];
+      // Get profile photos - handle both array format and individual field format
+      let photos = [];
+      
+      // Check if photos exist as an array (newer format)
+      if (data.photos && Array.isArray(data.photos)) {
+        photos = data.photos;
+      } else {
+        // Check for individual photo fields (current format)
+        if (data.photo1Url) {
+          photos.push({ url: data.photo1Url, name: data.photo1FileName || 'Photo 1' });
+        }
+        if (data.photo2Url) {
+          photos.push({ url: data.photo2Url, name: data.photo2FileName || 'Photo 2' });
+        }
+        // Add more photo fields if they exist
+        for (let i = 3; i <= 6; i++) {
+          const photoKey = `photo${i}Url`;
+          if (data[photoKey]) {
+            photos.push({ 
+              url: data[photoKey], 
+              name: data[`photo${i}FileName`] || `Photo ${i}` 
+            });
+          }
+        }
+      }
+      
       const mainPhoto = photos.length > 0 ? photos[0].url : null;
+      
+      // Debug logging for photo data
+      console.log('🔍 Creating profile card for:', email);
+      console.log('🔍 Photos found:', photos.length);
+      console.log('🔍 Photos array:', photos);
+      console.log('🔍 Main photo URL:', mainPhoto);
+      console.log('🔍 Full profile data keys:', Object.keys(data));
+      console.log('🔍 Photo1Url exists:', !!data.photo1Url);
+      console.log('🔍 Photo2Url exists:', !!data.photo2Url);
       
       // Calculate age from birth date if available
       let age = data.age;
@@ -610,22 +643,115 @@
       card.className = 'profile-card';
       card.dataset.userEmail = email;
       
-      // Create photo element - show placeholder if no photo
-      const photoElement = mainPhoto 
-        ? `<img src="${mainPhoto}" class="profile-image" alt="Profile">`
-        : `<div class="profile-image bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+      // Create photo element - show actual photo if available, otherwise placeholder
+      let photoElement;
+      if (mainPhoto && mainPhoto.trim() !== '') {
+        console.log('✅ Using actual profile photo:', mainPhoto);
+        photoElement = `<img src="${mainPhoto}" class="profile-image" alt="Profile" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="profile-image bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center" style="display:none;">
             <svg class="w-16 h-16 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
             </svg>
           </div>`;
+      } else {
+        console.log('⚠️ No photo available, showing placeholder');
+        photoElement = `<div class="profile-image bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+          <svg class="w-16 h-16 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+          </svg>
+        </div>`;
+      }
+      
+      // Create additional photos section if available
+      let additionalPhotosSection = '';
+      if (photos.length > 1) {
+        const additionalPhotos = photos.slice(1, 4); // Show up to 3 additional photos
+        const photoElements = additionalPhotos.map(photo => 
+          `<img src="${photo.url}" class="w-16 h-16 object-cover rounded-lg" alt="Profile photo" onerror="this.style.display='none';">`
+        ).join('');
+        additionalPhotosSection = `
+          <div class="mt-4">
+            <h4 class="text-primary font-semibold mb-2">More Photos</h4>
+            <div class="flex gap-2">
+              ${photoElements}
+            </div>
+          </div>
+        `;
+      }
+      
+      // Create comprehensive profile info
+      const profileInfo = `
+        <div class="profile-info overflow-y-auto max-h-96">
+          <!-- Basic Info -->
+          <div class="mb-4">
+            <h2 class="text-2xl font-bold text-primary mb-1">${data.fullName}, ${age}</h2>
+            <div class="text-secondary text-sm mb-2">${data.currentLocation || 'Location not set'}</div>
+            ${data.gender ? `<div class="text-secondary text-sm mb-2">${data.gender}</div>` : ''}
+            ${data.datingPreferences ? `<div class="text-secondary text-sm mb-2">Interested in: ${data.datingPreferences}</div>` : ''}
+          </div>
+          
+          <!-- Bio -->
+          ${data.bio ? `
+            <div class="mb-4">
+              <h4 class="text-primary font-semibold mb-2">About</h4>
+              <p class="text-secondary text-sm leading-relaxed">${data.bio}</p>
+            </div>
+          ` : ''}
+          
+          <!-- Personal Information -->
+          <div class="mb-4">
+            <h4 class="text-primary font-semibold mb-2">Personal Information</h4>
+            <div class="space-y-2 text-sm">
+              ${data.relationshipStatus ? `<div><span class="font-medium text-primary">Relationship Status:</span> <span class="text-secondary">${data.relationshipStatus}</span></div>` : ''}
+              ${data.datingIntentions ? `<div><span class="font-medium text-primary">Looking for:</span> <span class="text-secondary">${data.datingIntentions}</span></div>` : ''}
+              ${data.heightFeet && data.heightInches ? `<div><span class="font-medium text-primary">Height:</span> <span class="text-secondary">${data.heightFeet}'${data.heightInches}"</span></div>` : ''}
+            </div>
+          </div>
+          
+          <!-- Work & Education -->
+          ${(data.occupation || data.jobTitle || data.school || data.highestDegree) ? `
+            <div class="mb-4">
+              <h4 class="text-primary font-semibold mb-2">Work & Education</h4>
+              <div class="space-y-2 text-sm">
+                ${data.occupation ? `<div><span class="font-medium text-primary">Occupation:</span> <span class="text-secondary">${data.occupation}</span></div>` : ''}
+                ${data.jobTitle ? `<div><span class="font-medium text-primary">Job Title:</span> <span class="text-secondary">${data.jobTitle}</span></div>` : ''}
+                ${data.school ? `<div><span class="font-medium text-primary">School/University:</span> <span class="text-secondary">${data.school}</span></div>` : ''}
+                ${data.highestDegree ? `<div><span class="font-medium text-primary">Highest Degree:</span> <span class="text-secondary">${data.highestDegree}</span></div>` : ''}
+              </div>
+            </div>
+          ` : ''}
+          
+          <!-- Location -->
+          ${(data.currentLocation || data.hometown) ? `
+            <div class="mb-4">
+              <h4 class="text-primary font-semibold mb-2">Location</h4>
+              <div class="space-y-2 text-sm">
+                ${data.currentLocation ? `<div><span class="font-medium text-primary">Current Location:</span> <span class="text-secondary">${data.currentLocation}</span></div>` : ''}
+                ${data.hometown ? `<div><span class="font-medium text-primary">Hometown:</span> <span class="text-secondary">${data.hometown}</span></div>` : ''}
+              </div>
+            </div>
+          ` : ''}
+          
+          <!-- Interests -->
+          ${data.interests ? `
+            <div class="mb-4">
+              <h4 class="text-primary font-semibold mb-2">Interests</h4>
+              <div class="flex flex-wrap gap-2">
+                ${data.interests.split(',').map(interest => 
+                  `<span class="bg-blue-50 text-primary px-3 py-1 rounded-full text-xs">${interest.trim()}</span>`
+                ).join('')}
+              </div>
+            </div>
+          ` : ''}
+          
+          <!-- Additional Photos -->
+          ${additionalPhotosSection}
+        </div>
+      `;
       
       card.innerHTML = `
         ${photoElement}
-        <div class="profile-info">
-          <div class="profile-name">${data.fullName}, ${age}</div>
-          <div class="profile-details">${data.currentLocation || 'Location not set'}</div>
-          <div class="profile-bio">${data.bio || 'No bio available'}</div>
-        </div>
+        ${profileInfo}
         <div class="action-buttons">
           <button class="btn btn-dislike" onclick="handleDislike('${email}')">
             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
