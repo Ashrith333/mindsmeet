@@ -57,31 +57,153 @@
     }
     .bottom-nav {
       position: fixed;
-      left: 0; right: 0; bottom: 0;
-      background: #fff;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
       border-top: 1px solid #e5e7eb;
-      z-index: 50;
       display: flex;
       justify-content: space-around;
-      align-items: center;
-      height: 64px;
+      padding: 8px 0;
+      z-index: 1000;
     }
     .nav-icon {
       display: flex;
       flex-direction: column;
       align-items: center;
-      color: #a0aec0;
+      padding: 8px;
+      border: none;
+      background: none;
+      color: #6b7280;
       font-size: 12px;
-      font-weight: 500;
+      cursor: pointer;
       transition: color 0.2s;
-      background: transparent;
-      border-radius: 0;
-      padding: 0;
+      position: relative;
     }
     .nav-icon.active {
-      color: #3fa2ed;
-      background: transparent;
-      box-shadow: none;
+      color: #3b82f6;
+    }
+    .nav-icon:hover {
+      color: #3b82f6;
+    }
+    .unread-indicator {
+      position: absolute !important;
+      top: -4px !important;
+      right: -4px !important;
+      width: 12px !important;
+      height: 12px !important;
+      background-color: #3b82f6 !important;
+      border-radius: 50% !important;
+      z-index: 10 !important;
+    }
+    .profile-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .profile-image {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .profile-info {
+      padding: 16px;
+    }
+    .profile-name {
+      font-size: 24px;
+      font-weight: bold;
+      color: #1f2937;
+      margin-bottom: 4px;
+    }
+    .profile-details {
+      color: #6b7280;
+      margin-bottom: 12px;
+    }
+    .profile-bio {
+      color: #374151;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+    }
+    .btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-dislike {
+      background: #f3f4f6;
+      color: #6b7280;
+    }
+    .btn-dislike:hover {
+      background: #e5e7eb;
+    }
+    .btn-like {
+      background: #3b82f6;
+      color: white;
+    }
+    .btn-like:hover {
+      background: #2563eb;
+    }
+    .btn-superlike {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    .btn-superlike:hover {
+      opacity: 0.9;
+    }
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #6b7280;
+    }
+    .no-profiles {
+      text-align: center;
+      padding: 40px;
+      color: #6b7280;
+    }
+    .filter-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      z-index: 100;
+    }
+    .filter-btn:hover {
+      background: #f9fafb;
+    }
+    .animate-slide-up {
+      animation: slide-up 0.3s ease-out;
+    }
+    @keyframes slide-up {
+      from {
+        transform: translateY(100%);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+    #globalNotification {
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     }
   </style>
 </head>
@@ -104,51 +226,8 @@
   <!-- Main Content (scrollable between fixed bars) -->
   <div class="flex-1 w-full max-w-lg mx-auto pt-16 pb-20 bg-white overflow-y-auto" style="min-height:calc(100vh - 120px);">
     <!-- Browse Content -->
-    <div class="space-y-6">
-      <!-- Example Profile Cards (replace with dynamic content) -->
-      <div class="bg-white rounded-2xl card-shadow p-4 flex flex-col">
-        <div class="relative">
-          <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-full h-80 object-cover rounded-xl mb-2" alt="Profile photo">
-          <span class="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">Active today</span>
-        </div>
-        <div class="flex items-center justify-between mt-2">
-          <div>
-            <span class="text-xl font-bold text-primary">Tanya</span>
-            <span class="ml-2 text-xs text-green-600 font-semibold">• Active today</span>
-          </div>
-          <span class="text-xs text-purple-600 font-semibold flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Verified</span>
-        </div>
-        <div class="text-secondary text-sm mt-1">she/her</div>
-        <div class="flex items-center gap-2 mt-2">
-          <span class="bg-blue-100 text-blue-700 rounded-full px-3 py-1 text-xs">26</span>
-          <span class="bg-blue-100 text-blue-700 rounded-full px-3 py-1 text-xs">Woman</span>
-          <span class="bg-blue-100 text-blue-700 rounded-full px-3 py-1 text-xs">Straight</span>
-        </div>
-        <div class="text-sm text-primary mt-2 font-medium">Program Manager at Amazon</div>
-        <!-- More sections for testing -->
-        <div class="mt-4">
-          <h4 class="text-primary font-semibold mb-1">About</h4>
-          <p class="text-sm text-secondary">Loves travel, music, and deep conversations. Looking for someone genuine and kind.</p>
-        </div>
-        <div class="mt-4">
-          <h4 class="text-primary font-semibold mb-1">Interests</h4>
-          <div class="flex flex-wrap gap-2">
-            <span class="bg-blue-50 text-primary px-3 py-1 rounded-full text-xs">Yoga</span>
-            <span class="bg-blue-50 text-primary px-3 py-1 rounded-full text-xs">Photography</span>
-            <span class="bg-blue-50 text-primary px-3 py-1 rounded-full text-xs">Cooking</span>
-            <span class="bg-blue-50 text-primary px-3 py-1 rounded-full text-xs">Hiking</span>
-          </div>
-        </div>
-        <div class="mt-4">
-          <h4 class="text-primary font-semibold mb-1">Photos</h4>
-          <div class="flex gap-2">
-            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-16 h-16 object-cover rounded-lg" alt="Photo1">
-            <img src="https://randomuser.me/api/portraits/women/45.jpg" class="w-16 h-16 object-cover rounded-lg" alt="Photo2">
-            <img src="https://randomuser.me/api/portraits/women/46.jpg" class="w-16 h-16 object-cover rounded-lg" alt="Photo3">
-          </div>
-        </div>
-      </div>
-      <!-- Add more cards as needed -->
+    <div class="space-y-6 browse-container">
+      <!-- Dynamic content will be loaded here -->
     </div>
   </div>
 
@@ -227,6 +306,16 @@
     </div>
   </div>
 
+  <!-- Global Notification for New Messages -->
+  <div id="globalNotification" class="fixed top-4 right-4 bg-primary text-white px-4 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300">
+    <div class="flex items-center space-x-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8s-9-3.582-9-8a9 9 0 1118 0z"/>
+      </svg>
+      <span class="font-medium">New message received!</span>
+    </div>
+  </div>
+
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -291,6 +380,9 @@
             // Profile exists with essential data - load browse data
             console.log('Profile complete, loading browse data');
             loadBrowseData();
+            
+            // Setup message notifications
+            setupMessageNotifications();
           } else {
             // Profile exists but missing essential data - go to profile setup
             console.log('Profile incomplete, redirecting to profile setup');
@@ -310,12 +402,403 @@
     // Load browse data
     async function loadBrowseData() {
       try {
-        console.log('Loading browse data...');
-        // TODO: Load profiles from database
-        // For now, using example data
+        console.log('Loading browse data from Firebase...');
+        
+        // Get current user to exclude them from browse results
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+          console.log('No current user found');
+          return;
+        }
+
+        // Get current user's profile to check preferences
+        const currentUserDoc = await db.collection('users').doc(currentUser.email).get();
+        const currentUserData = currentUserDoc.data();
+        
+        console.log('Current user data:', currentUserData);
+        
+        // Fetch all user profiles except current user
+        const usersSnapshot = await db.collection('users').get();
+        const browseContainer = document.querySelector('.browse-container');
+        
+        // Clear existing content
+        browseContainer.innerHTML = '';
+        
+        let profilesFound = 0;
+        
+        // Get current user's likes/dislikes to filter out already interacted profiles
+        const likesSnapshot = await db.collection('likes').where('fromUser', '==', currentUser.email).get();
+        const userInteractions = {};
+        likesSnapshot.forEach(doc => {
+          const likeData = doc.data();
+          userInteractions[likeData.toUser] = likeData.status; // 'like' or 'dislike'
+        });
+        
+        // Get existing conversations to filter out matched users
+        const conversationsSnapshot = await db.collection('conversations').where('users', 'array-contains', currentUser.email).get();
+        const matchedUsers = new Set();
+        conversationsSnapshot.forEach(doc => {
+          const conversationData = doc.data();
+          conversationData.users.forEach(userEmail => {
+            if (userEmail !== currentUser.email) {
+              matchedUsers.add(userEmail);
+            }
+          });
+        });
+        
+        console.log('User interactions:', userInteractions);
+        console.log('Matched users:', Array.from(matchedUsers));
+        
+        usersSnapshot.forEach(doc => {
+          const userData = doc.data();
+          const userEmail = doc.id;
+          
+          console.log('Processing user:', userEmail, 'Data:', userData);
+          
+          // Skip current user
+          if (userEmail === currentUser.email) {
+            console.log('Skipping current user:', userEmail);
+            return;
+          }
+          
+          // Skip profiles that user has already liked or disliked
+          if (userInteractions[userEmail]) {
+            console.log(`Skipping ${userInteractions[userEmail]} profile:`, userEmail);
+            return;
+          }
+          
+          // Skip matched users (they should be in messages)
+          if (matchedUsers.has(userEmail)) {
+            console.log('Skipping matched user:', userEmail);
+            return;
+          }
+          
+          // Check if user has basic profile data (name and gender)
+          if (!userData.fullName || !userData.gender) {
+            console.log('Skipping user with missing name or gender:', userEmail, 'Missing:', {
+              fullName: !userData.fullName,
+              gender: !userData.gender
+            });
+            return;
+          }
+          
+          // Show all profiles that pass the basic checks
+          profilesFound++;
+          console.log('Showing profile:', userEmail);
+          
+          // Create profile card
+          const card = document.createElement('div');
+          card.className = 'bg-white rounded-2xl shadow-lg p-4 mb-4';
+          card.dataset.userEmail = userEmail;
+          
+          // Get profile photos
+          const photos = userData.photos || [];
+          const mainPhoto = photos.length > 0 ? photos[0].url : 'https://randomuser.me/api/portraits/lego/1.jpg';
+          const additionalPhotos = photos.slice(1, 4); // Get up to 3 additional photos
+          
+          // Calculate age from birth date if available
+          let age = userData.age;
+          if (userData.birthDate) {
+            const birthDate = new Date(userData.birthDate);
+            const today = new Date();
+            age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+              age--;
+            }
+          }
+          
+          card.innerHTML = `
+            <div class="flex items-start justify-between mb-3">
+              <div class="flex items-center space-x-3">
+                <img src="${mainPhoto}" class="w-16 h-16 object-cover rounded-xl" alt="Profile photo">
+                <div>
+                  <h3 class="font-bold text-lg text-gray-800">${userData.fullName || 'Anonymous'}</h3>
+                  <p class="text-gray-600">${age || 'N/A'} • ${userData.gender || 'N/A'}</p>
+                  <p class="text-gray-500 text-sm">${userData.currentLocation || 'Location not set'}</p>
+                </div>
+              </div>
+              <div class="flex space-x-2">
+                <button onclick="handleDislike('${userEmail}')" class="dislike-btn w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center text-white transition-colors">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                  </svg>
+                </button>
+                <button onclick="handleLike('${userEmail}')" class="like-btn w-10 h-10 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center text-white transition-colors">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <p class="text-gray-700 text-sm leading-relaxed">
+                ${userData.bio || 'No bio available'}
+              </p>
+            </div>
+            
+            <div class="flex gap-2">
+              ${additionalPhotos.map(photo => 
+                `<img src="${photo.url}" class="w-16 h-16 object-cover rounded-lg" alt="Additional photo">`
+              ).join('')}
+              ${additionalPhotos.length === 0 ? 
+                '<div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 text-xs">No more photos</div>' : 
+                ''
+              }
+            </div>
+          `;
+          
+          browseContainer.appendChild(card);
+        });
+        
+        if (profilesFound === 0) {
+          browseContainer.innerHTML = `
+            <div class="text-center py-8">
+              <div class="text-gray-500 text-lg mb-2">No new profiles found</div>
+              <div class="text-gray-400 text-sm">You've seen all available profiles. Check back later for new matches!</div>
+            </div>
+          `;
+        }
+        
+        console.log(`Loaded ${profilesFound} new profiles`);
+        
       } catch (error) {
         console.error('Error loading browse data:', error);
+        const browseContainer = document.querySelector('.browse-container');
+        browseContainer.innerHTML = `
+          <div class="text-center py-8">
+            <div class="text-red-500 text-lg mb-2">Error loading profiles</div>
+            <div class="text-gray-400 text-sm">Please try again later</div>
+          </div>
+        `;
       }
+    }
+
+    // Handle like action
+    async function handleLike(userEmail) {
+      try {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+          console.log('No current user found');
+          return;
+        }
+
+        console.log(`Liking user: ${userEmail}`);
+        
+        // Create or update like document
+        const likeRef = db.collection('likes').doc(`${currentUser.email}_${userEmail}`);
+        await likeRef.set({
+          fromUser: currentUser.email,
+          toUser: userEmail,
+          status: 'like',
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        // Remove profile from browse view
+        removeProfileFromBrowse(userEmail);
+        
+        // Check if it's a match (other user also liked current user)
+        await checkForMatch(userEmail);
+        
+      } catch (error) {
+        console.error('Error liking user:', error);
+        alert('Error liking user. Please try again.');
+      }
+    }
+
+    // Handle dislike action
+    async function handleDislike(userEmail) {
+      try {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+          console.log('No current user found');
+          return;
+        }
+
+        console.log(`Disliking user: ${userEmail}`);
+        
+        // Create or update like document
+        const likeRef = db.collection('likes').doc(`${currentUser.email}_${userEmail}`);
+        await likeRef.set({
+          fromUser: currentUser.email,
+          toUser: userEmail,
+          status: 'dislike',
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        // Remove profile from browse view
+        removeProfileFromBrowse(userEmail);
+        
+      } catch (error) {
+        console.error('Error disliking user:', error);
+        alert('Error disliking user. Please try again.');
+      }
+    }
+
+    // Remove profile from browse view
+    function removeProfileFromBrowse(userEmail) {
+      const card = document.querySelector(`[data-user-email="${userEmail}"]`);
+      if (card) {
+        // Add fade out animation
+        card.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
+        card.style.opacity = '0';
+        card.style.transform = 'translateX(-100%)';
+        
+        // Remove from DOM after animation
+        setTimeout(() => {
+          if (card.parentNode) {
+            card.parentNode.removeChild(card);
+          }
+          
+          // Check if no more profiles
+          const remainingCards = document.querySelectorAll('.browse-container > div');
+          if (remainingCards.length === 0) {
+            const browseContainer = document.querySelector('.browse-container');
+            browseContainer.innerHTML = `
+              <div class="text-center py-8">
+                <div class="text-gray-500 text-lg mb-2">No new profiles found</div>
+                <div class="text-gray-400 text-sm">You've seen all available profiles. Check back later for new matches!</div>
+              </div>
+            `;
+          }
+        }, 300);
+      }
+    }
+
+    // Update like status in UI (kept for compatibility but not used in browse)
+    function updateLikeStatus(userEmail, status) {
+      const card = document.querySelector(`[data-user-email="${userEmail}"]`);
+      if (!card) return;
+      
+      const dislikeBtn = card.querySelector('.dislike-btn');
+      const likeBtn = card.querySelector('.like-btn');
+      const statusText = card.querySelector('.text-blue-600');
+      
+      // Update button styles
+      if (status === 'like') {
+        dislikeBtn.className = 'dislike-btn w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center text-white transition-colors';
+        likeBtn.className = 'like-btn w-10 h-10 bg-green-600 rounded-full flex items-center justify-center text-white transition-colors';
+      } else if (status === 'dislike') {
+        dislikeBtn.className = 'dislike-btn w-10 h-10 bg-red-600 rounded-full flex items-center justify-center text-white transition-colors';
+        likeBtn.className = 'like-btn w-10 h-10 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center text-white transition-colors';
+      }
+      
+      // Update status text
+      if (statusText) {
+        statusText.textContent = `You ${status === 'like' ? 'liked' : 'disliked'} this profile`;
+      } else {
+        // Add status text if it doesn't exist
+        const userInfo = card.querySelector('.flex.items-center.space-x-3 + div');
+        if (userInfo) {
+          const newStatusText = document.createElement('p');
+          newStatusText.className = 'text-xs text-blue-600 font-medium mt-1';
+          newStatusText.textContent = `You ${status === 'like' ? 'liked' : 'disliked'} this profile`;
+          userInfo.appendChild(newStatusText);
+        }
+      }
+    }
+
+    // Check for mutual match
+    async function checkForMatch(userEmail) {
+      try {
+        const currentUser = auth.currentUser;
+        if (!currentUser) return;
+        
+        // Check if the other user also liked current user
+        const otherUserLikeRef = db.collection('likes').doc(`${userEmail}_${currentUser.email}`);
+        const otherUserLikeDoc = await otherUserLikeRef.get();
+        
+        if (otherUserLikeDoc.exists && otherUserLikeDoc.data().status === 'like') {
+          // It's a match!
+          console.log('Match found!');
+          
+          // Create match document
+          const matchRef = db.collection('matches').doc(`${currentUser.email}_${userEmail}`);
+          await matchRef.set({
+            users: [currentUser.email, userEmail].sort(),
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            status: 'active'
+          });
+          
+          // Create conversation for messaging
+          await createConversation(currentUser.email, userEmail);
+          
+          // Show match notification
+          showMatchNotification(userEmail);
+        }
+        
+      } catch (error) {
+        console.error('Error checking for match:', error);
+      }
+    }
+
+    // Create conversation for matched users
+    async function createConversation(user1Email, user2Email) {
+      try {
+        // Create conversation document
+        const conversationId = [user1Email, user2Email].sort().join('_');
+        const conversationRef = db.collection('conversations').doc(conversationId);
+        
+        // Check if conversation already exists
+        const conversationDoc = await conversationRef.get();
+        
+        if (!conversationDoc.exists) {
+          // Create new conversation
+          await conversationRef.set({
+            users: [user1Email, user2Email].sort(),
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            lastMessage: null,
+            lastMessageTime: null,
+            lastMessageSender: 'system'
+          });
+          
+          // Create initial welcome message
+          const messageRef = conversationRef.collection('messages').doc();
+          await messageRef.set({
+            sender: 'system',
+            text: 'You matched! Start a conversation! 💕',
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            type: 'system'
+          });
+          
+          // Update conversation with last message
+          await conversationRef.update({
+            lastMessage: 'You matched! Start a conversation! 💕',
+            lastMessageTime: firebase.firestore.FieldValue.serverTimestamp(),
+            lastMessageSender: 'system'
+          });
+          
+          console.log('Conversation created for match:', conversationId);
+        }
+        
+      } catch (error) {
+        console.error('Error creating conversation:', error);
+      }
+    }
+
+    // Show match notification
+    function showMatchNotification(userEmail) {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-bounce';
+      notification.innerHTML = `
+        <div class="flex items-center space-x-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+          </svg>
+          <span class="font-medium">It's a match! 🎉</span>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Remove notification after 3 seconds
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.parentNode.removeChild(notification);
+        }
+      }, 3000);
     }
 
     // Filter bar logic
@@ -338,6 +821,197 @@
     document.getElementById('filterModal').addEventListener('click', function(e) {
       if (e.target === this) closeFilterModal();
     });
+
+    // Load user profile
+    async function loadUserProfile() {
+      try {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        const userDoc = await db.collection('users').doc(user.email).get();
+        if (!userDoc.exists) {
+          window.location.href = 'profile-setup.html';
+          return;
+        }
+
+        const userData = userDoc.data();
+        
+        // Check if essential profile data exists
+        if (!userData.fullName || !userData.age || !userData.currentLocation) {
+          window.location.href = 'profile-setup.html';
+          return;
+        }
+
+        // Load browse data
+        loadBrowseData();
+        
+        // Setup message notifications
+        setupMessageNotifications();
+        
+      } catch (error) {
+        console.error('Error loading user profile:', error);
+        window.location.href = 'profile-setup.html';
+      }
+    }
+
+    // Setup message notifications
+    function setupMessageNotifications() {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      console.log('Setting up message notifications in browse');
+
+      // First, check for existing unread messages
+      checkForUnreadMessages();
+
+      // Listen for new conversations (messages)
+      db.collection('conversations').where('users', 'array-contains', user.email)
+        .onSnapshot(snapshot => {
+          console.log('Browse: Conversation changes detected:', snapshot.docChanges().length);
+          
+          snapshot.docChanges().forEach(change => {
+            console.log('Browse: Change type:', change.type, 'Doc ID:', change.doc.id);
+            
+            if (change.type === 'modified') {
+              const conversationData = change.doc.data();
+              console.log('Browse: Modified conversation data:', conversationData);
+              
+              // Check if this is a new message (not from current user, not system)
+              if (conversationData.lastMessage && 
+                  conversationData.lastMessageSender && 
+                  conversationData.lastMessageSender !== 'system' &&
+                  conversationData.lastMessageSender !== user.email) {
+                console.log('Browse: New message detected:', change.doc.id);
+                
+                // Get sender's name for notification
+                const otherUserEmail = conversationData.users.find(email => email !== user.email);
+                if (otherUserEmail) {
+                  db.collection('users').doc(otherUserEmail).get().then(userDoc => {
+                    if (userDoc.exists) {
+                      const senderProfile = userDoc.data();
+                      showNewMessageNotification(senderProfile.fullName);
+                      updateMessagesIndicator(true);
+                      console.log('Browse: Blue dot indicator updated');
+                    }
+                  });
+                }
+              }
+            }
+          });
+          
+          // Check for unread messages after any changes
+          setTimeout(() => {
+            checkForUnreadMessages();
+          }, 100);
+        }, error => {
+          console.error('Error setting up message notifications:', error);
+        });
+    }
+
+    // Check for unread messages across all conversations
+    async function checkForUnreadMessages() {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      try {
+        console.log('Checking for unread messages...');
+        
+        const conversationsSnapshot = await db.collection('conversations').where('users', 'array-contains', user.email).get();
+        let hasUnread = false;
+        
+        conversationsSnapshot.forEach(doc => {
+          const conversationData = doc.data();
+          // Check if this conversation has unread messages (last message is not from current user)
+          if (conversationData.lastMessage && 
+              conversationData.lastMessageSender && 
+              conversationData.lastMessageSender !== 'system' &&
+              conversationData.lastMessageSender !== user.email) {
+            hasUnread = true;
+            console.log('Found unread message in conversation:', doc.id);
+          }
+        });
+        
+        console.log('Unread messages found:', hasUnread);
+        updateMessagesIndicator(hasUnread);
+        
+      } catch (error) {
+        console.error('Error checking for unread messages:', error);
+      }
+    }
+
+    // Show notification for new message
+    function showNewMessageNotification(senderName) {
+      console.log('Showing notification for:', senderName);
+      
+      const notification = document.getElementById('globalNotification');
+      const notificationText = notification?.querySelector('span');
+      
+      if (!notification || !notificationText) {
+        console.error('Notification elements not found');
+        // Fallback: show browser notification if available
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification('New Message', {
+            body: `New message from ${senderName}!`,
+            icon: '/favicon.ico'
+          });
+        }
+        return;
+      }
+      
+      // Update notification text
+      notificationText.textContent = `New message from ${senderName}!`;
+      
+      // Ensure notification is visible
+      notification.style.display = 'block';
+      notification.style.transform = 'translateX(0)';
+      notification.classList.remove('translate-x-full');
+      
+      console.log('Notification shown');
+      
+      // Hide notification after 3 seconds
+      setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => {
+          notification.style.display = 'none';
+        }, 300);
+      }, 3000);
+    }
+
+    // Update messages indicator in navigation
+    function updateMessagesIndicator(hasUnread) {
+      console.log('Browse: Updating messages indicator, hasUnread:', hasUnread);
+      
+      // Update the messages icon in the bottom navigation
+      const messagesNavButton = document.querySelector('[onclick*="messages.html"]');
+      console.log('Browse: Messages nav button found:', !!messagesNavButton);
+      
+      if (messagesNavButton) {
+        // Make sure the button has relative positioning for the indicator
+        messagesNavButton.style.position = 'relative';
+        
+        const existingIndicator = messagesNavButton.querySelector('.unread-indicator');
+        console.log('Browse: Existing indicator found:', !!existingIndicator);
+        
+        if (hasUnread && !existingIndicator) {
+          // Add blue dot indicator
+          const indicator = document.createElement('div');
+          indicator.className = 'unread-indicator absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full z-10';
+          messagesNavButton.appendChild(indicator);
+          console.log('Browse: Blue dot indicator added');
+        } else if (!hasUnread && existingIndicator) {
+          // Remove blue dot indicator
+          existingIndicator.remove();
+          console.log('Browse: Blue dot indicator removed');
+        }
+      }
+      
+      // Also update the page title to show unread count
+      if (hasUnread) {
+        document.title = 'Browse (1) - Minds Meet';
+      } else {
+        document.title = 'Browse - Minds Meet';
+      }
+    }
   </script>
 </body>
 </html> 

@@ -76,81 +76,14 @@
   </div>
 
   <!-- Main Content -->
-  <div class="flex-1 w-full max-w-lg mx-auto pb-20 bg-white overflow-y-auto">
-    <!-- Messages List -->
-    <div class="space-y-1">
-      <!-- Example Message Items -->
-      <div class="message-item flex items-center p-4 cursor-pointer border-b border-gray-50">
-        <div class="relative">
-          <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-12 h-12 rounded-full object-cover" alt="Profile">
-          <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
-        </div>
-        <div class="ml-3 flex-1 min-w-0">
-          <div class="flex items-center justify-between">
-            <h3 class="text-sm font-semibold text-primary truncate">Tanya</h3>
-            <span class="text-xs text-gray-500">2m ago</span>
-          </div>
-          <p class="text-sm text-gray-600 truncate">Hey! I loved your profile. Would you like to grab coffee sometime?</p>
-        </div>
-        <div class="ml-2">
-          <div class="w-2 h-2 bg-primary rounded-full"></div>
-        </div>
-      </div>
-
-      <div class="message-item flex items-center p-4 cursor-pointer border-b border-gray-50">
-        <div class="relative">
-          <img src="https://randomuser.me/api/portraits/women/45.jpg" class="w-12 h-12 rounded-full object-cover" alt="Profile">
-        </div>
-        <div class="ml-3 flex-1 min-w-0">
-          <div class="flex items-center justify-between">
-            <h3 class="text-sm font-semibold text-primary truncate">Sarah</h3>
-            <span class="text-xs text-gray-500">1h ago</span>
-          </div>
-          <p class="text-sm text-gray-600 truncate">Thanks for the like! I'm also into hiking and photography.</p>
-        </div>
-      </div>
-
-      <div class="message-item flex items-center p-4 cursor-pointer border-b border-gray-50">
-        <div class="relative">
-          <img src="https://randomuser.me/api/portraits/women/46.jpg" class="w-12 h-12 rounded-full object-cover" alt="Profile">
-          <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
-        </div>
-        <div class="ml-3 flex-1 min-w-0">
-          <div class="flex items-center justify-between">
-            <h3 class="text-sm font-semibold text-primary truncate">Emma</h3>
-            <span class="text-xs text-gray-500">3h ago</span>
-          </div>
-          <p class="text-sm text-gray-600 truncate">Hi there! I noticed we have similar interests. Want to chat?</p>
-        </div>
-        <div class="ml-2">
-          <div class="w-2 h-2 bg-primary rounded-full"></div>
-        </div>
-      </div>
-
-      <div class="message-item flex items-center p-4 cursor-pointer border-b border-gray-50">
-        <div class="relative">
-          <img src="https://randomuser.me/api/portraits/women/47.jpg" class="w-12 h-12 rounded-full object-cover" alt="Profile">
-        </div>
-        <div class="ml-3 flex-1 min-w-0">
-          <div class="flex items-center justify-between">
-            <h3 class="text-sm font-semibold text-primary truncate">Jessica</h3>
-            <span class="text-xs text-gray-500">1d ago</span>
-          </div>
-          <p class="text-sm text-gray-600 truncate">Great to meet you! I'm free this weekend if you want to meet up.</p>
-        </div>
-      </div>
-
-      <div class="message-item flex items-center p-4 cursor-pointer border-b border-gray-50">
-        <div class="relative">
-          <img src="https://randomuser.me/api/portraits/women/48.jpg" class="w-12 h-12 rounded-full object-cover" alt="Profile">
-        </div>
-        <div class="ml-3 flex-1 min-w-0">
-          <div class="flex items-center justify-between">
-            <h3 class="text-sm font-semibold text-primary truncate">Maya</h3>
-            <span class="text-xs text-gray-500">2d ago</span>
-          </div>
-          <p class="text-sm text-gray-600 truncate">Thanks for reaching out! I'd love to get to know you better.</p>
-        </div>
+  <div class="flex-1 w-full max-w-lg mx-auto pt-16 pb-20 bg-white overflow-y-auto" style="min-height:calc(100vh - 120px);">
+    <!-- Messages Content -->
+    <div class="p-4">
+      <h2 class="text-2xl font-bold text-primary mb-6">Messages</h2>
+      
+      <!-- Messages List -->
+      <div id="messagesList" class="space-y-1">
+        <!-- Dynamic content will be loaded here -->
       </div>
     </div>
 
@@ -158,7 +91,7 @@
     <div id="emptyState" class="hidden flex flex-col items-center justify-center py-16 px-4">
       <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
         <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8s-9-3.582-9-8a9 9 0 1118 0z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8s-9-3.582-9-8a9 9 0 1118 0z"></path>
         </svg>
       </div>
       <h3 class="text-lg font-semibold text-primary mb-2">No messages yet</h3>
@@ -189,6 +122,9 @@
     </button>
   </nav>
 
+  <!-- Global Notification for New Messages -->
+  <!-- Removed - using blue highlighting instead of popup notifications -->
+
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -211,63 +147,52 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // Check authentication on page load
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('Messages page loaded, checking authentication...');
-      
-      auth.onAuthStateChanged(function(user) {
-        console.log('Auth state changed:', user ? 'User logged in' : 'No user');
-        
-        if (user && user.email) {
-          console.log('User authenticated:', user.email);
-          console.log('Email verified:', user.emailVerified);
-          
-          // Check if user has complete profile
-          checkUserProfile(user);
-        } else {
-          console.log('No user authenticated, redirecting to login');
-          window.location.href = 'login.html';
-        }
-      });
+    // Authentication state observer
+    auth.onAuthStateChanged(function(user) {
+      if (user) {
+        console.log('User authenticated:', user.email);
+        loadUserProfile();
+      } else {
+        console.log('No user authenticated, redirecting to login');
+        window.location.href = 'login.html';
+      }
     });
 
-    // Check if user has complete profile
-    async function checkUserProfile(user) {
+    // Load user profile
+    async function loadUserProfile() {
       try {
-        console.log('Checking user profile completion...');
-        
-        const userDocRef = db.collection('users').doc(user.email);
-        const userSnap = await userDocRef.get();
-        
-        if (userSnap.exists) {
-          const userData = userSnap.data();
-          console.log('User profile data:', userData);
-          
-          // Check if profile has essential data (name, age, etc.)
-          // For existing profiles, dating preferences is optional
-          // For new profiles, it will be required during setup
-          const hasEssentialData = userData.fullName && userData.age;
-          console.log('Has essential profile data:', hasEssentialData);
-          
-          if (hasEssentialData) {
-            // Profile exists with essential data - load messages
-            console.log('Profile complete, loading messages');
-            loadMessages();
-          } else {
-            // Profile exists but missing essential data - go to profile setup
-            console.log('Profile incomplete, redirecting to profile setup');
-            window.location.href = 'profile-setup.html?email=' + encodeURIComponent(user.email);
-          }
-        } else {
-          // No profile data found - go to profile setup
-          console.log('No profile data found, redirecting to profile setup');
-          window.location.href = 'profile-setup.html?email=' + encodeURIComponent(user.email);
+        const user = auth.currentUser;
+        if (!user) return;
+
+        const userDoc = await db.collection('users').doc(user.email).get();
+        if (!userDoc.exists) {
+          window.location.href = 'profile-setup.html';
+          return;
         }
+
+        const userData = userDoc.data();
+        
+        // Check if essential profile data exists
+        if (!userData.fullName || !userData.age || !userData.currentLocation) {
+          window.location.href = 'profile-setup.html';
+          return;
+        }
+
+        // Load messages (this will also setup the real-time listener)
+        loadMessages();
+        
+        // Setup global message notifications
+        setupGlobalMessageNotifications();
+        
       } catch (error) {
-        console.error('Error checking user profile:', error);
-        alert('Error checking profile. Please try again.');
+        console.error('Error loading user profile:', error);
+        window.location.href = 'profile-setup.html';
       }
     }
+
+    // Global variables for tracking
+    let displayedConversations = new Set();
+    let conversationsListener = null;
 
     // Load messages
     async function loadMessages() {
@@ -276,22 +201,456 @@
         const user = auth.currentUser;
         if (!user) return;
 
-        // TODO: Load messages from Firestore
-        // For now, using example data
-        console.log('Messages loaded successfully');
+        // Fetch conversations where current user is a participant
+        const conversationsSnapshot = await db.collection('conversations').where('users', 'array-contains', user.email).get();
+        
+        const messagesList = document.getElementById('messagesList');
+        const emptyState = document.getElementById('emptyState');
+        
+        // Clear existing content and tracking
+        messagesList.innerHTML = '';
+        displayedConversations.clear();
+        
+        let conversationsFound = 0;
+        
+        // Get all user profiles to match with conversations
+        const usersSnapshot = await db.collection('users').get();
+        const userProfiles = {};
+        usersSnapshot.forEach(doc => {
+          userProfiles[doc.id] = doc.data();
+        });
+        
+        // Collect all conversations with their data
+        const conversations = [];
+        conversationsSnapshot.forEach(doc => {
+          const conversationData = doc.data();
+          const otherUserEmail = conversationData.users.find(email => email !== user.email);
+          
+          if (otherUserEmail && userProfiles[otherUserEmail]) {
+            const otherUserProfile = userProfiles[otherUserEmail];
+            
+            if (otherUserProfile.fullName && otherUserProfile.age) {
+              conversations.push({
+                id: doc.id,
+                data: conversationData,
+                otherUserEmail: otherUserEmail,
+                otherUserProfile: otherUserProfile
+              });
+            }
+          }
+        });
+        
+        // Sort conversations by last message time (most recent first)
+        conversations.sort((a, b) => {
+          const timeA = a.data.lastMessageTime ? a.data.lastMessageTime.toDate() : new Date(0);
+          const timeB = b.data.lastMessageTime ? b.data.lastMessageTime.toDate() : new Date(0);
+          return timeB - timeA;
+        });
+        
+        // Create message items in sorted order
+        conversations.forEach(conversation => {
+          conversationsFound++;
+          
+          // Track this conversation as displayed
+          displayedConversations.add(conversation.id);
+          
+          // Create message item
+          createMessageItem(conversation.id, conversation.data, conversation.otherUserEmail, conversation.otherUserProfile, user);
+        });
+        
+        // Show empty state if no conversations
+        if (conversationsFound === 0) {
+          messagesList.classList.add('hidden');
+          emptyState.classList.remove('hidden');
+        } else {
+          messagesList.classList.remove('hidden');
+          emptyState.classList.add('hidden');
+        }
+        
+        console.log(`Loaded ${conversationsFound} conversations`);
+        console.log('Displayed conversations:', Array.from(displayedConversations));
+        
+        // Check for unread messages and update indicator
+        checkUnreadMessages();
+        
+        // Setup real-time listener after initial load
+        setupConversationsListener();
+        
       } catch (error) {
         console.error('Error loading messages:', error);
+        const messagesList = document.getElementById('messagesList');
+        const emptyState = document.getElementById('emptyState');
+        
+        messagesList.classList.add('hidden');
+        emptyState.classList.add('hidden');
+        
+        // Update empty state message for error
+        const emptyStateTitle = emptyState.querySelector('h3');
+        const emptyStateDesc = emptyState.querySelector('p');
+        if (emptyStateTitle) emptyStateTitle.textContent = 'Error loading messages';
+        if (emptyStateDesc) emptyStateDesc.textContent = 'Please try again later';
       }
     }
 
+    // Create a message item (extracted function to avoid duplication)
+    function createMessageItem(conversationId, conversationData, otherUserEmail, otherUserProfile, currentUser) {
+      const messagesList = document.getElementById('messagesList');
+      
+      // Get profile photo
+      const photos = otherUserProfile.photos || [];
+      const mainPhoto = photos.length > 0 ? photos[0].url : 'https://randomuser.me/api/portraits/lego/1.jpg';
+      
+      // Calculate age from birth date if available
+      let age = otherUserProfile.age;
+      if (otherUserProfile.birthDate) {
+        const birthDate = new Date(otherUserProfile.birthDate);
+        const today = new Date();
+        age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+      }
+      
+      // Format last message time
+      const lastMessageTime = conversationData.lastMessageTime ? formatTimeAgo(conversationData.lastMessageTime) : 'recently';
+      
+      // Check if message is unread (last message is not from current user AND there is a last message)
+      const isUnread = conversationData.lastMessage && 
+                      conversationData.lastMessageSender && 
+                      conversationData.lastMessageSender !== 'system' &&
+                      conversationData.lastMessageSender !== currentUser.email;
+      
+      console.log('Creating message item:', {
+        conversationId,
+        lastMessage: conversationData.lastMessage,
+        lastMessageSender: conversationData.lastMessageSender,
+        currentUser: currentUser.email,
+        isUnread
+      });
+      
+      // Create message item
+      const messageItem = document.createElement('div');
+      messageItem.className = `message-item flex items-center p-4 cursor-pointer border-b border-gray-50 hover:bg-gray-50 transition-colors ${isUnread ? 'bg-blue-50' : ''}`;
+      messageItem.dataset.conversationId = conversationId;
+      messageItem.dataset.otherUser = otherUserEmail;
+      messageItem.onclick = () => handleMessageClick(conversationId, otherUserEmail, otherUserProfile.fullName);
+      
+      messageItem.innerHTML = `
+        <div class="relative">
+          <img src="${mainPhoto}" class="w-12 h-12 rounded-full object-cover" alt="Profile">
+          <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+        </div>
+        <div class="ml-3 flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-semibold text-primary truncate">${otherUserProfile.fullName}, ${age}</h3>
+            <span class="text-xs text-gray-500">${lastMessageTime}</span>
+          </div>
+          <p class="text-sm ${isUnread ? 'text-primary font-semibold' : 'text-gray-600'} truncate">${conversationData.lastMessage || 'Start a conversation!'}</p>
+        </div>
+        <div class="ml-2">
+          ${isUnread ? '<div class="w-3 h-3 bg-blue-500 rounded-full"></div>' : ''}
+        </div>
+      `;
+      
+      messagesList.appendChild(messageItem);
+      
+      // Update navigation indicator if this is unread
+      if (isUnread) {
+        updateMessagesIndicator(true);
+      }
+    }
+
+    // Format timestamp to "time ago" format
+    function formatTimeAgo(timestamp) {
+      if (!timestamp) return 'recently';
+      
+      const now = new Date();
+      const time = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+      const diffInSeconds = Math.floor((now - time) / 1000);
+      
+      if (diffInSeconds < 60) return 'just now';
+      if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+      if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+      return `${Math.floor(diffInSeconds / 86400)}d ago`;
+    }
+
     // Handle message item clicks
-    document.addEventListener('click', function(e) {
-      if (e.target.closest('.message-item')) {
-        // TODO: Navigate to chat page
-        console.log('Message clicked, navigating to chat...');
-        // window.location.href = 'chat.html?id=' + messageId;
+    function handleMessageClick(conversationId, otherUserEmail, otherUserName) {
+      console.log('Message clicked for conversation:', conversationId, 'with user:', otherUserEmail);
+      // Navigate to chat page
+      window.location.href = `chat.html?conversationId=${encodeURIComponent(conversationId)}&user=${encodeURIComponent(otherUserEmail)}`;
+    }
+
+    // Setup real-time listener for conversations
+    function setupConversationsListener() {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      // Clean up existing listener if any
+      if (conversationsListener) {
+        conversationsListener();
+      }
+
+      console.log('Setting up conversations listener...');
+      console.log('Currently displayed conversations:', Array.from(displayedConversations));
+
+      // Listen for changes in conversations
+      conversationsListener = db.collection('conversations').where('users', 'array-contains', user.email)
+        .onSnapshot(snapshot => {
+          snapshot.docChanges().forEach(change => {
+            console.log('Conversation change detected:', change.type, change.doc.id);
+            
+            if (change.type === 'modified') {
+              // Update the specific conversation in the UI
+              updateConversationInUI(change.doc.id, change.doc.data());
+            } else if (change.type === 'added') {
+              // Check if this conversation is already displayed
+              if (displayedConversations.has(change.doc.id)) {
+                console.log('Conversation already displayed, skipping:', change.doc.id);
+                return;
+              }
+              
+              console.log('New conversation added:', change.doc.id);
+              displayedConversations.add(change.doc.id);
+              
+              // Get user profile and create message item
+              const conversationData = change.doc.data();
+              const otherUserEmail = conversationData.users.find(email => email !== user.email);
+              
+              if (otherUserEmail) {
+                db.collection('users').doc(otherUserEmail).get().then(userDoc => {
+                  if (userDoc.exists) {
+                    const otherUserProfile = userDoc.data();
+                    if (otherUserProfile.fullName && otherUserProfile.age) {
+                      createMessageItem(change.doc.id, conversationData, otherUserEmail, otherUserProfile, user);
+                      
+                      // Show messages list if it was hidden
+                      const messagesList = document.getElementById('messagesList');
+                      const emptyState = document.getElementById('emptyState');
+                      messagesList.classList.remove('hidden');
+                      emptyState.classList.add('hidden');
+                      
+                      // Check unread status after adding
+                      checkUnreadMessages();
+                    }
+                  }
+                });
+              }
+            } else if (change.type === 'removed') {
+              // Remove conversation from tracking and UI
+              console.log('Conversation removed:', change.doc.id);
+              displayedConversations.delete(change.doc.id);
+              
+              // Remove from UI
+              const messageItem = document.querySelector(`[data-conversation-id="${change.doc.id}"]`);
+              if (messageItem) {
+                messageItem.remove();
+              }
+              
+              // Check if we need to show empty state
+              const messagesList = document.getElementById('messagesList');
+              const emptyState = document.getElementById('emptyState');
+              if (messagesList.children.length === 0) {
+                messagesList.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+              }
+              
+              // Check unread status after removing
+              checkUnreadMessages();
+            }
+          });
+          
+          // Check unread status after any changes
+          setTimeout(() => {
+            checkUnreadMessages();
+          }, 100);
+        }, error => {
+          console.error('Error setting up conversations listener:', error);
+        });
+    }
+
+    // Show notification for new message
+    function showNewMessageNotification(senderName) {
+      // Remove the notification popup - we'll just use the blue highlighting instead
+      console.log('New message from:', senderName, '- notification suppressed');
+    }
+
+    // Update a specific conversation in the UI
+    async function updateConversationInUI(conversationId, conversationData) {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      const messageItem = document.querySelector(`[data-conversation-id="${conversationId}"]`);
+      if (!messageItem) return;
+
+      const otherUserEmail = conversationData.users.find(email => email !== user.email);
+      
+      // Get user profile
+      const userDoc = await db.collection('users').doc(otherUserEmail).get();
+      if (!userDoc.exists) return;
+      
+      const otherUserProfile = userDoc.data();
+      
+      // Calculate age
+      let age = otherUserProfile.age;
+      if (otherUserProfile.birthDate) {
+        const birthDate = new Date(otherUserProfile.birthDate);
+        const today = new Date();
+        age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+      }
+      
+      // Format last message time
+      const lastMessageTime = conversationData.lastMessageTime ? formatTimeAgo(conversationData.lastMessageTime) : 'recently';
+      
+      // Check if message is unread (last message is not from current user AND there is a last message)
+      const isUnread = conversationData.lastMessage && 
+                      conversationData.lastMessageSender && 
+                      conversationData.lastMessageSender !== 'system' &&
+                      conversationData.lastMessageSender !== user.email;
+      
+      console.log('Updating conversation UI:', {
+        conversationId,
+        lastMessage: conversationData.lastMessage,
+        lastMessageSender: conversationData.lastMessageSender,
+        currentUser: user.email,
+        isUnread
+      });
+      
+      // Get profile photo
+      const photos = otherUserProfile.photos || [];
+      const mainPhoto = photos.length > 0 ? photos[0].url : 'https://randomuser.me/api/portraits/lego/1.jpg';
+      
+      // Update the message item
+      messageItem.className = `message-item flex items-center p-4 cursor-pointer border-b border-gray-50 hover:bg-gray-50 transition-colors ${isUnread ? 'bg-blue-50' : ''}`;
+      
+      messageItem.innerHTML = `
+        <div class="relative">
+          <img src="${mainPhoto}" class="w-12 h-12 rounded-full object-cover" alt="Profile">
+          <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+        </div>
+        <div class="ml-3 flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-semibold text-primary truncate">${otherUserProfile.fullName}, ${age}</h3>
+            <span class="text-xs text-gray-500">${lastMessageTime}</span>
+          </div>
+          <p class="text-sm ${isUnread ? 'text-primary font-semibold' : 'text-gray-600'} truncate">${conversationData.lastMessage || 'Start a conversation!'}</p>
+        </div>
+        <div class="ml-2">
+          ${isUnread ? '<div class="w-3 h-3 bg-blue-500 rounded-full"></div>' : ''}
+        </div>
+      `;
+      
+      // Re-attach click handler
+      messageItem.onclick = () => handleMessageClick(conversationId, otherUserEmail, otherUserProfile.fullName);
+      
+      // Move conversation to top (most recent first)
+      const messagesList = document.getElementById('messagesList');
+      messagesList.insertBefore(messageItem, messagesList.firstChild);
+      
+      // Update navigation indicator if this is unread
+      if (isUnread) {
+        updateMessagesIndicator(true);
+      }
+    }
+
+    // Clean up listener when page unloads
+    window.addEventListener('beforeunload', function() {
+      if (conversationsListener) {
+        conversationsListener();
       }
     });
+
+    // Update messages indicator in navigation
+    function updateMessagesIndicator(hasUnread) {
+      // Update the messages icon in the bottom navigation
+      const messagesNavButton = document.querySelector('[onclick*="messages.html"]');
+      if (messagesNavButton) {
+        // Make sure the button has relative positioning for the indicator
+        messagesNavButton.style.position = 'relative';
+        
+        const existingIndicator = messagesNavButton.querySelector('.unread-indicator');
+        if (hasUnread && !existingIndicator) {
+          // Add blue dot indicator
+          const indicator = document.createElement('div');
+          indicator.className = 'unread-indicator absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full z-10';
+          messagesNavButton.appendChild(indicator);
+        } else if (!hasUnread && existingIndicator) {
+          // Remove blue dot indicator
+          existingIndicator.remove();
+        }
+      }
+      
+      // Also update the page title to show unread count
+      if (hasUnread) {
+        document.title = 'Messages (1) - Minds Meet';
+      } else {
+        document.title = 'Messages - Minds Meet';
+      }
+    }
+
+    // Check for unread messages and update indicator
+    function checkUnreadMessages() {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      let hasUnread = false;
+      const messageItems = document.querySelectorAll('.message-item');
+      
+      messageItems.forEach(item => {
+        const conversationId = item.dataset.conversationId;
+        if (conversationId && displayedConversations.has(conversationId)) {
+          // Check if this conversation has unread messages
+          const unreadDot = item.querySelector('.w-3.h-3.bg-blue-500');
+          if (unreadDot) {
+            hasUnread = true;
+          }
+        }
+      });
+      
+      console.log('Unread messages found:', hasUnread);
+      updateMessagesIndicator(hasUnread);
+    }
+
+    // Setup global message notifications that work across all pages
+    function setupGlobalMessageNotifications() {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      console.log('Setting up global message notifications');
+
+      // Listen for new conversations (messages)
+      db.collection('conversations').where('users', 'array-contains', user.email)
+        .onSnapshot(snapshot => {
+          snapshot.docChanges().forEach(change => {
+            if (change.type === 'modified') {
+              const conversationData = change.doc.data();
+              // Check if this is a new message (not from current user)
+              if (conversationData.lastMessage && conversationData.lastMessageSender !== user.email) {
+                console.log('New message detected in conversation:', change.doc.id);
+                
+                // Get sender's name for notification
+                const otherUserEmail = conversationData.users.find(email => email !== user.email);
+                if (otherUserEmail) {
+                  db.collection('users').doc(otherUserEmail).get().then(userDoc => {
+                    if (userDoc.exists) {
+                      const senderProfile = userDoc.data();
+                      showNewMessageNotification(senderProfile.fullName);
+                      updateMessagesIndicator(true);
+                    }
+                  });
+                }
+              }
+            }
+          });
+        }, error => {
+          console.error('Error setting up global message notifications:', error);
+        });
+    }
   </script>
 </body>
 </html> 
