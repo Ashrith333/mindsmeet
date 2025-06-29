@@ -481,15 +481,15 @@
 
   <!-- Bottom Navigation Bar -->
   <nav class="bottom-nav">
-    <button class="nav-icon active" onclick="switchTab('browse', this)">
+    <button class="nav-icon active" onclick="window.location.href='browse.html'">
       <svg class="w-7 h-7 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3"></path></svg>
       Browse
     </button>
-    <button class="nav-icon" onclick="switchTab('messages', this)">
+    <button class="nav-icon" onclick="window.location.href='messages.html'">
       <svg class="w-7 h-7 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8s-9-3.582-9-8a9 9 0 1118 0z"></path></svg>
       Messages
     </button>
-    <button class="nav-icon" onclick="switchTab('likes', this)">
+    <button class="nav-icon" onclick="window.location.href='likes.html'">
       <svg class="w-7 h-7 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"></path></svg>
       Likes
     </button>
@@ -773,17 +773,9 @@
           console.log('Has essential profile data:', hasEssentialData);
           
           if (hasEssentialData) {
-            // Profile exists with essential data - stay on home page
-            console.log('Profile has essential data, staying on home page');
-            
-            // Populate the edit form
-            populateEditForm();
-            
-            // Update display fields
-            updateProfileDisplay();
-            
-            // Update verification status
-            updateVerificationStatus();
+            // Profile exists with essential data - redirect to browse page
+            console.log('Profile has essential data, redirecting to browse page');
+            window.location.href = 'browse.html';
           } else {
             // Profile exists but missing essential data - go to profile setup
             console.log('Profile exists but missing essential data, redirecting to profile setup');

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Likes - Minds Meet</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #3fa2ed;
+      --primary-dark: #2d8fd8;
+      --text-primary: #111518;
+      --text-secondary: #617889;
+      --bg-input: #f0f3f4;
+      --nav-bg: #3fa2ed;
+      --nav-active: #fff;
+      --nav-inactive: #b6dafe;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #fff;
+      min-height: 100vh;
+    }
+    .bottom-nav {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      background: #fff;
+      border-top: 1px solid #e5e7eb;
+      z-index: 50;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 64px;
+    }
+    .nav-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #a0aec0;
+      font-size: 12px;
+      font-weight: 500;
+      transition: color 0.2s;
+      background: transparent;
+      border-radius: 0;
+      padding: 0;
+    }
+    .nav-icon.active {
+      color: #3fa2ed;
+      background: transparent;
+      box-shadow: none;
+    }
+    .like-card {
+      transition: transform 0.2s;
+    }
+    .like-card:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-white">
+  <!-- Top Safe Area for iOS Notch -->
+  <div style="height: env(safe-area-inset-top, 24px);"></div>
+  
+  <!-- Header -->
+  <div class="flex items-center justify-between px-4 py-3 bg-white border-b border-gray-100 sticky top-0 z-40">
+    <div class="flex items-center">
+      <div class="rounded-full bg-blue-100 flex items-center justify-center w-9 h-9 text-xl font-bold text-primary select-none">M</div>
+      <h1 class="ml-3 text-xl font-bold text-primary">Likes</h1>
+    </div>
+    <button class="text-primary" aria-label="Settings">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex-1 w-full max-w-lg mx-auto pb-20 bg-white overflow-y-auto">
+    <!-- Likes Grid -->
+    <div class="p-4">
+      <div class="grid grid-cols-2 gap-4">
+        <!-- Example Like Cards -->
+        <div class="like-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer">
+          <div class="relative">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-full h-48 object-cover" alt="Profile">
+            <div class="absolute top-2 right-2 bg-white rounded-full p-1">
+              <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="p-3">
+            <h3 class="font-semibold text-primary text-sm">Tanya, 26</h3>
+            <p class="text-xs text-gray-600 mt-1">2 miles away</p>
+          </div>
+        </div>
+
+        <div class="like-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer">
+          <div class="relative">
+            <img src="https://randomuser.me/api/portraits/women/45.jpg" class="w-full h-48 object-cover" alt="Profile">
+            <div class="absolute top-2 right-2 bg-white rounded-full p-1">
+              <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="p-3">
+            <h3 class="font-semibold text-primary text-sm">Sarah, 24</h3>
+            <p class="text-xs text-gray-600 mt-1">5 miles away</p>
+          </div>
+        </div>
+
+        <div class="like-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer">
+          <div class="relative">
+            <img src="https://randomuser.me/api/portraits/women/46.jpg" class="w-full h-48 object-cover" alt="Profile">
+            <div class="absolute top-2 right-2 bg-white rounded-full p-1">
+              <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="p-3">
+            <h3 class="font-semibold text-primary text-sm">Emma, 28</h3>
+            <p class="text-xs text-gray-600 mt-1">1 mile away</p>
+          </div>
+        </div>
+
+        <div class="like-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer">
+          <div class="relative">
+            <img src="https://randomuser.me/api/portraits/women/47.jpg" class="w-full h-48 object-cover" alt="Profile">
+            <div class="absolute top-2 right-2 bg-white rounded-full p-1">
+              <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="p-3">
+            <h3 class="font-semibold text-primary text-sm">Jessica, 25</h3>
+            <p class="text-xs text-gray-600 mt-1">3 miles away</p>
+          </div>
+        </div>
+
+        <div class="like-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer">
+          <div class="relative">
+            <img src="https://randomuser.me/api/portraits/women/48.jpg" class="w-full h-48 object-cover" alt="Profile">
+            <div class="absolute top-2 right-2 bg-white rounded-full p-1">
+              <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="p-3">
+            <h3 class="font-semibold text-primary text-sm">Maya, 27</h3>
+            <p class="text-xs text-gray-600 mt-1">4 miles away</p>
+          </div>
+        </div>
+
+        <div class="like-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer">
+          <div class="relative">
+            <img src="https://randomuser.me/api/portraits/women/49.jpg" class="w-full h-48 object-cover" alt="Profile">
+            <div class="absolute top-2 right-2 bg-white rounded-full p-1">
+              <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="p-3">
+            <h3 class="font-semibold text-primary text-sm">Sophia, 23</h3>
+            <p class="text-xs text-gray-600 mt-1">6 miles away</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State (hidden by default) -->
+    <div id="emptyState" class="hidden flex flex-col items-center justify-center py-16 px-4">
+      <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+        <svg class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-primary mb-2">No likes yet</h3>
+      <p class="text-gray-600 text-center mb-6">Start browsing profiles to get likes!</p>
+      <button onclick="window.location.href='browse.html'" class="bg-primary text-white px-6 py-2 rounded-full font-medium">
+        Start Browsing
+      </button>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <button class="nav-icon" onclick="window.location.href='browse.html'">
+      <svg class="w-7 h-7 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3"></path></svg>
+      Browse
+    </button>
+    <button class="nav-icon" onclick="window.location.href='messages.html'">
+      <svg class="w-7 h-7 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8s-9-3.582-9-8a9 9 0 1118 0z"></path></svg>
+      Messages
+    </button>
+    <button class="nav-icon active" onclick="window.location.href='likes.html'">
+      <svg class="w-7 h-7 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"></path></svg>
+      Likes
+    </button>
+    <button class="nav-icon" onclick="window.location.href='profile.html'">
+      <svg class="w-7 h-7 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+      Profile
+    </button>
+  </nav>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBkEbvGk_kxL3d1IB2zgYFpbixUBJ8EV8c",
+      authDomain: "mindsmeet-a8945.firebaseapp.com",
+      projectId: "mindsmeet-a8945",
+      storageBucket: "mindsmeet-a8945.firebasestorage.app",
+      messagingSenderId: "273248409523",
+      appId: "1:273248409523:web:88fc2d8eefacc665c8ddc6",
+      measurementId: "G-H8QD41XT3P"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Check authentication on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Likes page loaded, checking authentication...');
+      
+      auth.onAuthStateChanged(function(user) {
+        console.log('Auth state changed:', user ? 'User logged in' : 'No user');
+        
+        if (user && user.email) {
+          console.log('User authenticated:', user.email);
+          console.log('Email verified:', user.emailVerified);
+          
+          // Check if user has complete profile
+          checkUserProfile(user);
+        } else {
+          console.log('No user authenticated, redirecting to login');
+          window.location.href = 'login.html';
+        }
+      });
+    });
+
+    // Check if user has complete profile
+    async function checkUserProfile(user) {
+      try {
+        console.log('Checking user profile completion...');
+        
+        const userDocRef = db.collection('users').doc(user.email);
+        const userSnap = await userDocRef.get();
+        
+        if (userSnap.exists) {
+          const userData = userSnap.data();
+          console.log('User profile data:', userData);
+          
+          // Check if profile has essential data (name, age, etc.)
+          const hasEssentialData = userData.fullName && userData.age;
+          console.log('Has essential profile data:', hasEssentialData);
+          
+          if (hasEssentialData) {
+            // Profile exists with essential data - load likes
+            console.log('Profile complete, loading likes');
+            loadLikes();
+          } else {
+            // Profile exists but missing essential data - go to profile setup
+            console.log('Profile incomplete, redirecting to profile setup');
+            window.location.href = 'profile-setup.html?email=' + encodeURIComponent(user.email);
+          }
+        } else {
+          // No profile data found - go to profile setup
+          console.log('No profile data found, redirecting to profile setup');
+          window.location.href = 'profile-setup.html?email=' + encodeURIComponent(user.email);
+        }
+      } catch (error) {
+        console.error('Error checking user profile:', error);
+        alert('Error checking profile. Please try again.');
+      }
+    }
+
+    // Load likes
+    async function loadLikes() {
+      try {
+        console.log('Loading likes...');
+        const user = auth.currentUser;
+        if (!user) return;
+
+        // TODO: Load likes from Firestore
+        // For now, using example data
+        console.log('Likes loaded successfully');
+      } catch (error) {
+        console.error('Error loading likes:', error);
+      }
+    }
+
+    // Handle like card clicks
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('.like-card')) {
+        // TODO: Navigate to profile view
+        console.log('Like card clicked, navigating to profile...');
+        // window.location.href = 'profile-view.html?id=' + profileId;
+      }
+    });
+  </script>
+</body>
+</html> 
