@@ -20,28 +20,32 @@
       background: linear-gradient(to bottom, rgba(135, 206, 250, 0) 0%, rgba(135, 206, 250, 0.6) 70%, var(--light-blue) 100%);
     }
     .animation-placeholder {
-      animation: gentlePulse 8s infinite alternate ease-in-out;
+      animation: gentlePulse 12s infinite alternate ease-in-out;
     }
     @keyframes gentlePulse {
       0% { 
+        opacity: 0.7; 
+        transform: scale(1) translateX(0); 
+      }
+      20% { 
         opacity: 0.8; 
-        transform: scale(1); 
+        transform: scale(1.08) translateX(-5px); 
       }
-      25% { 
+      40% { 
         opacity: 0.9; 
-        transform: scale(1.05); 
+        transform: scale(1.15) translateX(-8px); 
       }
-      50% { 
+      60% { 
         opacity: 1; 
-        transform: scale(1.1); 
+        transform: scale(1.12) translateX(-6px); 
       }
-      75% { 
+      80% { 
         opacity: 0.95; 
-        transform: scale(1.03); 
+        transform: scale(1.05) translateX(-3px); 
       }
       100% { 
-        opacity: 0.8; 
-        transform: scale(1); 
+        opacity: 0.7; 
+        transform: scale(1) translateX(0); 
       }
     }
     .app-name {
@@ -71,7 +75,7 @@
 <body class="bg-[var(--light-blue)]">
 <div class="relative flex flex-col min-h-screen overflow-hidden">
 <div class="absolute inset-0 w-full h-full animation-placeholder">
-<img alt="Diverse couples forming connections" class="object-cover w-full h-full opacity-70" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzG54B1AWrtT73XN7By5PHB9Erk816_i2UUIirH7XxJaF_dLmUL8OIxhkftGqDMx4kQdbAYY9qq2gGaEok7uEBD9LGGesOZSB6YBN3WEXlNDKVd1-sj9a5EHzUbgjD9UAUHQ3-CK4VfgGJEWqdzd_bw01ApvdqOHu2paXfVGiC6QG1tUVGdRQna7vzrhYagbAxxnKYzehdr0LPgF3RA9xSykJfG7L8Mi7Pr3vJwOD605zypRZ9Il7VgJqOKZ3_z0juFAx1WWhztiA"/>
+<img alt="Diverse couples forming connections" class="object-cover w-full h-full opacity-70 mobile-image-position" style="object-position: 45% center;" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzG54B1AWrtT73XN7By5PHB9Erk816_i2UUIirH7XxJaF_dLmUL8OIxhkftGqDMx4kQdbAYY9qq2gGaEok7uEBD9LGGesOZSB6YBN3WEXlNDKVd1-sj9a5EHzUbgjD9UAUHQ3-CK4VfgGJEWqdzd_bw01ApvdqOHu2paXfVGiC6QG1tUVGdRQna7vzrhYagbAxxnKYzehdr0LPgF3RA9xSykJfG7L8Mi7Pr3vJwOD605zypRZ9Il7VgJqOKZ3_z0juFAx1WWhztiA"/>
 <div class="absolute inset-0 gradient-overlay"></div>
 </div>
 <div class="relative z-10 flex flex-col items-center justify-between flex-grow p-6 text-center">
@@ -97,5 +101,20 @@
         window.location.href = 'login.html';
     }
 </script>
+
+<style>
+    /* Mobile-specific image positioning */
+    @media (max-width: 768px) {
+      .mobile-image-position {
+        object-position: 50% center !important;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .mobile-image-position {
+        object-position: 55% center !important;
+      }
+    }
+</style>
 
 </body></html> 
