@@ -98,69 +98,84 @@
     }
     .profile-card {
       background: white;
-      border-radius: 16px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
       overflow: hidden;
-      margin-bottom: 16px;
+      margin: 0 auto;
+      max-width: 100%;
       position: relative;
+      min-height: 500px;
+      display: flex;
+      flex-direction: column;
     }
     .profile-image {
       width: 100%;
-      height: 300px;
+      height: 400px;
       object-fit: cover;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
     .profile-info {
-      padding: 16px;
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
     .profile-name {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: bold;
       color: #1f2937;
-      margin-bottom: 4px;
+      margin-bottom: 8px;
     }
     .profile-details {
       color: #6b7280;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
+      font-size: 16px;
     }
     .profile-bio {
       color: #374151;
-      line-height: 1.5;
-      margin-bottom: 16px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      flex: 1;
+      font-size: 15px;
     }
     .action-buttons {
       display: flex;
-      gap: 12px;
+      gap: 16px;
+      justify-content: center;
+      padding: 0 20px 20px;
     }
     .btn {
-      flex: 1;
-      padding: 12px;
+      width: 60px;
+      height: 60px;
       border: none;
-      border-radius: 8px;
+      border-radius: 50%;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
     .btn-dislike {
-      background: #f3f4f6;
-      color: #6b7280;
+      background: #ef4444;
+      color: white;
     }
     .btn-dislike:hover {
-      background: #e5e7eb;
+      background: #dc2626;
+      transform: scale(1.05);
     }
     .btn-like {
-      background: #3b82f6;
+      background: #10b981;
       color: white;
     }
     .btn-like:hover {
-      background: #2563eb;
+      background: #059669;
+      transform: scale(1.05);
     }
-    .btn-superlike {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-    }
-    .btn-superlike:hover {
-      opacity: 0.9;
+    .btn svg {
+      width: 24px;
+      height: 24px;
     }
     .loading {
       text-align: center;
@@ -241,11 +256,36 @@
     </button>
   </div>
 
-  <!-- Main Content (scrollable between fixed bars) -->
+  <!-- Main Content -->
   <div class="flex-1 w-full max-w-lg mx-auto pt-16 pb-20 bg-white overflow-y-auto" style="min-height:calc(100vh - 120px);">
     <!-- Browse Content -->
-    <div class="space-y-6 browse-container">
-      <!-- Dynamic content will be loaded here -->
+    <div class="p-4">
+      <h2 class="text-2xl font-bold text-primary mb-6">Browse</h2>
+      
+      <!-- Single Profile Card Container -->
+      <div class="browse-container">
+        <!-- Profile cards will be loaded here one at a time -->
+      </div>
+
+      <!-- Loading State -->
+      <div id="loadingState" class="hidden flex flex-col items-center justify-center py-16">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+        <p class="text-gray-600">Finding profiles for you...</p>
+      </div>
+
+      <!-- No More Profiles State -->
+      <div id="noProfilesState" class="hidden flex flex-col items-center justify-center py-16">
+        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+          <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-primary mb-2">No more profiles</h3>
+        <p class="text-gray-600 text-center mb-6">You've seen all available profiles. Check back later for new matches!</p>
+        <button onclick="loadBrowseData()" class="bg-primary text-white px-6 py-2 rounded-full font-medium">
+          Refresh
+        </button>
+      </div>
     </div>
   </div>
 
@@ -416,10 +456,23 @@
       }
     }
 
+    // Global variables for profile management
+    let profileQueue = [];
+    let currentProfileIndex = 0;
+
     // Load browse data
     async function loadBrowseData() {
       try {
         console.log('Loading browse data from Firebase...');
+        
+        // Show loading state
+        const loadingState = document.getElementById('loadingState');
+        const noProfilesState = document.getElementById('noProfilesState');
+        const browseContainer = document.querySelector('.browse-container');
+        
+        loadingState.classList.remove('hidden');
+        noProfilesState.classList.add('hidden');
+        browseContainer.innerHTML = '';
         
         // Get current user to exclude them from browse results
         const currentUser = auth.currentUser;
@@ -436,12 +489,10 @@
         
         // Fetch all user profiles except current user
         const usersSnapshot = await db.collection('users').get();
-        const browseContainer = document.querySelector('.browse-container');
         
         // Clear existing content
-        browseContainer.innerHTML = '';
-        
-        let profilesFound = 0;
+        profileQueue = [];
+        currentProfileIndex = 0;
         
         // Get current user's likes/dislikes to filter out already interacted profiles
         const likesSnapshot = await db.collection('likes').where('fromUser', '==', currentUser.email).get();
@@ -466,130 +517,121 @@
         console.log('User interactions:', userInteractions);
         console.log('Matched users:', Array.from(matchedUsers));
         
+        // Filter and collect valid profiles
         usersSnapshot.forEach(doc => {
           const userData = doc.data();
           const userEmail = doc.id;
           
-          console.log('Processing user:', userEmail, 'Data:', userData);
-          
           // Skip current user
-          if (userEmail === currentUser.email) {
-            console.log('Skipping current user:', userEmail);
-            return;
-          }
+          if (userEmail === currentUser.email) return;
           
-          // Skip profiles that user has already liked or disliked
+          // Skip if already liked/disliked
           if (userInteractions[userEmail]) {
-            console.log(`Skipping ${userInteractions[userEmail]} profile:`, userEmail);
+            console.log(`Skipping ${userInteractions[userEmail]} user:`, userEmail);
             return;
           }
           
-          // Skip matched users (they should be in messages)
+          // Skip if already matched
           if (matchedUsers.has(userEmail)) {
             console.log('Skipping matched user:', userEmail);
             return;
           }
           
-          // Check if user has basic profile data (name and gender)
-          if (!userData.fullName || !userData.gender) {
-            console.log('Skipping user with missing name or gender:', userEmail, 'Missing:', {
-              fullName: !userData.fullName,
-              gender: !userData.gender
+          // Check if profile has essential data
+          if (userData.fullName && userData.age) {
+            profileQueue.push({
+              email: userEmail,
+              data: userData
             });
-            return;
           }
-          
-          // Show all profiles that pass the basic checks
-          profilesFound++;
-          console.log('Showing profile:', userEmail);
-          
-          // Create profile card
-          const card = document.createElement('div');
-          card.className = 'bg-white rounded-2xl shadow-lg p-4 mb-4';
-          card.dataset.userEmail = userEmail;
-          
-          // Get profile photos
-          const photos = userData.photos || [];
-          const mainPhoto = photos.length > 0 ? photos[0].url : 'https://randomuser.me/api/portraits/lego/1.jpg';
-          const additionalPhotos = photos.slice(1, 4); // Get up to 3 additional photos
-          
-          // Calculate age from birth date if available
-          let age = userData.age;
-          if (userData.birthDate) {
-            const birthDate = new Date(userData.birthDate);
-            const today = new Date();
-            age = today.getFullYear() - birthDate.getFullYear();
-            const monthDiff = today.getMonth() - birthDate.getMonth();
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-              age--;
-            }
-          }
-          
-          card.innerHTML = `
-            <div class="flex items-start justify-between mb-3">
-              <div class="flex items-center space-x-3">
-                <img src="${mainPhoto}" class="w-16 h-16 object-cover rounded-xl" alt="Profile photo">
-                <div>
-                  <h3 class="font-bold text-lg text-gray-800">${userData.fullName || 'Anonymous'}</h3>
-                  <p class="text-gray-600">${age || 'N/A'} • ${userData.gender || 'N/A'}</p>
-                  <p class="text-gray-500 text-sm">${userData.currentLocation || 'Location not set'}</p>
-                </div>
-              </div>
-              <div class="flex space-x-2">
-                <button onclick="handleDislike('${userEmail}')" class="dislike-btn w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center text-white transition-colors">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                  </svg>
-                </button>
-                <button onclick="handleLike('${userEmail}')" class="like-btn w-10 h-10 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center text-white transition-colors">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            
-            <div class="mb-3">
-              <p class="text-gray-700 text-sm leading-relaxed">
-                ${userData.bio || 'No bio available'}
-              </p>
-            </div>
-            
-            <div class="flex gap-2">
-              ${additionalPhotos.map(photo => 
-                `<img src="${photo.url}" class="w-16 h-16 object-cover rounded-lg" alt="Additional photo">`
-              ).join('')}
-              ${additionalPhotos.length === 0 ? 
-                '<div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 text-xs">No more photos</div>' : 
-                ''
-              }
-            </div>
-          `;
-          
-          browseContainer.appendChild(card);
         });
         
-        if (profilesFound === 0) {
-          browseContainer.innerHTML = `
-            <div class="text-center py-8">
-              <div class="text-gray-500 text-lg mb-2">No new profiles found</div>
-              <div class="text-gray-400 text-sm">You've seen all available profiles. Check back later for new matches!</div>
-            </div>
-          `;
-        }
+        console.log(`Found ${profileQueue.length} valid profiles`);
         
-        console.log(`Loaded ${profilesFound} new profiles`);
+        // Hide loading state
+        loadingState.classList.add('hidden');
+        
+        // Show first profile or no profiles state
+        if (profileQueue.length > 0) {
+          showNextProfile();
+        } else {
+          noProfilesState.classList.remove('hidden');
+        }
         
       } catch (error) {
         console.error('Error loading browse data:', error);
-        const browseContainer = document.querySelector('.browse-container');
-        browseContainer.innerHTML = `
-          <div class="text-center py-8">
-            <div class="text-red-500 text-lg mb-2">Error loading profiles</div>
-            <div class="text-gray-400 text-sm">Please try again later</div>
-          </div>
-        `;
+        loadingState.classList.add('hidden');
+        noProfilesState.classList.remove('hidden');
       }
+    }
+
+    // Show the next profile in the queue
+    function showNextProfile() {
+      if (currentProfileIndex >= profileQueue.length) {
+        // No more profiles
+        const browseContainer = document.querySelector('.browse-container');
+        const noProfilesState = document.getElementById('noProfilesState');
+        
+        browseContainer.innerHTML = '';
+        noProfilesState.classList.remove('hidden');
+        return;
+      }
+      
+      const profile = profileQueue[currentProfileIndex];
+      const browseContainer = document.querySelector('.browse-container');
+      
+      // Create profile card
+      const profileCard = createProfileCard(profile);
+      browseContainer.innerHTML = '';
+      browseContainer.appendChild(profileCard);
+    }
+
+    // Create a single profile card
+    function createProfileCard(profile) {
+      const { email, data } = profile;
+      
+      // Get profile photo
+      const photos = data.photos || [];
+      const mainPhoto = photos.length > 0 ? photos[0].url : 'https://randomuser.me/api/portraits/lego/1.jpg';
+      
+      // Calculate age from birth date if available
+      let age = data.age;
+      if (data.birthDate) {
+        const birthDate = new Date(data.birthDate);
+        const today = new Date();
+        age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+      }
+      
+      const card = document.createElement('div');
+      card.className = 'profile-card';
+      card.dataset.userEmail = email;
+      
+      card.innerHTML = `
+        <img src="${mainPhoto}" class="profile-image" alt="Profile">
+        <div class="profile-info">
+          <div class="profile-name">${data.fullName}, ${age}</div>
+          <div class="profile-details">${data.currentLocation || 'Location not set'}</div>
+          <div class="profile-bio">${data.bio || 'No bio available'}</div>
+        </div>
+        <div class="action-buttons">
+          <button class="btn btn-dislike" onclick="handleDislike('${email}')">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+          <button class="btn btn-like" onclick="handleLike('${email}')">
+            <svg fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </button>
+        </div>
+      `;
+      
+      return card;
     }
 
     // Handle like action
@@ -612,11 +654,17 @@
           timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
         
-        // Remove profile from browse view
+        // Remove current profile from view with animation
         removeProfileFromBrowse(userEmail);
         
         // Check if it's a match (other user also liked current user)
         await checkForMatch(userEmail);
+        
+        // Show next profile
+        currentProfileIndex++;
+        setTimeout(() => {
+          showNextProfile();
+        }, 300);
         
       } catch (error) {
         console.error('Error liking user:', error);
@@ -644,8 +692,14 @@
           timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
         
-        // Remove profile from browse view
+        // Remove current profile from view with animation
         removeProfileFromBrowse(userEmail);
+        
+        // Show next profile
+        currentProfileIndex++;
+        setTimeout(() => {
+          showNextProfile();
+        }, 300);
         
       } catch (error) {
         console.error('Error disliking user:', error);
@@ -653,7 +707,7 @@
       }
     }
 
-    // Remove profile from browse view
+    // Remove profile from browse view with animation
     function removeProfileFromBrowse(userEmail) {
       const card = document.querySelector(`[data-user-email="${userEmail}"]`);
       if (card) {
@@ -666,18 +720,6 @@
         setTimeout(() => {
           if (card.parentNode) {
             card.parentNode.removeChild(card);
-          }
-          
-          // Check if no more profiles
-          const remainingCards = document.querySelectorAll('.browse-container > div');
-          if (remainingCards.length === 0) {
-            const browseContainer = document.querySelector('.browse-container');
-            browseContainer.innerHTML = `
-              <div class="text-center py-8">
-                <div class="text-gray-500 text-lg mb-2">No new profiles found</div>
-                <div class="text-gray-400 text-sm">You've seen all available profiles. Check back later for new matches!</div>
-              </div>
-            `;
           }
         }, 300);
       }
