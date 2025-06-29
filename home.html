@@ -768,15 +768,29 @@
             photo2Url: userProfileData.photo2Url
           });
           
-          // Populate the edit form
-          populateEditForm();
+          // Check if profile has essential data (name, age, etc.)
+          const hasEssentialData = userProfileData.fullName && userProfileData.age;
+          console.log('Has essential profile data:', hasEssentialData);
           
-          // Update display fields
-          updateProfileDisplay();
-          
-          // Update verification status
-          updateVerificationStatus();
+          if (hasEssentialData) {
+            // Profile exists with essential data - stay on home page
+            console.log('Profile has essential data, staying on home page');
+            
+            // Populate the edit form
+            populateEditForm();
+            
+            // Update display fields
+            updateProfileDisplay();
+            
+            // Update verification status
+            updateVerificationStatus();
+          } else {
+            // Profile exists but missing essential data - go to profile setup
+            console.log('Profile exists but missing essential data, redirecting to profile setup');
+            window.location.href = 'profile-setup.html?email=' + encodeURIComponent(currentUser.email);
+          }
         } else {
+          // No profile data found - go to profile setup
           console.log('No profile data found for user:', currentUser.email);
           window.location.href = 'profile-setup.html?email=' + encodeURIComponent(currentUser.email);
         }

@@ -424,6 +424,27 @@
                     if (userSnap.exists) {
                         Object.assign(profileData, userSnap.data());
                         console.log('✅ Profile data loaded successfully');
+                        console.log('Profile data:', profileData);
+                        
+                        // Check if profile has essential data (name, age, etc.)
+                        const hasEssentialData = profileData.fullName && profileData.age;
+                        console.log('Has essential profile data:', hasEssentialData);
+                        console.log('fullName:', profileData.fullName);
+                        console.log('age:', profileData.age);
+                        
+                        if (hasEssentialData) {
+                            // Profile exists with essential data - redirect to home page
+                            console.log('Profile has essential data, redirecting to home page');
+                            alert('Profile already exists! Redirecting to home page...');
+                            window.location.href = 'home.html';
+                            return;
+                        } else {
+                            console.log('Profile exists but missing essential data - continuing with setup');
+                            console.log('Missing fields:', {
+                                fullName: !profileData.fullName,
+                                age: !profileData.age
+                            });
+                        }
                     } else {
                         console.log('No existing profile data found - starting fresh');
                     }
@@ -847,6 +868,9 @@
         }
 
         function loadStepData() {
+            console.log('Loading step data for step:', currentStep);
+            console.log('Profile data available:', profileData);
+            
             switch(currentStep) {
                 case 1:
                     if (profileData.fullName) document.getElementById('fullName').value = profileData.fullName;
@@ -875,6 +899,9 @@
                     if (profileData.drinking) document.getElementById('drinking').value = profileData.drinking;
                     break;
                 case 6:
+                    console.log('Loading photo step data');
+                    console.log('Photo1 URL:', profileData.photo1Url);
+                    console.log('Photo2 URL:', profileData.photo2Url);
                     // Display photos using the new function
                     displayUploadedPhoto('photo1', 'photo1Preview');
                     displayUploadedPhoto('photo2', 'photo2Preview');
@@ -1102,26 +1129,51 @@
 
         // Helper: Display uploaded photo
         function displayUploadedPhoto(photoKey, containerId) {
+            console.log('Displaying uploaded photo for:', photoKey, 'in container:', containerId);
+            console.log('Photo URL:', profileData[photoKey + 'Url']);
+            
             const container = document.getElementById(containerId);
-            if (!container) return;
+            if (!container) {
+                console.error('Container not found:', containerId);
+                return;
+            }
             
             // Clear previous content
             container.innerHTML = '';
             
             // Check if we have URL data (Firebase Storage)
             if (profileData[photoKey + 'Url']) {
+                console.log('Showing existing photo for:', photoKey);
+                
                 const img = document.createElement('img');
                 img.src = profileData[photoKey + 'Url'];
                 img.className = 'w-full h-32 object-cover rounded-lg mb-2';
                 img.alt = 'Profile photo';
+                img.onload = function() {
+                    console.log('Photo loaded successfully:', photoKey);
+                };
+                img.onerror = function() {
+                    console.error('Failed to load photo:', photoKey);
+                };
                 container.appendChild(img);
                 
                 // Add a simple green checkmark
                 const note = document.createElement('p');
-                note.textContent = '✓ Uploaded';
-                note.className = 'text-xs text-green-600 text-center';
+                note.textContent = '✓ Photo uploaded';
+                note.className = 'text-xs text-green-600 text-center font-medium';
                 container.appendChild(note);
+                
+                // Make container visible
+                container.classList.remove('hidden');
+                
+                // Hide the placeholder
+                const placeholder = document.getElementById(photoKey + 'Placeholder');
+                if (placeholder) {
+                    placeholder.classList.add('hidden');
+                }
             } else {
+                console.log('No photo URL found for:', photoKey);
+                
                 // Show placeholder if no photo
                 const placeholder = document.createElement('div');
                 placeholder.className = 'w-full h-32 bg-gray-200 rounded-lg mb-2 flex items-center justify-center';
@@ -1134,6 +1186,9 @@
                     </div>
                 `;
                 container.appendChild(placeholder);
+                
+                // Make container visible
+                container.classList.remove('hidden');
             }
         }
 
