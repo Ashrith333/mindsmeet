@@ -95,17 +95,17 @@
             background-color: #3b82f6 !important;
             border-radius: 50% !important;
             z-index: 10 !important;
-        }
-    </style>
-</head>
+    }
+  </style>
+  </head>
 <body class="min-h-screen flex flex-col bg-white">
     <div style="height: env(safe-area-inset-top, 24px);"></div>
     <div class="flex-1 w-full max-w-lg mx-auto pt-8 pb-20 bg-white overflow-y-auto" style="min-height:calc(100vh - 120px);">
         <div id="profileSectionContainer">
             <!-- Welcome Section (view mode) -->
-            <div id="welcomeSection" class="bg-white rounded-2xl card-shadow p-8 text-center mb-6">
-                <h1 class="text-4xl font-bold text-primary mb-4">Welcome to Minds Meet!</h1>
-                <p class="text-secondary mb-8 text-lg">Your profile has been completed successfully. You're now ready to start your journey!</p>
+        <div id="welcomeSection" class="bg-white rounded-2xl card-shadow p-8 text-center mb-6">
+            <h1 class="text-4xl font-bold text-primary mb-4">Welcome to Minds Meet!</h1>
+            <p class="text-secondary mb-8 text-lg">Your profile has been completed successfully. You're now ready to start your journey!</p>
                 <!-- Profile Display Section -->
                 <div class="bg-gray-50 rounded-xl p-6 mb-6 text-left">
                     <h2 class="text-xl font-semibold text-primary mb-4">Your Profile</h2>
@@ -132,30 +132,30 @@
                         </div>
                     </div>
                 </div>
-                <div class="space-y-4">
+            <div class="space-y-4">
                     <button class="w-full px-6 py-4 btn-primary text-white rounded-xl font-semibold text-lg">Start Matching</button>
                     <button onclick="showEditProfile()" class="w-full px-6 py-4 btn-secondary text-primary rounded-xl font-semibold text-lg">Edit Profile</button>
                     <button onclick="signOutUser()" class="w-full px-6 py-4 text-red-600 border border-red-300 rounded-xl hover:bg-red-50 transition-colors font-semibold">Sign Out</button>
-                </div>
             </div>
+        </div>
             <!-- Profile Edit Section (edit mode) -->
-            <div id="profileEditSection" class="bg-white rounded-2xl card-shadow p-8 hidden">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-primary">Edit Profile</h2>
-                    <button onclick="hideEditProfile()" class="text-secondary hover:text-primary">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-                <div class="profile-section">
-                    <!-- Photos Section -->
-                    <div class="mb-8">
-                        <h3 class="text-xl font-semibold text-primary mb-4">Profile Photos</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-4">
-                                <label class="block text-sm font-medium text-primary">Photo 1</label>
-                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-primary transition-colors cursor-pointer" onclick="document.getElementById('editPhoto1').click()">
+        <div id="profileEditSection" class="bg-white rounded-2xl card-shadow p-8 hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-primary">Edit Profile</h2>
+                <button onclick="hideEditProfile()" class="text-secondary hover:text-primary">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="profile-section">
+                <!-- Photos Section -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-primary mb-4">Profile Photos</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <label class="block text-sm font-medium text-primary">Photo 1</label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-primary transition-colors cursor-pointer" onclick="document.getElementById('editPhoto1').click()">
                                     <div id="editPhoto1Preview" class="hidden">
                                         <img id="editPhoto1Img" class="w-full h-32 object-cover rounded-lg mb-2" alt="Profile photo">
                                     </div>
@@ -165,13 +165,13 @@
                                         </svg>
                                         <p class="text-sm text-secondary mb-2">Add Photo 1</p>
                                         <button class="px-4 py-2 bg-primary text-white rounded-lg text-sm hover:bg-primary-dark transition-colors">Upload Image</button>
-                                    </div>
-                                    <input type="file" id="editPhoto1" accept="image/*" class="hidden" onchange="previewEditPhoto(this, 'editPhoto1Preview', 'editPhoto1Placeholder', 'editPhoto1Img')">
                                 </div>
+                                <input type="file" id="editPhoto1" accept="image/*" class="hidden" onchange="previewEditPhoto(this, 'editPhoto1Preview', 'editPhoto1Placeholder', 'editPhoto1Img')">
                             </div>
-                            <div class="space-y-4">
-                                <label class="block text-sm font-medium text-primary">Photo 2</label>
-                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-primary transition-colors cursor-pointer" onclick="document.getElementById('editPhoto2').click()">
+                        </div>
+                        <div class="space-y-4">
+                            <label class="block text-sm font-medium text-primary">Photo 2</label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-primary transition-colors cursor-pointer" onclick="document.getElementById('editPhoto2').click()">
                                     <div id="editPhoto2Preview" class="hidden">
                                         <img id="editPhoto2Img" class="w-full h-32 object-cover rounded-lg mb-2" alt="Profile photo">
                                     </div>
@@ -181,12 +181,12 @@
                                         </svg>
                                         <p class="text-sm text-secondary mb-2">Add Photo 2</p>
                                         <button class="px-4 py-2 bg-primary text-white rounded-lg text-sm hover:bg-primary-dark transition-colors">Upload Image</button>
-                                    </div>
-                                    <input type="file" id="editPhoto2" accept="image/*" class="hidden" onchange="previewEditPhoto(this, 'editPhoto2Preview', 'editPhoto2Placeholder', 'editPhoto2Img')">
                                 </div>
+                                <input type="file" id="editPhoto2" accept="image/*" class="hidden" onchange="previewEditPhoto(this, 'editPhoto2Preview', 'editPhoto2Placeholder', 'editPhoto2Img')">
                             </div>
                         </div>
                     </div>
+                </div>
                     <!-- Email Verification Status -->
                     <div id="emailVerificationStatus" class="mb-8 p-4 rounded-lg border-2 hidden">
                         <div class="flex items-center space-x-2 mb-2">
@@ -198,28 +198,28 @@
                         <p id="verificationMessage" class="text-sm mb-3">Please verify your email address to access all features.</p>
                         <button id="resendVerificationBtn" onclick="resendVerificationEmail()" class="text-sm text-primary hover:underline font-medium">Resend verification email</button>
                     </div>
-                    <!-- Personal Information -->
-                    <div class="mb-8">
-                        <h3 class="text-xl font-semibold text-primary mb-4">Personal Information</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-primary mb-2">Full Name</label>
+                <!-- Personal Information -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-primary mb-4">Personal Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Full Name</label>
                                 <input type="text" id="editName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-primary mb-2">Age</label>
-                                <input type="number" id="editAge" min="18" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-primary mb-2">Gender</label>
-                                <select id="editGender" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                                    <option value="">Select Gender</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Age</label>
+                            <input type="number" id="editAge" min="18" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Gender</label>
+                            <select id="editGender" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
                                     <option value="non-binary">Non-binary</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
                             <div>
                                 <label class="block text-sm font-medium text-primary mb-2">Dating Preferences <span class="text-gray-500 text-xs">(Optional)</span></label>
                                 <select id="editDatingPreferences" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
@@ -231,152 +231,152 @@
                                 </select>
                                 <p class="text-xs text-gray-500 mt-1">This helps us show you better matches</p>
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-primary mb-2">Relationship Status</label>
-                                <select id="editRelationshipStatus" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                                    <option value="">Select Status</option>
-                                    <option value="single">Single</option>
-                                    <option value="divorced">Divorced</option>
-                                    <option value="widowed">Widowed</option>
-                                </select>
-                            </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Relationship Status</label>
+                            <select id="editRelationshipStatus" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="">Select Status</option>
+                                <option value="single">Single</option>
+                                <option value="divorced">Divorced</option>
+                                <option value="widowed">Widowed</option>
+                            </select>
                         </div>
                     </div>
-                    <!-- Location -->
-                    <div class="mb-8">
-                        <h3 class="text-xl font-semibold text-primary mb-4">Location</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-primary mb-2">Current Location</label>
+                </div>
+                <!-- Location -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-primary mb-4">Location</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Current Location</label>
                                 <input type="text" id="editLocation" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-primary mb-2">Hometown</label>
-                                <input type="text" id="editHometown" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Hometown</label>
+                            <input type="text" id="editHometown" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
                         </div>
                     </div>
-                    <!-- Dating Preferences -->
-                    <div class="mb-8">
-                        <h3 class="text-xl font-semibold text-primary mb-4">Dating Preferences</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-primary mb-2">Dating Intentions</label>
-                                <select id="editDatingIntentions" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                                    <option value="">Select Intentions</option>
-                                    <option value="serious-relationship">Serious Relationship</option>
-                                    <option value="casual-dating">Casual Dating</option>
-                                    <option value="friendship">Friendship</option>
-                                    <option value="marriage">Marriage</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-primary mb-2">Height (Feet)</label>
-                                <select id="editHeightFeet" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                                    <option value="">Feet</option>
-                                    <option value="4">4'</option>
-                                    <option value="5">5'</option>
-                                    <option value="6">6'</option>
-                                    <option value="7">7'</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-primary mb-2">Height (Inches)</label>
-                                <select id="editHeightInches" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                                    <option value="">Inches</option>
-                                    <option value="0">0"</option>
-                                    <option value="1">1"</option>
-                                    <option value="2">2"</option>
-                                    <option value="3">3"</option>
-                                    <option value="4">4"</option>
-                                    <option value="5">5"</option>
-                                    <option value="6">6"</option>
-                                    <option value="7">7"</option>
-                                    <option value="8">8"</option>
-                                    <option value="9">9"</option>
-                                    <option value="10">10"</option>
-                                    <option value="11">11"</option>
-                                </select>
-                            </div>
+                </div>
+                <!-- Dating Preferences -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-primary mb-4">Dating Preferences</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Dating Intentions</label>
+                            <select id="editDatingIntentions" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="">Select Intentions</option>
+                                <option value="serious-relationship">Serious Relationship</option>
+                                <option value="casual-dating">Casual Dating</option>
+                                <option value="friendship">Friendship</option>
+                                <option value="marriage">Marriage</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Height (Feet)</label>
+                            <select id="editHeightFeet" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="">Feet</option>
+                                <option value="4">4'</option>
+                                <option value="5">5'</option>
+                                <option value="6">6'</option>
+                                <option value="7">7'</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Height (Inches)</label>
+                            <select id="editHeightInches" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="">Inches</option>
+                                <option value="0">0"</option>
+                                <option value="1">1"</option>
+                                <option value="2">2"</option>
+                                <option value="3">3"</option>
+                                <option value="4">4"</option>
+                                <option value="5">5"</option>
+                                <option value="6">6"</option>
+                                <option value="7">7"</option>
+                                <option value="8">8"</option>
+                                <option value="9">9"</option>
+                                <option value="10">10"</option>
+                                <option value="11">11"</option>
+                            </select>
                         </div>
                     </div>
-                    <!-- Occupation -->
-                    <div class="mb-8">
+                </div>
+                <!-- Occupation -->
+                <div class="mb-8">
                         <h3 class="text-xl font-semibold text-primary mb-4">Work & Education</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-primary mb-2">Occupation</label>
-                                <input type="text" id="editOccupation" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-primary mb-2">Job Title</label>
-                                <input type="text" id="editJobTitle" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-primary mb-2">School/University</label>
-                                <input type="text" id="editSchool" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-primary mb-2">Highest Degree</label>
-                                <select id="editHighestDegree" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                                    <option value="">Select Degree</option>
-                                    <option value="high-school">High School</option>
-                                    <option value="associate">Associate's</option>
-                                    <option value="bachelor">Bachelor's</option>
-                                    <option value="master">Master's</option>
-                                    <option value="doctorate">Doctorate</option>
-                                </select>
-                            </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Occupation</label>
+                            <input type="text" id="editOccupation" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Job Title</label>
+                            <input type="text" id="editJobTitle" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">School/University</label>
+                            <input type="text" id="editSchool" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Highest Degree</label>
+                            <select id="editHighestDegree" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="">Select Degree</option>
+                                <option value="high-school">High School</option>
+                                <option value="associate">Associate's</option>
+                                <option value="bachelor">Bachelor's</option>
+                                <option value="master">Master's</option>
+                                <option value="doctorate">Doctorate</option>
+                            </select>
                         </div>
                     </div>
-                    <!-- Lifestyle -->
-                    <div class="mb-8">
-                        <h3 class="text-xl font-semibold text-primary mb-4">Lifestyle</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-primary mb-2">Religion</label>
-                                <select id="editReligion" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                                    <option value="">Select Religion</option>
-                                    <option value="christianity">Christianity</option>
-                                    <option value="islam">Islam</option>
-                                    <option value="hinduism">Hinduism</option>
-                                    <option value="buddhism">Buddhism</option>
-                                    <option value="judaism">Judaism</option>
-                                    <option value="atheist">Atheist</option>
-                                    <option value="agnostic">Agnostic</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-primary mb-2">Smoking</label>
-                                <select id="editSmoking" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                                    <option value="">Select Preference</option>
-                                    <option value="never">Never</option>
-                                    <option value="occasionally">Occasionally</option>
-                                    <option value="regularly">Regularly</option>
-                                    <option value="trying-to-quit">Trying to Quit</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-primary mb-2">Drinking</label>
-                                <select id="editDrinking" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                                    <option value="">Select Preference</option>
-                                    <option value="never">Never</option>
-                                    <option value="occasionally">Occasionally</option>
-                                    <option value="socially">Socially</option>
-                                    <option value="regularly">Regularly</option>
-                                </select>
-                            </div>
+                </div>
+                <!-- Lifestyle -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-primary mb-4">Lifestyle</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Religion</label>
+                            <select id="editReligion" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="">Select Religion</option>
+                                <option value="christianity">Christianity</option>
+                                <option value="islam">Islam</option>
+                                <option value="hinduism">Hinduism</option>
+                                <option value="buddhism">Buddhism</option>
+                                <option value="judaism">Judaism</option>
+                                <option value="atheist">Atheist</option>
+                                <option value="agnostic">Agnostic</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Smoking</label>
+                            <select id="editSmoking" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="">Select Preference</option>
+                                <option value="never">Never</option>
+                                <option value="occasionally">Occasionally</option>
+                                <option value="regularly">Regularly</option>
+                                <option value="trying-to-quit">Trying to Quit</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-primary mb-2">Drinking</label>
+                            <select id="editDrinking" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="">Select Preference</option>
+                                <option value="never">Never</option>
+                                <option value="occasionally">Occasionally</option>
+                                <option value="socially">Socially</option>
+                                <option value="regularly">Regularly</option>
+                            </select>
                         </div>
                     </div>
+                </div>
                     <!-- Save/Cancel Buttons -->
-                    <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+                <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
                         <button onclick="hideEditProfile()" class="px-6 py-3 text-secondary border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
                         <button onclick="saveProfileChanges()" class="px-6 py-3 btn-primary text-white rounded-lg font-semibold">Save Changes</button>
-                    </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <!-- Bottom Navigation Bar -->
     <nav class="bottom-nav">
@@ -403,21 +403,21 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
     <script>
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyBkEbvGk_kxL3d1IB2zgYFpbixUBJ8EV8c",
-      authDomain: "mindsmeet-a8945.firebaseapp.com",
-      projectId: "mindsmeet-a8945",
-      storageBucket: "mindsmeet-a8945.firebasestorage.app",
-      messagingSenderId: "273248409523",
-      appId: "1:273248409523:web:88fc2d8eefacc665c8ddc6",
-      measurementId: "G-H8QD41XT3P"
-    };
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBkEbvGk_kxL3d1IB2zgYFpbixUBJ8EV8c",
+            authDomain: "mindsmeet-a8945.firebaseapp.com",
+            projectId: "mindsmeet-a8945",
+            storageBucket: "mindsmeet-a8945.firebasestorage.app",
+            messagingSenderId: "273248409523",
+            appId: "1:273248409523:web:88fc2d8eefacc665c8ddc6",
+            measurementId: "G-H8QD41XT3P"
+        };
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
     const storage = firebase.storage();
 
     // Set persistence to LOCAL for better iOS Safari support
@@ -429,29 +429,29 @@
         console.error('Error setting persistence:', error);
       });
 
-    let userProfileData = {};
+        let userProfileData = {};
 
-    // Check authentication on page load
-    document.addEventListener('DOMContentLoaded', function() {
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
       console.log('DOM loaded, checking authentication...');
       
-      auth.onAuthStateChanged(function(user) {
+            auth.onAuthStateChanged(function(user) {
         console.log('Auth state changed:', user ? 'User logged in' : 'No user');
         
-        if (user && user.email) {
-          console.log('User authenticated:', user.email);
+                if (user && user.email) {
+                    console.log('User authenticated:', user.email);
           console.log('Email verified:', user.emailVerified);
           console.log('User ID:', user.uid);
           
           // Load user profile
-          loadUserProfile();
+                    loadUserProfile();
           checkEmailVerificationStatus(user);
-        } else {
-          console.log('No user authenticated, redirecting to login');
-          window.location.href = 'login.html';
-        }
-      });
-    });
+                } else {
+                    console.log('No user authenticated, redirecting to login');
+                    window.location.href = 'login.html';
+                }
+            });
+        });
 
     // Check and display email verification status
     function checkEmailVerificationStatus(user) {
@@ -520,16 +520,16 @@
     }
 
     // Load user profile
-    async function loadUserProfile() {
-      try {
+        async function loadUserProfile() {
+            try {
         const user = auth.currentUser;
         if (!user) return;
 
         const userDoc = await db.collection('users').doc(user.email).get();
         if (!userDoc.exists) {
           window.location.href = 'profile-setup.html';
-          return;
-        }
+                    return;
+                }
 
         const userData = userDoc.data();
         
@@ -545,7 +545,7 @@
         // Setup message notifications
         setupMessageNotifications();
         
-      } catch (error) {
+            } catch (error) {
         console.error('Error loading user profile:', error);
         window.location.href = 'profile-setup.html';
       }
@@ -572,7 +572,7 @@
       if (profileInterests) profileInterests.textContent = userData.interests || 'Not set';
       
       // Populate edit form with current data
-      populateEditForm();
+            populateEditForm();
       
       // Display existing photos if they exist
       if (userData.photo1Url) {
@@ -728,7 +728,7 @@
     }
 
     // Populate edit form with user data
-    function populateEditForm() {
+        function populateEditForm() {
       console.log('populateEditForm called - DEBUG');
       console.log('User profile data:', window.userProfileData);
       
@@ -788,8 +788,8 @@
       if (jobTitleElement) jobTitleElement.value = userData.jobTitle || '';
       if (schoolElement) schoolElement.value = userData.school || '';
       if (highestDegreeElement) highestDegreeElement.value = userData.highestDegree || '';
-      
-      // Lifestyle
+            
+            // Lifestyle
       const religionElement = document.getElementById('editReligion');
       const smokingElement = document.getElementById('editSmoking');
       const drinkingElement = document.getElementById('editDrinking');
@@ -823,45 +823,45 @@
       safeUpdateElement('profileInterests', userProfileData.interests || 'No interests set');
       
       console.log('Profile display updated successfully');
-    }
+        }
 
-    // Display photo in edit form
+        // Display photo in edit form
     function displayEditPhoto(photoKey, previewId, placeholderId, imgId, photoUrl) {
-      const preview = document.getElementById(previewId);
-      const placeholder = document.getElementById(placeholderId);
-      const img = document.getElementById(imgId);
-      
+            const preview = document.getElementById(previewId);
+            const placeholder = document.getElementById(placeholderId);
+            const img = document.getElementById(imgId);
+            
       if (photoUrl) {
         img.src = photoUrl;
         preview.classList.remove('hidden');
-        placeholder.classList.add('hidden');
-      } else {
+                placeholder.classList.add('hidden');
+            } else {
         preview.classList.add('hidden');
-        placeholder.classList.remove('hidden');
-      }
-    }
+                placeholder.classList.remove('hidden');
+            }
+        }
 
-    // Preview photo in edit form
-    function previewEditPhoto(input, previewId, placeholderId, imgId) {
+        // Preview photo in edit form
+        function previewEditPhoto(input, previewId, placeholderId, imgId) {
       console.log('previewEditPhoto called - DEBUG');
       console.log('Input element:', input);
       console.log('Preview ID:', previewId);
       console.log('Placeholder ID:', placeholderId);
       console.log('Image ID:', imgId);
       
-      const file = input.files[0];
+            const file = input.files[0];
       console.log('Selected file:', file);
       
-      if (file) {
+            if (file) {
         console.log('File selected, starting preview and upload');
-        const reader = new FileReader();
-        reader.onload = function(e) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
           console.log('File read successfully, updating preview');
           document.getElementById(previewId).classList.remove('hidden');
-          document.getElementById(placeholderId).classList.add('hidden');
+                    document.getElementById(placeholderId).classList.add('hidden');
           document.getElementById(imgId).src = e.target.result;
-        };
-        reader.readAsDataURL(file);
+                };
+                reader.readAsDataURL(file);
         // Upload photo to Firebase Storage and save URL
         const photoKey = input.id.replace('edit', '').toLowerCase(); // photo1 or photo2
         console.log('Starting upload for photo key:', photoKey);
@@ -873,78 +873,78 @@
 
     // Helper: Upload photo to Firebase Storage and save URL in userProfileData
     async function uploadPhotoAndSaveUrl(file, photoKey) {
-      const currentUser = auth.currentUser;
+                const currentUser = auth.currentUser;
       if (!file || !currentUser || !currentUser.email) {
         console.log('No file or user provided for upload');
-        return;
-      }
+                    return;
+                }
 
-      console.log('Starting photo upload for:', photoKey);
-      console.log('File size:', file.size, 'bytes');
-      console.log('File type:', file.type);
-      
+                console.log('Starting photo upload for:', photoKey);
+                console.log('File size:', file.size, 'bytes');
+                console.log('File type:', file.type);
+                
       // Show uploading status immediately
       showEditUploadStatus(photoKey, 'uploading', 0);
       
       try {
-        // Ensure Firebase Storage is properly initialized
-        if (!firebase.storage) {
-          console.error('Firebase Storage not available');
+                // Ensure Firebase Storage is properly initialized
+                if (!firebase.storage) {
+                    console.error('Firebase Storage not available');
           showEditUploadStatus(photoKey, 'error');
-          alert('Firebase Storage not available. Please refresh the page and try again.');
+                    alert('Firebase Storage not available. Please refresh the page and try again.');
           return;
-        }
-        
-        // Get storage instance
-        const storage = firebase.storage();
-        console.log('Firebase Storage initialized:', storage);
-        
-        // Optimize image before upload
-        const optimizedFile = await optimizeImageForUpload(file);
-        console.log('Image optimized, new size:', optimizedFile.size, 'bytes');
-        
-        // Upload to Firebase Storage
+                }
+                
+                // Get storage instance
+                const storage = firebase.storage();
+                console.log('Firebase Storage initialized:', storage);
+                
+                // Optimize image before upload
+                const optimizedFile = await optimizeImageForUpload(file);
+                console.log('Image optimized, new size:', optimizedFile.size, 'bytes');
+                
+                // Upload to Firebase Storage
         const storagePath = `users/${currentUser.email}/${photoKey}_${Date.now()}.jpg`;
-        console.log('Storage path:', storagePath);
-        
-        const fileRef = storage.ref(storagePath);
-        console.log('File reference created');
-        
-        console.log('Starting file upload...');
-        
-        // Create a promise-based upload with progress tracking
-        const uploadPromise = new Promise((resolve, reject) => {
-          const uploadTask = fileRef.put(optimizedFile, {
-            contentType: 'image/jpeg',
-            cacheControl: 'public, max-age=31536000' // 1 year cache
-          });
-          
-          uploadTask.on('state_changed',
-            (snapshot) => {
+                console.log('Storage path:', storagePath);
+                
+                const fileRef = storage.ref(storagePath);
+                console.log('File reference created');
+                
+                console.log('Starting file upload...');
+                
+                // Create a promise-based upload with progress tracking
+                const uploadPromise = new Promise((resolve, reject) => {
+                    const uploadTask = fileRef.put(optimizedFile, {
+                        contentType: 'image/jpeg',
+                        cacheControl: 'public, max-age=31536000' // 1 year cache
+                    });
+                    
+                    uploadTask.on('state_changed', 
+                        (snapshot) => {
               const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-              console.log('Upload progress: ' + progress + '%');
+                            console.log('Upload progress: ' + progress + '%');
               showEditUploadStatus(photoKey, 'uploading', progress);
-            },
-            (error) => {
-              console.error('Upload error:', error);
+                        },
+                        (error) => {
+                            console.error('Upload error:', error);
               showEditUploadStatus(photoKey, 'error');
-              reject(error);
-            },
-            () => {
-              console.log('Upload completed successfully');
+                            reject(error);
+                        },
+                        () => {
+                            console.log('Upload completed successfully');
               showEditUploadStatus(photoKey, 'success');
-              resolve(uploadTask);
-            }
-          );
-        });
-        
-        await uploadPromise;
-        console.log('File upload completed');
-        
-        console.log('Getting download URL...');
-        const url = await fileRef.getDownloadURL();
-        console.log('Download URL obtained:', url);
-        
+                            resolve(uploadTask);
+                        }
+                    );
+                });
+                
+                await uploadPromise;
+                console.log('File upload completed');
+                
+                console.log('Getting download URL...');
+                const url = await fileRef.getDownloadURL();
+                console.log('Download URL obtained:', url);
+                
         // Save URL to global userProfileData with correct field name
         const photoUrlField = photoKey + 'Url'; // photo1Url or photo2Url
         if (!window.userProfileData) {
@@ -977,28 +977,28 @@
         setTimeout(() => {
           displayEditPhoto(photoKey, 'edit' + photoKey.charAt(0).toUpperCase() + photoKey.slice(1) + 'Preview', 'edit' + photoKey.charAt(0).toUpperCase() + photoKey.slice(1) + 'Placeholder', 'edit' + photoKey.charAt(0).toUpperCase() + photoKey.slice(1) + 'Img', url);
         }, 2000);
-        
-      } catch (error) {
-        console.error('Error uploading photo:', error);
-        console.error('Error code:', error.code);
-        console.error('Error message:', error.message);
+                
+            } catch (error) {
+                console.error('Error uploading photo:', error);
+                console.error('Error code:', error.code);
+                console.error('Error message:', error.message);
         
         showEditUploadStatus(photoKey, 'error');
-        
-        let errorMessage = 'Error uploading photo. ';
-        if (error.code === 'storage/unauthorized') {
-          errorMessage += 'Storage access denied. Please check permissions.';
-        } else if (error.code === 'storage/quota-exceeded') {
-          errorMessage += 'Storage quota exceeded.';
-        } else if (error.code === 'storage/invalid-format') {
-          errorMessage += 'Invalid file format. Please use JPG, PNG, or GIF.';
-        } else if (error.code === 'storage/network-request-failed') {
-          errorMessage += 'Network error. Please check your internet connection.';
-        } else {
-          errorMessage += 'Please try again. Error: ' + error.message;
-        }
-        
-        alert(errorMessage);
+                
+                let errorMessage = 'Error uploading photo. ';
+                if (error.code === 'storage/unauthorized') {
+                    errorMessage += 'Storage access denied. Please check permissions.';
+                } else if (error.code === 'storage/quota-exceeded') {
+                    errorMessage += 'Storage quota exceeded.';
+                } else if (error.code === 'storage/invalid-format') {
+                    errorMessage += 'Invalid file format. Please use JPG, PNG, or GIF.';
+                } else if (error.code === 'storage/network-request-failed') {
+                    errorMessage += 'Network error. Please check your internet connection.';
+                } else {
+                    errorMessage += 'Please try again. Error: ' + error.message;
+                }
+                
+                alert(errorMessage);
       }
     }
 
@@ -1118,53 +1118,53 @@
         console.log('Edit section hidden, welcome section shown');
       } else {
         console.error('Edit or welcome section not found');
-      }
-    }
+            }
+        }
 
-    // Helper: Optimize image for upload (resize and compress)
-    function optimizeImageForUpload(file) {
-      return new Promise((resolve) => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const img = new Image();
-        
-        img.onload = function() {
-          // Calculate new dimensions (max 800x800 for profile photos)
-          const maxSize = 800;
-          let { width, height } = img;
-          
-          if (width > height) {
-            if (width > maxSize) {
-              height = (height * maxSize) / width;
-              width = maxSize;
-            }
-          } else {
-            if (height > maxSize) {
-              width = (width * maxSize) / height;
-              height = maxSize;
-            }
-          }
-          
-          // Set canvas dimensions
-          canvas.width = width;
-          canvas.height = height;
-          
-          // Draw and compress image
-          ctx.drawImage(img, 0, 0, width, height);
-          
-          // Convert to blob with quality 0.8 (good balance of quality and size)
-          canvas.toBlob((blob) => {
-            const optimizedFile = new File([blob], file.name.replace(/\.[^/.]+$/, '.jpg'), {
-              type: 'image/jpeg',
-              lastModified: Date.now()
+        // Helper: Optimize image for upload (resize and compress)
+        function optimizeImageForUpload(file) {
+            return new Promise((resolve) => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                
+                img.onload = function() {
+                    // Calculate new dimensions (max 800x800 for profile photos)
+                    const maxSize = 800;
+                    let { width, height } = img;
+                    
+                    if (width > height) {
+                        if (width > maxSize) {
+                            height = (height * maxSize) / width;
+                            width = maxSize;
+                        }
+                    } else {
+                        if (height > maxSize) {
+                            width = (width * maxSize) / height;
+                            height = maxSize;
+                        }
+                    }
+                    
+                    // Set canvas dimensions
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    // Draw and compress image
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Convert to blob with quality 0.8 (good balance of quality and size)
+                    canvas.toBlob((blob) => {
+                        const optimizedFile = new File([blob], file.name.replace(/\.[^/.]+$/, '.jpg'), {
+                            type: 'image/jpeg',
+                            lastModified: Date.now()
+                        });
+                        resolve(optimizedFile);
+                    }, 'image/jpeg', 0.8);
+                };
+                
+                img.src = URL.createObjectURL(file);
             });
-            resolve(optimizedFile);
-          }, 'image/jpeg', 0.8);
-        };
-        
-        img.src = URL.createObjectURL(file);
-      });
-    }
+        }
 
     // Show upload status in edit form
     function showEditUploadStatus(photoKey, status, progress = 0) {
@@ -1216,12 +1216,12 @@
       }
     }
 
-    // Sign out function
+        // Sign out function
     function signOutUser() {
-      auth.signOut().then(() => {
-        window.location.href = 'login.html';
-      }).catch((error) => {
-        console.error('Error signing out:', error);
+            auth.signOut().then(() => {
+                window.location.href = 'login.html';
+            }).catch((error) => {
+                console.error('Error signing out:', error);
       });
     }
 
