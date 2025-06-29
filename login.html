@@ -50,6 +50,7 @@
     };
 
     try {
+      console.log('🔍 Checking email existence for:', email);
       const res = await fetch(url, {
         method: 'POST',
         headers: {
@@ -59,14 +60,68 @@
       });
 
       const data = await res.json();
-      return data.registered === true;
+      console.log('🔍 Firebase API response:', data);
+      
+      // Check if the response indicates the user is registered
+      if (data.registered === true) {
+        console.log('✅ Email exists - user is registered');
+        return true;
+      } else if (data.registered === false) {
+        console.log('❌ Email does not exist - user is not registered');
+        return false;
+      } else {
+        // If we can't determine, try alternative method
+        console.log('⚠️ Could not determine registration status, trying alternative method');
+        return await checkEmailExistsAlternative(email);
+      }
     } catch (error) {
+      console.error('❌ Error checking email existence:', error);
+      // Fallback to alternative method
+      return await checkEmailExistsAlternative(email);
+    }
+  }
+
+  // Alternative method to check if email exists
+  async function checkEmailExistsAlternative(email) {
+    try {
+      console.log('🔍 Trying alternative method to check email existence');
+      
+      // Try to sign in with a dummy password to see if account exists
+      // This will fail with 'auth/wrong-password' if account exists, or 'auth/user-not-found' if it doesn't
+      const dummyPassword = 'dummyPassword123!@#';
+      
+      try {
+        await firebase.auth().signInWithEmailAndPassword(email, dummyPassword);
+        // If we get here, the password was somehow correct (very unlikely)
+        console.log('⚠️ Unexpected success with dummy password');
+        return true;
+      } catch (error) {
+        console.log('🔍 Alternative method error code:', error.code);
+        
+        if (error.code === 'auth/wrong-password') {
+          console.log('✅ Email exists (wrong password error)');
+          return true;
+        } else if (error.code === 'auth/user-not-found') {
+          console.log('❌ Email does not exist (user not found error)');
+          return false;
+        } else if (error.code === 'auth/invalid-email') {
+          console.log('❌ Invalid email format');
+          return false;
+        } else {
+          console.log('⚠️ Unknown error, assuming email does not exist');
+          return false;
+        }
+      }
+    } catch (error) {
+      console.error('❌ Alternative method also failed:', error);
+      // If all methods fail, assume email doesn't exist (safer for signup flow)
       return false;
     }
   }
   
   // Make function available globally
   window.checkEmailExists = checkEmailExists;
+  window.checkEmailExistsAlternative = checkEmailExistsAlternative;
 </script>
 <style type="text/tailwindcss">
     :root {

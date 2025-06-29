@@ -590,9 +590,9 @@
     function createProfileCard(profile) {
       const { email, data } = profile;
       
-      // Get profile photo
+      // Get profile photo - don't use default placeholder
       const photos = data.photos || [];
-      const mainPhoto = photos.length > 0 ? photos[0].url : 'https://randomuser.me/api/portraits/lego/1.jpg';
+      const mainPhoto = photos.length > 0 ? photos[0].url : null;
       
       // Calculate age from birth date if available
       let age = data.age;
@@ -610,8 +610,17 @@
       card.className = 'profile-card';
       card.dataset.userEmail = email;
       
+      // Create photo element - show placeholder if no photo
+      const photoElement = mainPhoto 
+        ? `<img src="${mainPhoto}" class="profile-image" alt="Profile">`
+        : `<div class="profile-image bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+            <svg class="w-16 h-16 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+            </svg>
+          </div>`;
+      
       card.innerHTML = `
-        <img src="${mainPhoto}" class="profile-image" alt="Profile">
+        ${photoElement}
         <div class="profile-info">
           <div class="profile-name">${data.fullName}, ${age}</div>
           <div class="profile-details">${data.currentLocation || 'Location not set'}</div>
