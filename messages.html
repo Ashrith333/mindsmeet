@@ -244,6 +244,8 @@
           console.log('User profile data:', userData);
           
           // Check if profile has essential data (name, age, etc.)
+          // For existing profiles, dating preferences is optional
+          // For new profiles, it will be required during setup
           const hasEssentialData = userData.fullName && userData.age;
           console.log('Has essential profile data:', hasEssentialData);
           

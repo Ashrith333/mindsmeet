@@ -202,8 +202,20 @@
                                     <option value="">Select Gender</option>
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
+                                    <option value="non-binary">Non-binary</option>
                                     <option value="other">Other</option>
                                 </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-primary mb-2">Dating Preferences <span class="text-gray-500 text-xs">(Optional)</span></label>
+                                <select id="editDatingPreferences" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                    <option value="">Select Preferences</option>
+                                    <option value="men">Men</option>
+                                    <option value="women">Women</option>
+                                    <option value="non-binary">Non-binary</option>
+                                    <option value="everyone">Everyone</option>
+                                </select>
+                                <p class="text-xs text-gray-500 mt-1">This helps us show you better matches</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-primary mb-2">Relationship Status</label>
@@ -522,6 +534,8 @@
           });
           
           // Check if profile has essential data (name, age, etc.)
+          // For existing profiles, dating preferences is optional
+          // For new profiles, it will be required during setup
           const hasEssentialData = userProfileData.fullName && userProfileData.age;
           console.log('Has essential profile data:', hasEssentialData);
           
@@ -575,18 +589,21 @@
       const nameElement = document.getElementById('editName');
       const ageElement = document.getElementById('editAge');
       const genderElement = document.getElementById('editGender');
+      const datingPreferencesElement = document.getElementById('editDatingPreferences');
       const relationshipElement = document.getElementById('editRelationshipStatus');
       
       console.log('Form elements found:', {
         name: nameElement,
         age: ageElement,
         gender: genderElement,
+        datingPreferences: datingPreferencesElement,
         relationship: relationshipElement
       });
       
       if (nameElement) nameElement.value = userProfileData.fullName || '';
       if (ageElement) ageElement.value = userProfileData.age || '';
       if (genderElement) genderElement.value = userProfileData.gender || '';
+      if (datingPreferencesElement) datingPreferencesElement.value = userProfileData.datingPreferences || '';
       if (relationshipElement) relationshipElement.value = userProfileData.relationshipStatus || '';
       
       // Location - using correct database field names
@@ -857,6 +874,7 @@
           fullName: document.getElementById('editName').value,
           age: document.getElementById('editAge').value,
           gender: document.getElementById('editGender').value,
+          datingPreferences: document.getElementById('editDatingPreferences').value,
           relationshipStatus: document.getElementById('editRelationshipStatus').value,
           currentLocation: document.getElementById('editLocation').value,
           hometown: document.getElementById('editHometown').value,
