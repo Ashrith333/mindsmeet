@@ -110,10 +110,10 @@
   </div>
 
   <!-- Profile Modal (hidden by default) -->
-  <div id="profileModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 transition-opacity duration-200 hidden">
-    <div class="relative w-full max-w-md bg-white rounded-2xl shadow-lg overflow-hidden animate-slide-up">
-      <button onclick="closeProfileModal()" class="absolute top-3 right-3 text-3xl text-gray-400 hover:text-primary z-10" aria-label="Close">&times;</button>
-      <div id="profileModalContent"></div>
+  <div id="profileModal" class="fixed left-0 right-0 z-50 flex items-center justify-center bg-black bg-opacity-70 transition-opacity duration-200 hidden" style="top:56px;bottom:0px;">
+    <div class="relative w-full h-full bg-white shadow-lg overflow-hidden animate-slide-up">
+      <button onclick="closeProfileModal()" class="absolute top-3 right-3 text-4xl font-bold z-10" style="color:#666;" aria-label="Close">&times;</button>
+      <div id="profileModalContent" style="height:100%;overflow-y:auto;"></div>
     </div>
   </div>
 

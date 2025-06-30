@@ -306,7 +306,7 @@ function showProfileModal() {
   // Modal content with scrollable area
   const modalContent = `
     <div class=\"flex flex-col h-full w-full\">
-      <div class=\"flex-1 overflow-y-auto\" style=\"padding-bottom: 24px; max-height:70vh;\">
+      <div class=\"flex-1 overflow-y-auto\" style=\"max-height:100%;\">
         <img src=\"${mainPhoto}\" class=\"w-full h-80 object-cover\" alt=\"Profile Photo\">
         ${profileDetails.join('')}
         ${additionalPhotos}
