@@ -98,6 +98,7 @@ async function loadBrowseData() {
     loadingState.classList.remove('hidden');
     noProfilesState.classList.add('hidden');
     browseContainer.innerHTML = '';
+    setFloatingButtonsVisible(false);
     
     // Get current user to exclude them from browse results
     const currentUser = auth.currentUser;
@@ -178,8 +179,10 @@ async function loadBrowseData() {
     
     // Show first profile or no profiles state
     if (profileQueue.length > 0) {
+      setFloatingButtonsVisible(true);
       showNextProfile();
     } else {
+      setFloatingButtonsVisible(false);
       noProfilesState.classList.remove('hidden');
     }
     
@@ -187,6 +190,7 @@ async function loadBrowseData() {
     console.error('Error loading browse data:', error);
     loadingState.classList.add('hidden');
     noProfilesState.classList.remove('hidden');
+    setFloatingButtonsVisible(false);
   }
 }
 
@@ -198,6 +202,7 @@ function showNextProfile() {
     const noProfilesState = document.getElementById('noProfilesState');
     
     browseContainer.innerHTML = '';
+    setFloatingButtonsVisible(false);
     noProfilesState.classList.remove('hidden');
     return;
   }
@@ -674,4 +679,12 @@ window.floatingDislike = function() {
   if (profileQueue && profileQueue.length > 0 && profileQueue[currentProfileIndex]) {
     handleDislike(profileQueue[currentProfileIndex].email);
   }
-}; 
+};
+
+// Utility to show/hide floating action buttons
+function setFloatingButtonsVisible(visible) {
+  const likeBtn = document.getElementById('floatingLikeBtn');
+  const dislikeBtn = document.getElementById('floatingDislikeBtn');
+  if (likeBtn) likeBtn.style.display = visible ? 'flex' : 'none';
+  if (dislikeBtn) dislikeBtn.style.display = visible ? 'flex' : 'none';
+} 
