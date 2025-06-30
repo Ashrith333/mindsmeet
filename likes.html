@@ -92,11 +92,11 @@
   <div class="flex-1 w-full max-w-lg mx-auto pb-20 bg-gray-50 overflow-y-auto" style="min-height:calc(100vh - 120px);">
     <!-- Likes Content -->
     <div>
-       <!-- Likes Grid -->
-       <div id="likesGrid" class="grid grid-cols-2 gap-4">
-         <!-- Dynamic content will be loaded here -->
-       </div>
-     </div>
+      <!-- Likes Grid -->
+      <div id="likesGrid" class="grid grid-cols-2 gap-4">
+        <!-- Dynamic content will be loaded here -->
+      </div>
+    </div>
 
     <!-- Empty State (hidden by default) -->
     <div id="emptyState" class="hidden flex flex-col items-center justify-center py-16 px-4">
@@ -113,10 +113,10 @@
     </div>
 
     <!-- Profile Modal (hidden by default) -->
-    <div id="profileModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 transition-opacity duration-200 hidden">
-      <div class="relative w-full max-w-md bg-white rounded-2xl shadow-lg overflow-hidden animate-slide-up">
-        <button onclick="closeProfileModal()" class="absolute top-3 right-3 text-3xl text-gray-400 hover:text-primary z-10" aria-label="Close">&times;</button>
-        <div id="profileModalContent"></div>
+    <div id="profileModal" class="fixed left-0 right-0 z-50 flex items-center justify-center bg-black bg-opacity-70 transition-opacity duration-200 hidden" style="top:56px;bottom:0px;">
+      <div class="relative w-full h-full bg-white shadow-lg overflow-hidden animate-slide-up">
+        <button onclick="closeProfileModal()" class="absolute top-3 right-3 text-4xl font-bold z-10" style="color:#666;" aria-label="Close">&times;</button>
+        <div id="profileModalContent" style="height:100%;overflow-y:auto;"></div>
       </div>
     </div>
   </div>

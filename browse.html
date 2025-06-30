@@ -288,30 +288,30 @@
   <div class="flex-1 w-full max-w-lg mx-auto bg-white" style="height: calc(100vh - 120px - env(safe-area-inset-top, 24px) - env(safe-area-inset-bottom, 0px)); margin-top: calc(56px + env(safe-area-inset-top, 24px)); margin-bottom: 64px; overflow: hidden;">
     <!-- Browse Content -->
     <div class="h-full overflow-y-auto">
-      <div class="p-4">
-        <!-- Single Profile Card Container -->
-        <div class="browse-container">
-          <!-- Profile cards will be loaded here one at a time -->
-        </div>
+    <div class="p-4">
+      <!-- Single Profile Card Container -->
+      <div class="browse-container">
+        <!-- Profile cards will be loaded here one at a time -->
+      </div>
 
-        <!-- Loading State -->
-        <div id="loadingState" class="hidden flex flex-col items-center justify-center py-16">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
-          <p class="text-gray-600">Finding profiles for you...</p>
-        </div>
+      <!-- Loading State -->
+      <div id="loadingState" class="hidden flex flex-col items-center justify-center py-16">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+        <p class="text-gray-600">Finding profiles for you...</p>
+      </div>
 
-        <!-- No More Profiles State -->
-        <div id="noProfilesState" class="hidden flex flex-col items-center justify-center py-16">
-          <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-            </svg>
-          </div>
-          <h3 class="text-lg font-semibold text-primary mb-2">No more profiles</h3>
-          <p class="text-gray-600 text-center mb-6">You've seen all available profiles. Check back later for new matches!</p>
-          <button onclick="loadBrowseData()" class="bg-primary text-white px-6 py-2 rounded-full font-medium">
-            Refresh
-          </button>
+      <!-- No More Profiles State -->
+      <div id="noProfilesState" class="hidden flex flex-col items-center justify-center py-16">
+        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+          <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-primary mb-2">No more profiles</h3>
+        <p class="text-gray-600 text-center mb-6">You've seen all available profiles. Check back later for new matches!</p>
+        <button onclick="loadBrowseData()" class="bg-primary text-white px-6 py-2 rounded-full font-medium">
+          Refresh
+        </button>
         </div>
       </div>
     </div>
