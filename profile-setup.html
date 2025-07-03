@@ -12,11 +12,6 @@
             --text-secondary: #617889;
             --bg-input: #f0f3f4;
             --bg-button-disabled: #e0e0e0;
-            --background-start: #7dd3fc;
-            --background-end: #60a5fa;
-        }
-        .gradient-bg {
-            background: linear-gradient(135deg, var(--background-start) 0%, var(--background-end) 100%);
         }
         .card-shadow {
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
@@ -29,16 +24,13 @@
         .ring-primary { ring-color: var(--primary-color); }
         body {
             font-family: "Plus Jakarta Sans", sans-serif;
+            background-color: white;
         }
     </style>
 </head>
-<body class="gradient-bg min-h-screen flex items-center justify-center p-4">
+<body class="bg-white min-h-screen flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl card-shadow p-8 w-full max-w-2xl">
-        <!-- Header -->
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-primary mb-2">Complete Your Profile</h1>
-            <p class="text-secondary">Let's get to know you better to find your perfect match</p>
-        </div>
+
 
         <!-- Progress Steps -->
         <div class="mb-8">
@@ -56,8 +48,6 @@
         <div id="stepContent" class="mb-6">
             <!-- Step 1: Personal Basics -->
             <div id="step1Content" class="step-content">
-                <h2 class="text-2xl font-semibold text-gray-800 mb-6">Tell us about yourself</h2>
-                
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-primary mb-2">Full Name</label>
@@ -81,6 +71,40 @@
                     </div>
                     
                     <div>
+                        <label class="block text-sm font-medium text-primary mb-2">Height</label>
+                        <div class="flex space-x-2">
+                            <select id="heightFeet" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="">Feet</option>
+                                <option value="0">0'</option>
+                                <option value="1">1'</option>
+                                <option value="2">2'</option>
+                                <option value="3">3'</option>
+                                <option value="4">4'</option>
+                                <option value="5">5'</option>
+                                <option value="6">6'</option>
+                                <option value="7">7'</option>
+                                <option value="8">8'</option>
+                                <option value="9">9'</option>
+                                <option value="10">10'</option>
+                            </select>
+                            <select id="heightInches" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                                <option value="0" selected>0"</option>
+                                <option value="1">1"</option>
+                                <option value="2">2"</option>
+                                <option value="3">3"</option>
+                                <option value="4">4"</option>
+                                <option value="5">5"</option>
+                                <option value="6">6"</option>
+                                <option value="7">7"</option>
+                                <option value="8">8"</option>
+                                <option value="9">9"</option>
+                                <option value="10">10"</option>
+                                <option value="11">11"</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
                         <label class="block text-sm font-medium text-primary mb-2">Dating Preferences <span class="text-gray-500 text-xs">(Optional)</span></label>
                         <select id="datingPreferences" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
                             <option value="">Who are you interested in dating?</option>
@@ -96,8 +120,6 @@
 
             <!-- Step 2: Location & Status -->
             <div id="step2Content" class="step-content hidden">
-                <h2 class="text-2xl font-semibold text-primary mb-6">Where are you located?</h2>
-                
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-primary mb-2">Relationship Status</label>
@@ -107,6 +129,18 @@
                             <option value="divorced">Divorced</option>
                             <option value="widowed">Widowed</option>
                             <option value="separated">Separated</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-primary mb-2">Dating Intentions</label>
+                        <select id="datingIntentions" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                            <option value="">What are you looking for?</option>
+                            <option value="serious-relationship">Serious Relationship</option>
+                            <option value="casual-dating">Casual Dating</option>
+                            <option value="marriage">Marriage</option>
+                            <option value="friendship">Friendship</option>
+                            <option value="not-sure">Not Sure Yet</option>
                         </select>
                     </div>
                     
@@ -122,75 +156,31 @@
                 </div>
             </div>
 
-            <!-- Step 3: Intentions & Height -->
-            <div id="step3Content" class="step-content hidden">
-                <h2 class="text-2xl font-semibold text-primary mb-6">What are you looking for?</h2>
-                
+            <!-- Step 3: Work & Education -->
+            <div id="step3Content" class="step-content hidden"> 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-primary mb-2">Dating Intentions</label>
-                        <select id="datingIntentions" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                            <option value="">What are you looking for?</option>
-                            <option value="serious-relationship">Serious Relationship</option>
-                            <option value="casual-dating">Casual Dating</option>
-                            <option value="marriage">Marriage</option>
-                            <option value="friendship">Friendship</option>
-                            <option value="not-sure">Not Sure Yet</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-primary mb-2">Height</label>
-                        <div class="flex space-x-2">
-                            <select id="heightFeet" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                                <option value="">Feet</option>
-                                <option value="4">4'</option>
-                                <option value="5">5'</option>
-                                <option value="6">6'</option>
-                                <option value="7">7'</option>
-                            </select>
-                            <select id="heightInches" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                                <option value="">Inches</option>
-                                <option value="0">0"</option>
-                                <option value="1">1"</option>
-                                <option value="2">2"</option>
-                                <option value="3">3"</option>
-                                <option value="4">4"</option>
-                                <option value="5">5"</option>
-                                <option value="6">6"</option>
-                                <option value="7">7"</option>
-                                <option value="8">8"</option>
-                                <option value="9">9"</option>
-                                <option value="10">10"</option>
-                                <option value="11">11"</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 4: Work & Education -->
-            <div id="step4Content" class="step-content hidden">
-                <h2 class="text-2xl font-semibold text-primary mb-6">Tell us about your career</h2>
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-primary mb-2">Occupation</label>
-                        <input type="text" id="occupation" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary" placeholder="What do you do for work?">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-primary mb-2">Job Title</label>
+                        <label class="block text-sm font-medium text-primary mb-2">Job Designation</label>
                         <input type="text" id="jobTitle" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary" placeholder="Your job title or designation">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-primary mb-2">School/University</label>
+                        <label class="block text-sm font-medium text-primary mb-2">Company</label>
+                        <input type="text" id="company" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary" placeholder="Where do you work?">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-primary mb-2">Graduation College/School</label>
                         <input type="text" id="school" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary" placeholder="Where did you study?">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-primary mb-2">Highest Degree</label>
+                        <label class="block text-sm font-medium text-primary mb-2">Graduation Year</label>
+                        <input type="number" id="graduationYear" min="1950" max="2030" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary" placeholder="Year of graduation">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-primary mb-2">Degree Type</label>
                         <select id="highestDegree" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
                             <option value="">Select your highest degree</option>
                             <option value="high-school">High School</option>
@@ -204,10 +194,8 @@
                 </div>
             </div>
 
-            <!-- Step 5: Lifestyle -->
-            <div id="step5Content" class="step-content hidden">
-                <h2 class="text-2xl font-semibold text-primary mb-6">What's your lifestyle like?</h2>
-                
+            <!-- Step 4: Lifestyle -->
+            <div id="step4Content" class="step-content hidden">
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-primary mb-2">Religion</label>
@@ -250,9 +238,25 @@
                 </div>
             </div>
 
+            <!-- Step 5: Bio -->
+            <div id="step5Content" class="step-content hidden">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-primary mb-2">Bio</label>
+                        <textarea id="bio" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary resize-none" placeholder="Tell us about yourself, your interests, what you're looking for..."></textarea>
+                        <p class="text-xs text-gray-500 mt-1">Share what makes you unique and what you're looking for in a partner</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Step 6: Photos -->
             <div id="step6Content" class="step-content hidden">
-                <h2 class="text-2xl font-semibold text-primary mb-6">Add your photos</h2>
+                <div class="flex items-center mb-6">
+                    <!-- <svg class="w-8 h-8 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg> -->
+                    <!-- <h2 class="text-2xl font-semibold text-gray-800">Add Your Photos</h2> -->
+                </div>
                 
                 <div class="space-y-6">
                     <div class="text-center">

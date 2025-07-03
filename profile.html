@@ -148,14 +148,26 @@
       <!-- Profile Edit Section (edit mode) -->
       <div id="profileEditSection" class="fixed inset-0 z-50 bg-white flex flex-col hidden">
         <div class="flex items-center justify-between px-4 py-4 border-b border-gray-100 bg-white sticky top-0 z-10">
-          <h2 class="text-2xl font-bold text-primary">Edit Profile</h2>
+          <h2 class="text-2xl font-bold text-primary">Profile</h2>
           <button onclick="hideEditProfile()" class="text-secondary hover:text-primary">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </button>
         </div>
-        <div class="flex-1 overflow-y-auto min-h-0 px-8 pb-8">
+        
+        <!-- Tab Navigation -->
+        <div class="flex border-b border-gray-200 bg-white sticky top-16 z-10">
+          <button id="editTabBtn" onclick="switchToEditTab()" class="flex-1 py-3 px-4 text-center font-medium text-primary border-b-2 border-primary bg-blue-50">
+            Edit
+          </button>
+          <button id="viewTabBtn" onclick="switchToViewTab()" class="flex-1 py-3 px-4 text-center font-medium text-gray-500 border-b-2 border-transparent hover:text-primary">
+            View
+          </button>
+        </div>
+        
+        <!-- Edit Tab Content -->
+        <div id="editTabContent" class="flex-1 overflow-y-auto min-h-0 px-8 pb-8">
           <!-- Photos Section -->
           <div class="mb-8">
             <h3 class="text-xl font-semibold text-primary mb-4">Profile Photos</h3>
@@ -228,6 +240,34 @@
                 </select>
               </div>
               <div>
+                <label class="block text-sm font-medium text-primary mb-2">Height (Feet)</label>
+                <select id="editHeightFeet" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                  <option value="">Feet</option>
+                  <option value="4">4'</option>
+                  <option value="5">5'</option>
+                  <option value="6">6'</option>
+                  <option value="7">7'</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-primary mb-2">Height (Inches)</label>
+                <select id="editHeightInches" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+                  <option value="">Inches</option>
+                  <option value="0">0"</option>
+                  <option value="1">1"</option>
+                  <option value="2">2"</option>
+                  <option value="3">3"</option>
+                  <option value="4">4"</option>
+                  <option value="5">5"</option>
+                  <option value="6">6"</option>
+                  <option value="7">7"</option>
+                  <option value="8">8"</option>
+                  <option value="9">9"</option>
+                  <option value="10">10"</option>
+                  <option value="11">11"</option>
+                </select>
+              </div>
+              <div>
                 <label class="block text-sm font-medium text-primary mb-2">Dating Preferences <span class="text-gray-500 text-xs">(Optional)</span></label>
                 <select id="editDatingPreferences" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
                   <option value="">Select Preferences</option>
@@ -266,7 +306,7 @@
           <!-- Dating Preferences -->
           <div class="mb-8">
             <h3 class="text-xl font-semibold text-primary mb-4">Dating Preferences</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label class="block text-sm font-medium text-primary mb-2">Dating Intentions</label>
                 <select id="editDatingIntentions" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
@@ -275,63 +315,41 @@
                   <option value="casual-dating">Casual Dating</option>
                   <option value="friendship">Friendship</option>
                   <option value="marriage">Marriage</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-primary mb-2">Height (Feet)</label>
-                <select id="editHeightFeet" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                  <option value="">Feet</option>
-                  <option value="4">4'</option>
-                  <option value="5">5'</option>
-                  <option value="6">6'</option>
-                  <option value="7">7'</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-primary mb-2">Height (Inches)</label>
-                <select id="editHeightInches" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-                  <option value="">Inches</option>
-                  <option value="0">0"</option>
-                  <option value="1">1"</option>
-                  <option value="2">2"</option>
-                  <option value="3">3"</option>
-                  <option value="4">4"</option>
-                  <option value="5">5"</option>
-                  <option value="6">6"</option>
-                  <option value="7">7"</option>
-                  <option value="8">8"</option>
-                  <option value="9">9"</option>
-                  <option value="10">10"</option>
-                  <option value="11">11"</option>
+                  <option value="not-sure">Not Sure Yet</option>
                 </select>
               </div>
             </div>
           </div>
-          <!-- Occupation -->
+          <!-- Work & Education -->
           <div class="mb-8">
             <h3 class="text-xl font-semibold text-primary mb-4">Work & Education</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label class="block text-sm font-medium text-primary mb-2">Occupation</label>
-                <input type="text" id="editOccupation" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-primary mb-2">Job Title</label>
+                <label class="block text-sm font-medium text-primary mb-2">Job Designation</label>
                 <input type="text" id="editJobTitle" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
               </div>
               <div>
-                <label class="block text-sm font-medium text-primary mb-2">School/University</label>
+                <label class="block text-sm font-medium text-primary mb-2">Company</label>
+                <input type="text" id="editCompany" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-primary mb-2">Graduation College/School</label>
                 <input type="text" id="editSchool" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
               </div>
               <div>
-                <label class="block text-sm font-medium text-primary mb-2">Highest Degree</label>
+                <label class="block text-sm font-medium text-primary mb-2">Graduation Year</label>
+                <input type="number" id="editGraduationYear" min="1950" max="2030" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-primary mb-2">Degree Type</label>
                 <select id="editHighestDegree" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
                   <option value="">Select Degree</option>
                   <option value="high-school">High School</option>
-                  <option value="associate">Associate's</option>
-                  <option value="bachelor">Bachelor's</option>
-                  <option value="master">Master's</option>
+                  <option value="associate">Associate's Degree</option>
+                  <option value="bachelor">Bachelor's Degree</option>
+                  <option value="master">Master's Degree</option>
                   <option value="doctorate">Doctorate</option>
+                  <option value="other">Other</option>
                 </select>
               </div>
             </div>
@@ -349,9 +367,11 @@
                   <option value="hinduism">Hinduism</option>
                   <option value="buddhism">Buddhism</option>
                   <option value="judaism">Judaism</option>
+                  <option value="sikhism">Sikhism</option>
                   <option value="atheist">Atheist</option>
                   <option value="agnostic">Agnostic</option>
                   <option value="other">Other</option>
+                  <option value="prefer-not-to-say">Prefer not to say</option>
                 </select>
               </div>
               <div>
@@ -369,10 +389,22 @@
                 <select id="editDrinking" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary">
                   <option value="">Select Preference</option>
                   <option value="never">Never</option>
-                  <option value="occasionally">Occasionally</option>
                   <option value="socially">Socially</option>
+                  <option value="occasionally">Occasionally</option>
                   <option value="regularly">Regularly</option>
                 </select>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Bio -->
+          <div class="mb-8">
+            <h3 class="text-xl font-semibold text-primary mb-4">About Me</h3>
+            <div class="grid grid-cols-1 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-primary mb-2">Bio</label>
+                <textarea id="editBio" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-input text-primary resize-none" placeholder="Tell us about yourself, your interests, what you're looking for..."></textarea>
+                <p class="text-xs text-gray-500 mt-1">Share what makes you unique and what you're looking for in a partner</p>
               </div>
             </div>
           </div>
@@ -380,6 +412,13 @@
           <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
             <button onclick="hideEditProfile()" class="px-6 py-3 text-secondary border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
             <button onclick="saveProfileChanges()" class="px-6 py-3 btn-primary text-white rounded-lg font-semibold">Save Changes</button>
+          </div>
+        </div>
+        
+        <!-- View Tab Content -->
+        <div id="viewTabContent" class="flex-1 overflow-y-auto min-h-0 hidden">
+          <div class="profile-view-container">
+            <!-- Profile cards will be loaded here to show how it appears in browse -->
           </div>
         </div>
       </div>

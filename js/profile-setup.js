@@ -220,9 +220,9 @@ function updateStepDisplay() {
     const stepNames = [
         'Personal Basics',
         'Location & Status', 
-        'Intentions & Height',
         'Work & Education',
-        'Lifestyle',
+        'Lifestyle & Preferences',
+        'About You',
         'Photos'
     ];
     const currentStepNameElement = document.getElementById('currentStepName');
@@ -251,28 +251,30 @@ function saveCurrentStepData() {
             profileData.fullName = document.getElementById('fullName').value;
             profileData.age = document.getElementById('age').value;
             profileData.gender = document.getElementById('gender').value;
+            profileData.heightFeet = document.getElementById('heightFeet').value;
+            profileData.heightInches = document.getElementById('heightInches').value;
             profileData.datingPreferences = document.getElementById('datingPreferences').value;
             break;
         case 2:
             profileData.relationshipStatus = document.getElementById('relationshipStatus').value;
+            profileData.datingIntentions = document.getElementById('datingIntentions').value;
             profileData.currentLocation = document.getElementById('currentLocation').value;
             profileData.hometown = document.getElementById('hometown').value;
             break;
         case 3:
-            profileData.datingIntentions = document.getElementById('datingIntentions').value;
-            profileData.heightFeet = document.getElementById('heightFeet').value;
-            profileData.heightInches = document.getElementById('heightInches').value;
-            break;
-        case 4:
-            profileData.occupation = document.getElementById('occupation').value;
             profileData.jobTitle = document.getElementById('jobTitle').value;
+            profileData.company = document.getElementById('company').value;
             profileData.school = document.getElementById('school').value;
+            profileData.graduationYear = document.getElementById('graduationYear').value;
             profileData.highestDegree = document.getElementById('highestDegree').value;
             break;
-        case 5:
+        case 4:
             profileData.religion = document.getElementById('religion').value;
             profileData.smoking = document.getElementById('smoking').value;
             profileData.drinking = document.getElementById('drinking').value;
+            break;
+        case 5:
+            profileData.bio = document.getElementById('bio').value;
             break;
         case 6:
             const photo1File = document.getElementById('photo1').files[0];
@@ -297,28 +299,30 @@ function loadStepData() {
             if (profileData.fullName) document.getElementById('fullName').value = profileData.fullName;
             if (profileData.age) document.getElementById('age').value = profileData.age;
             if (profileData.gender) document.getElementById('gender').value = profileData.gender;
+            if (profileData.heightFeet) document.getElementById('heightFeet').value = profileData.heightFeet;
+            if (profileData.heightInches) document.getElementById('heightInches').value = profileData.heightInches;
             if (profileData.datingPreferences) document.getElementById('datingPreferences').value = profileData.datingPreferences;
             break;
         case 2:
             if (profileData.relationshipStatus) document.getElementById('relationshipStatus').value = profileData.relationshipStatus;
+            if (profileData.datingIntentions) document.getElementById('datingIntentions').value = profileData.datingIntentions;
             if (profileData.currentLocation) document.getElementById('currentLocation').value = profileData.currentLocation;
             if (profileData.hometown) document.getElementById('hometown').value = profileData.hometown;
             break;
         case 3:
-            if (profileData.datingIntentions) document.getElementById('datingIntentions').value = profileData.datingIntentions;
-            if (profileData.heightFeet) document.getElementById('heightFeet').value = profileData.heightFeet;
-            if (profileData.heightInches) document.getElementById('heightInches').value = profileData.heightInches;
-            break;
-        case 4:
-            if (profileData.occupation) document.getElementById('occupation').value = profileData.occupation;
             if (profileData.jobTitle) document.getElementById('jobTitle').value = profileData.jobTitle;
+            if (profileData.company) document.getElementById('company').value = profileData.company;
             if (profileData.school) document.getElementById('school').value = profileData.school;
+            if (profileData.graduationYear) document.getElementById('graduationYear').value = profileData.graduationYear;
             if (profileData.highestDegree) document.getElementById('highestDegree').value = profileData.highestDegree;
             break;
-        case 5:
+        case 4:
             if (profileData.religion) document.getElementById('religion').value = profileData.religion;
             if (profileData.smoking) document.getElementById('smoking').value = profileData.smoking;
             if (profileData.drinking) document.getElementById('drinking').value = profileData.drinking;
+            break;
+        case 5:
+            if (profileData.bio) document.getElementById('bio').value = profileData.bio;
             break;
         case 6:
             displayUploadedPhoto('photo1', 'photo1Preview');
@@ -333,42 +337,46 @@ function validateCurrentStep() {
             const fullName = document.getElementById('fullName').value.trim();
             const age = document.getElementById('age').value;
             const gender = document.getElementById('gender').value;
+            const heightFeet = document.getElementById('heightFeet').value;
+            const heightInches = document.getElementById('heightInches').value;
             if (!fullName) { alert('Please enter your full name'); return false; }
             if (!age || age < 18 || age > 100) { alert('Please enter a valid age (18-100)'); return false; }
             if (!gender) { alert('Please select your gender'); return false; }
+            if (!heightFeet || !heightInches) { alert('Please select your height'); return false; }
             break;
         case 2:
             const relationshipStatus = document.getElementById('relationshipStatus').value;
+            const datingIntentions = document.getElementById('datingIntentions').value;
             const currentLocation = document.getElementById('currentLocation').value;
             const hometown = document.getElementById('hometown').value;
             if (!relationshipStatus) { alert('Please select your relationship status'); return false; }
+            if (!datingIntentions) { alert('Please select your dating intentions'); return false; }
             if (!currentLocation) { alert('Please enter your current location'); return false; }
             if (!hometown) { alert('Please enter your hometown'); return false; }
             break;
         case 3:
-            const datingIntentions = document.getElementById('datingIntentions').value;
-            const heightFeet = document.getElementById('heightFeet').value;
-            const heightInches = document.getElementById('heightInches').value;
-            if (!datingIntentions) { alert('Please select your dating intentions'); return false; }
-            if (!heightFeet || !heightInches) { alert('Please select your height'); return false; }
+            const jobTitle = document.getElementById('jobTitle').value.trim();
+            const company = document.getElementById('company').value.trim();
+            const school = document.getElementById('school').value.trim();
+            const graduationYear = document.getElementById('graduationYear').value;
+            const highestDegree = document.getElementById('highestDegree').value;
+            if (!jobTitle) { alert('Please enter your job designation'); return false; }
+            if (!company) { alert('Please enter your company'); return false; }
+            if (!school) { alert('Please enter your graduation college/school'); return false; }
+            if (!graduationYear) { alert('Please enter your graduation year'); return false; }
+            if (!highestDegree) { alert('Please select your degree type'); return false; }
             break;
         case 4:
-            const occupation = document.getElementById('occupation').value.trim();
-            const jobTitle = document.getElementById('jobTitle').value.trim();
-            const school = document.getElementById('school').value.trim();
-            const highestDegree = document.getElementById('highestDegree').value;
-            if (!occupation) { alert('Please enter your occupation'); return false; }
-            if (!jobTitle) { alert('Please enter your job title'); return false; }
-            if (!school) { alert('Please enter your school or university'); return false; }
-            if (!highestDegree) { alert('Please select your highest degree'); return false; }
-            break;
-        case 5:
             const religion = document.getElementById('religion').value;
             const smoking = document.getElementById('smoking').value;
             const drinking = document.getElementById('drinking').value;
             if (!religion) { alert('Please select your religion'); return false; }
             if (!smoking) { alert('Please select your smoking preference'); return false; }
             if (!drinking) { alert('Please select your drinking preference'); return false; }
+            break;
+        case 5:
+            const bio = document.getElementById('bio').value.trim();
+            if (!bio) { alert('Please write a bio about yourself'); return false; }
             break;
         case 6:
             if (!document.getElementById('photo1').files.length && !document.getElementById('photo2').files.length) { alert('Please upload at least one photo'); return false; }
