@@ -333,10 +333,11 @@ function createProfileCard(profile) {
   
   // Work & Education
   let workEducationItems = [];
-  if (data.occupation) workEducationItems.push(`<div class="mb-2"><span class="font-medium text-primary">Occupation:</span> <span class="text-secondary">${data.occupation}</span></div>`);
-  if (data.jobTitle) workEducationItems.push(`<div class="mb-2"><span class="font-medium text-primary">Job Title:</span> <span class="text-secondary">${data.jobTitle}</span></div>`);
-  if (data.school) workEducationItems.push(`<div class="mb-2"><span class="font-medium text-primary">School/University:</span> <span class="text-secondary">${data.school}</span></div>`);
-  if (data.highestDegree) workEducationItems.push(`<div class="mb-2"><span class="font-medium text-primary">Highest Degree:</span> <span class="text-secondary">${data.highestDegree}</span></div>`);
+  if (data.jobTitle) workEducationItems.push(`<div class="mb-2"><span class="font-medium text-primary">Job Designation:</span> <span class="text-secondary">${data.jobTitle}</span></div>`);
+  if (data.company) workEducationItems.push(`<div class="mb-2"><span class="font-medium text-primary">Company:</span> <span class="text-secondary">${data.company}</span></div>`);
+  if (data.school) workEducationItems.push(`<div class="mb-2"><span class="font-medium text-primary">Graduation College/School:</span> <span class="text-secondary">${data.school}</span></div>`);
+  if (data.graduationYear) workEducationItems.push(`<div class="mb-2"><span class="font-medium text-primary">Graduation Year:</span> <span class="text-secondary">${data.graduationYear}</span></div>`);
+  if (data.highestDegree) workEducationItems.push(`<div class="mb-2"><span class="font-medium text-primary">Degree Type:</span> <span class="text-secondary">${data.highestDegree}</span></div>`);
   
   if (workEducationItems.length > 0) {
     profileDetails.push(`
@@ -360,6 +361,23 @@ function createProfileCard(profile) {
         <h4 class="text-primary font-semibold mb-3 text-lg">Location</h4>
         <div class="space-y-2 text-base">
           ${locationItems.join('')}
+        </div>
+      </div>
+    `);
+  }
+  
+  // Lifestyle
+  let lifestyleItems = [];
+  if (data.religion) lifestyleItems.push(`<div class="mb-2"><span class="font-medium text-primary">Religion:</span> <span class="text-secondary">${data.religion}</span></div>`);
+  if (data.smoking) lifestyleItems.push(`<div class="mb-2"><span class="font-medium text-primary">Smoking:</span> <span class="text-secondary">${data.smoking}</span></div>`);
+  if (data.drinking) lifestyleItems.push(`<div class="mb-2"><span class="font-medium text-primary">Drinking:</span> <span class="text-secondary">${data.drinking}</span></div>`);
+  
+  if (lifestyleItems.length > 0) {
+    profileDetails.push(`
+      <div class="px-6 py-4">
+        <h4 class="text-primary font-semibold mb-3 text-lg">Lifestyle</h4>
+        <div class="space-y-2 text-base">
+          ${lifestyleItems.join('')}
         </div>
       </div>
     `);

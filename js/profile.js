@@ -207,20 +207,22 @@ function populateEditForm() {
   document.getElementById('editName').value = userData.fullName || '';
   document.getElementById('editAge').value = userData.age || '';
   document.getElementById('editGender').value = userData.gender || '';
-  document.getElementById('editDatingPreferences').value = userData.datingPreferences || '';
-  document.getElementById('editRelationshipStatus').value = userData.relationshipStatus || '';
-  document.getElementById('editLocation').value = userData.currentLocation || '';
-  document.getElementById('editHometown').value = userData.hometown || '';
-  document.getElementById('editDatingIntentions').value = userData.datingIntentions || '';
   document.getElementById('editHeightFeet').value = userData.heightFeet || '';
   document.getElementById('editHeightInches').value = userData.heightInches || '';
-  document.getElementById('editOccupation').value = userData.occupation || '';
+  document.getElementById('editDatingPreferences').value = userData.datingPreferences || '';
+  document.getElementById('editRelationshipStatus').value = userData.relationshipStatus || '';
+  document.getElementById('editDatingIntentions').value = userData.datingIntentions || '';
+  document.getElementById('editLocation').value = userData.currentLocation || '';
+  document.getElementById('editHometown').value = userData.hometown || '';
   document.getElementById('editJobTitle').value = userData.jobTitle || '';
+  document.getElementById('editCompany').value = userData.company || '';
   document.getElementById('editSchool').value = userData.school || '';
+  document.getElementById('editGraduationYear').value = userData.graduationYear || '';
   document.getElementById('editHighestDegree').value = userData.highestDegree || '';
   document.getElementById('editReligion').value = userData.religion || '';
   document.getElementById('editSmoking').value = userData.smoking || '';
   document.getElementById('editDrinking').value = userData.drinking || '';
+  document.getElementById('editBio').value = userData.bio || '';
 }
 
 function updateProfileDisplay() {
@@ -347,20 +349,22 @@ async function saveProfileChanges() {
       fullName: document.getElementById('editName').value,
       age: document.getElementById('editAge').value,
       gender: document.getElementById('editGender').value,
-      datingPreferences: document.getElementById('editDatingPreferences').value,
-      relationshipStatus: document.getElementById('editRelationshipStatus').value,
-      currentLocation: document.getElementById('editLocation').value,
-      hometown: document.getElementById('editHometown').value,
-      datingIntentions: document.getElementById('editDatingIntentions').value,
       heightFeet: document.getElementById('editHeightFeet').value,
       heightInches: document.getElementById('editHeightInches').value,
-      occupation: document.getElementById('editOccupation').value,
+      datingPreferences: document.getElementById('editDatingPreferences').value,
+      relationshipStatus: document.getElementById('editRelationshipStatus').value,
+      datingIntentions: document.getElementById('editDatingIntentions').value,
+      currentLocation: document.getElementById('editLocation').value,
+      hometown: document.getElementById('editHometown').value,
       jobTitle: document.getElementById('editJobTitle').value,
+      company: document.getElementById('editCompany').value,
       school: document.getElementById('editSchool').value,
+      graduationYear: document.getElementById('editGraduationYear').value,
       highestDegree: document.getElementById('editHighestDegree').value,
       religion: document.getElementById('editReligion').value,
       smoking: document.getElementById('editSmoking').value,
       drinking: document.getElementById('editDrinking').value,
+      bio: document.getElementById('editBio').value,
       updatedAt: new Date()
     };
     if (window.userProfileData && window.userProfileData.photo1Url) {
@@ -485,7 +489,9 @@ function showEditProfile() {
   if (viewSection && editSection) {
     viewSection.classList.add('hidden');
     editSection.classList.remove('hidden');
+    document.querySelector('.bottom-nav').classList.add('hidden');
     populateEditForm();
+    switchToEditTab(); // Start with edit tab
   }
 }
 
@@ -495,6 +501,7 @@ function hideEditProfile() {
   if (viewSection && editSection) {
     editSection.classList.add('hidden');
     viewSection.classList.remove('hidden');
+    document.querySelector('.bottom-nav').classList.remove('hidden');
   }
 }
 
@@ -504,4 +511,189 @@ window.hideEditProfile = hideEditProfile;
 window.saveProfileChanges = saveProfileChanges;
 window.previewEditPhoto = previewEditPhoto;
 window.signOutUser = signOutUser;
-window.resendVerificationEmail = resendVerificationEmail; 
+window.switchToEditTab = switchToEditTab;
+window.switchToViewTab = switchToViewTab;
+window.resendVerificationEmail = resendVerificationEmail;
+
+// Tab switching functions
+function switchToEditTab() {
+  document.getElementById('editTabBtn').classList.add('text-primary', 'border-primary', 'bg-blue-50');
+  document.getElementById('editTabBtn').classList.remove('text-gray-500', 'border-transparent');
+  document.getElementById('viewTabBtn').classList.remove('text-primary', 'border-primary', 'bg-blue-50');
+  document.getElementById('viewTabBtn').classList.add('text-gray-500', 'border-transparent');
+  
+  document.getElementById('editTabContent').classList.remove('hidden');
+  document.getElementById('viewTabContent').classList.add('hidden');
+}
+
+function switchToViewTab() {
+  document.getElementById('viewTabBtn').classList.add('text-primary', 'border-primary', 'bg-blue-50');
+  document.getElementById('viewTabBtn').classList.remove('text-gray-500', 'border-transparent');
+  document.getElementById('editTabBtn').classList.remove('text-primary', 'border-primary', 'bg-blue-50');
+  document.getElementById('editTabBtn').classList.add('text-gray-500', 'border-transparent');
+  
+  document.getElementById('viewTabContent').classList.remove('hidden');
+  document.getElementById('editTabContent').classList.add('hidden');
+  
+  // Load the profile view
+  loadProfileView();
+}
+
+function loadProfileView() {
+  if (!window.userProfileData) return;
+  
+  const userData = window.userProfileData;
+  const container = document.querySelector('.profile-view-container');
+  
+  // Create a profile card similar to browse.js
+  const profileCard = createProfileViewCard(userData);
+  container.innerHTML = '';
+  container.appendChild(profileCard);
+}
+
+function createProfileViewCard(userData) {
+  // Get profile photos
+  let photos = [];
+  if (userData.photo1Url) {
+    photos.push({ url: userData.photo1Url, name: 'Photo 1' });
+  }
+  if (userData.photo2Url) {
+    photos.push({ url: userData.photo2Url, name: 'Photo 2' });
+  }
+  
+  // Calculate age
+  let age = userData.age;
+  
+  const card = document.createElement('div');
+  card.className = 'profile-card bg-white rounded-lg shadow-lg overflow-hidden';
+  
+  // Build the continuous scrollable content
+  let contentSections = [];
+  
+  // 1. First Photo
+  if (photos.length > 0 && photos[0].url && photos[0].url.trim() !== '') {
+    contentSections.push(`
+      <img src="${photos[0].url}" class="w-full h-80 object-cover" alt="Profile" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="w-full h-80 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center" style="display:none;">
+        <svg class="w-16 h-16 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+        </svg>
+      </div>
+    `);
+  } else {
+    contentSections.push(`
+      <div class="w-full h-80 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+        <svg class="w-16 h-16 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+        </svg>
+      </div>
+    `);
+  }
+  
+  // 2. Profile Details
+  let profileDetails = [];
+  
+  // Basic Info
+  profileDetails.push(`
+    <div class="px-6 py-4">
+      <h2 class="text-3xl font-bold text-primary mb-2">${userData.fullName || 'No name set'}, ${age || 'Age not set'}</h2>
+      <div class="text-secondary text-base mb-2">${userData.currentLocation || 'Location not set'}</div>
+      ${userData.gender ? `<div class="text-secondary text-base mb-2">${userData.gender}</div>` : ''}
+      ${userData.datingPreferences ? `<div class="text-secondary text-base mb-2">Interested in: ${userData.datingPreferences}</div>` : ''}
+    </div>
+  `);
+  
+  // Bio
+  if (userData.bio) {
+    profileDetails.push(`
+      <div class="px-6 py-4">
+        <h4 class="text-primary font-semibold mb-3 text-lg">About</h4>
+        <p class="text-secondary text-base leading-relaxed">${userData.bio}</p>
+      </div>
+    `);
+  }
+  
+  // Personal Information
+  let personalInfoItems = [];
+  if (userData.relationshipStatus) personalInfoItems.push(`<div class="mb-2"><span class="font-medium text-primary">Relationship Status:</span> <span class="text-secondary">${userData.relationshipStatus}</span></div>`);
+  if (userData.datingIntentions) personalInfoItems.push(`<div class="mb-2"><span class="font-medium text-primary">Looking for:</span> <span class="text-secondary">${userData.datingIntentions}</span></div>`);
+  if (userData.heightFeet && userData.heightInches) personalInfoItems.push(`<div class="mb-2"><span class="font-medium text-primary">Height:</span> <span class="text-secondary">${userData.heightFeet}'${userData.heightInches}"</span></div>`);
+  
+  if (personalInfoItems.length > 0) {
+    profileDetails.push(`
+      <div class="px-6 py-4">
+        <h4 class="text-primary font-semibold mb-3 text-lg">Personal Information</h4>
+        <div class="space-y-2 text-base">
+          ${personalInfoItems.join('')}
+        </div>
+      </div>
+    `);
+  }
+  
+  // Work & Education
+  let workEducationItems = [];
+  if (userData.jobTitle) workEducationItems.push(`<div class="mb-2"><span class="font-medium text-primary">Job Designation:</span> <span class="text-secondary">${userData.jobTitle}</span></div>`);
+  if (userData.company) workEducationItems.push(`<div class="mb-2"><span class="font-medium text-primary">Company:</span> <span class="text-secondary">${userData.company}</span></div>`);
+  if (userData.school) workEducationItems.push(`<div class="mb-2"><span class="font-medium text-primary">Graduation College/School:</span> <span class="text-secondary">${userData.school}</span></div>`);
+  if (userData.graduationYear) workEducationItems.push(`<div class="mb-2"><span class="font-medium text-primary">Graduation Year:</span> <span class="text-secondary">${userData.graduationYear}</span></div>`);
+  if (userData.highestDegree) workEducationItems.push(`<div class="mb-2"><span class="font-medium text-primary">Degree Type:</span> <span class="text-secondary">${userData.highestDegree}</span></div>`);
+  
+  if (workEducationItems.length > 0) {
+    profileDetails.push(`
+      <div class="px-6 py-4">
+        <h4 class="text-primary font-semibold mb-3 text-lg">Work & Education</h4>
+        <div class="space-y-2 text-base">
+          ${workEducationItems.join('')}
+        </div>
+      </div>
+    `);
+  }
+  
+  // Location
+  let locationItems = [];
+  if (userData.currentLocation) locationItems.push(`<div class="mb-2"><span class="font-medium text-primary">Current Location:</span> <span class="text-secondary">${userData.currentLocation}</span></div>`);
+  if (userData.hometown) locationItems.push(`<div class="mb-2"><span class="font-medium text-primary">Hometown:</span> <span class="text-secondary">${userData.hometown}</span></div>`);
+  
+  if (locationItems.length > 0) {
+    profileDetails.push(`
+      <div class="px-6 py-4">
+        <h4 class="text-primary font-semibold mb-3 text-lg">Location</h4>
+        <div class="space-y-2 text-base">
+          ${locationItems.join('')}
+        </div>
+      </div>
+    `);
+  }
+  
+  // Lifestyle
+  let lifestyleItems = [];
+  if (userData.religion) lifestyleItems.push(`<div class="mb-2"><span class="font-medium text-primary">Religion:</span> <span class="text-secondary">${userData.religion}</span></div>`);
+  if (userData.smoking) lifestyleItems.push(`<div class="mb-2"><span class="font-medium text-primary">Smoking:</span> <span class="text-secondary">${userData.smoking}</span></div>`);
+  if (userData.drinking) lifestyleItems.push(`<div class="mb-2"><span class="font-medium text-primary">Drinking:</span> <span class="text-secondary">${userData.drinking}</span></div>`);
+  
+  if (lifestyleItems.length > 0) {
+    profileDetails.push(`
+      <div class="px-6 py-4">
+        <h4 class="text-primary font-semibold mb-3 text-lg">Lifestyle</h4>
+        <div class="space-y-2 text-base">
+          ${lifestyleItems.join('')}
+        </div>
+      </div>
+    `);
+  }
+  
+  // Add profile details to content sections
+  contentSections.push(profileDetails.join(''));
+  
+  // 3. Second Image (if available)
+  if (photos.length > 1 && photos[1].url && photos[1].url.trim() !== '') {
+    contentSections.push(`
+      <img src="${photos[1].url}" class="w-full h-80 object-cover" alt="Profile photo 2" onerror="this.style.display='none';">
+    `);
+  }
+  
+  // Set the card content
+  card.innerHTML = contentSections.join('');
+  
+  return card;
+} 
