@@ -411,7 +411,9 @@ function optimizeImageForUpload(file) {
       canvas.height = height;
       ctx.drawImage(img, 0, 0, width, height);
       canvas.toBlob((blob) => {
-        const optimizedFile = new File([blob], file.name.replace(/\.[^/.]+$/, '.jpg'), {
+        // Fix: handle case where file.name is undefined (e.g. cropped blob)
+        const fileName = file.name ? file.name.replace(/\.[^/.]+$/, '.jpg') : 'photo.jpg';
+        const optimizedFile = new File([blob], fileName, {
           type: 'image/jpeg',
           lastModified: Date.now()
         });
@@ -491,7 +493,8 @@ function showEditProfile() {
     editSection.classList.remove('hidden');
     document.querySelector('.bottom-nav').classList.add('hidden');
     populateEditForm();
-    switchToEditTab(); // Start with edit tab
+    switchToEditTab();
+    initializePhotoGridFromProfile(); // Ensure photo grid is always initialized
   }
 }
 
@@ -524,6 +527,7 @@ function switchToEditTab() {
   
   document.getElementById('editTabContent').classList.remove('hidden');
   document.getElementById('viewTabContent').classList.add('hidden');
+  initializePhotoGridFromProfile(); // Also re-initialize grid on tab switch
 }
 
 function switchToViewTab() {
@@ -696,4 +700,227 @@ function createProfileViewCard(userData) {
   card.innerHTML = contentSections.join('');
   
   return card;
+} 
+
+// --- Advanced Photo Grid Logic for Edit Profile ---
+const NUM_PHOTOS = 6;
+let photoFiles = Array(NUM_PHOTOS).fill(null); // Local File objects
+let photoUrls = Array(NUM_PHOTOS).fill(null); // Uploaded URLs
+let photoStatus = Array(NUM_PHOTOS).fill('empty'); // 'empty', 'uploading', 'success', 'error'
+let draggingIndex = null;
+let cropper = null;
+let cropTargetIndex = null;
+
+function renderPhotoGrid() {
+    const grid = document.getElementById('photoGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    for (let i = 0; i < NUM_PHOTOS; i++) {
+        const slot = document.createElement('div');
+        slot.className = `relative group border-2 rounded-lg flex flex-col items-center justify-center aspect-square bg-white ${i === 0 ? 'border-primary' : 'border-gray-300'} cursor-pointer`;
+        slot.setAttribute('draggable', 'true');
+        slot.setAttribute('data-index', i);
+        // Drag handle
+        slot.innerHTML += `<div class="absolute top-2 left-2 z-10"><svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></div>`;
+        // Main photo badge
+        if (i === 0) {
+            slot.innerHTML += `<div class="absolute top-2 right-2 bg-primary text-white text-xs px-2 py-0.5 rounded-full z-10">Main</div>`;
+        }
+        // Photo or placeholder
+        if (photoUrls[i]) {
+            slot.innerHTML += `<img src="${photoUrls[i]}" class="w-full h-full object-cover rounded-lg" alt="Photo ${i+1}">`;
+        } else {
+            slot.innerHTML += `<div class="flex flex-col items-center justify-center h-full w-full"><svg class="mx-auto h-10 w-10 text-gray-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 48 48"><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="text-xs text-secondary">Add Photo</span></div>`;
+        }
+        // Upload status
+        if (photoStatus[i] === 'uploading') {
+            slot.innerHTML += `
+                <div class="absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center z-20">
+                    <svg class="animate-spin h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                    </svg>
+                    <span class="text-primary text-xs font-semibold ml-2">Uploading...</span>
+                </div>
+            `;
+        } else if (photoStatus[i] === 'error') {
+            slot.innerHTML += `<div class="absolute inset-0 bg-red-50 bg-opacity-80 flex items-center justify-center z-20"><span class="text-red-600 text-xs font-semibold">Upload Failed</span></div>`;
+        }
+        // Remove button
+        if (photoUrls[i]) {
+            slot.innerHTML += `<button class="absolute bottom-2 right-2 bg-white border border-gray-300 rounded-full p-1 z-10" onclick="removePhoto(${i}); event.stopPropagation();"><svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>`;
+        }
+        // Click to add/change photo
+        slot.addEventListener('click', (e) => {
+            if (photoStatus[i] === 'uploading') return;
+            openFileInput(i);
+        });
+        // Drag events
+        slot.addEventListener('dragstart', (e) => { draggingIndex = i; });
+        slot.addEventListener('dragover', (e) => { e.preventDefault(); slot.classList.add('ring-2', 'ring-primary'); });
+        slot.addEventListener('dragleave', (e) => { slot.classList.remove('ring-2', 'ring-primary'); });
+        slot.addEventListener('drop', (e) => { e.preventDefault(); slot.classList.remove('ring-2', 'ring-primary'); if (draggingIndex !== null && draggingIndex !== i) reorderPhotos(draggingIndex, i); draggingIndex = null; });
+        grid.appendChild(slot);
+    }
+}
+
+function openFileInput(index) {
+    cropTargetIndex = index;
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) openCropper(file);
+    };
+    input.click();
+}
+
+function openCropper(file) {
+    const modal = document.getElementById('cropperModal');
+    const img = document.getElementById('cropperImage');
+    const cancelBtn = document.getElementById('cancelCropBtn');
+    const confirmBtn = document.getElementById('confirmCropBtn');
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        img.src = e.target.result;
+        modal.classList.remove('hidden');
+        if (cropper) cropper.destroy();
+        cropper = new Cropper(img, { aspectRatio: 1, viewMode: 1 });
+    };
+    reader.readAsDataURL(file);
+    cancelBtn.onclick = () => { modal.classList.add('hidden'); if (cropper) cropper.destroy(); };
+    confirmBtn.onclick = () => {
+        if (!cropper) return;
+        cropper.getCroppedCanvas({ width: 800, height: 800 }).toBlob(blob => {
+            modal.classList.add('hidden');
+            cropper.destroy();
+            handlePhotoSelected(blob, cropTargetIndex);
+        }, 'image/jpeg', 0.9);
+    };
+}
+
+function handlePhotoSelected(file, index) {
+    photoFiles[index] = file;
+    photoStatus[index] = 'uploading';
+    renderPhotoGrid();
+    uploadPhotoAndSaveUrl(file, `photo${index+1}`).then(url => {
+        photoUrls[index] = url;
+        photoStatus[index] = 'success';
+        renderPhotoGrid();
+    }).catch(() => {
+        photoStatus[index] = 'error';
+        renderPhotoGrid();
+    });
+}
+
+function removePhoto(index) {
+    photoFiles[index] = null;
+    photoUrls[index] = null;
+    photoStatus[index] = 'empty';
+    renderPhotoGrid();
+}
+
+function reorderPhotos(from, to) {
+    [photoFiles[from], photoFiles[to]] = [photoFiles[to], photoFiles[from]];
+    [photoUrls[from], photoUrls[to]] = [photoUrls[to], photoUrls[from]];
+    [photoStatus[from], photoStatus[to]] = [photoStatus[to], photoStatus[from]];
+    renderPhotoGrid();
+}
+
+// Patch uploadPhotoAndSaveUrl to return URL
+async function uploadPhotoAndSaveUrl(file, photoKey) {
+    const currentUser = auth.currentUser;
+    if (!file || !currentUser || !currentUser.email) return Promise.reject();
+    try {
+        if (!firebase.storage) {
+            alert('Firebase Storage not available. Please refresh the page and try again.');
+            return Promise.reject();
+        }
+        const storage = firebase.storage();
+        const optimizedFile = await optimizeImageForUpload(file);
+        const storagePath = `users/${currentUser.email}/${photoKey}_${Date.now()}.jpg`;
+        const fileRef = storage.ref(storagePath);
+        const uploadPromise = new Promise((resolve, reject) => {
+            const uploadTask = fileRef.put(optimizedFile, {
+                contentType: 'image/jpeg',
+                cacheControl: 'public, max-age=31536000'
+            });
+            uploadTask.on('state_changed', 
+                (snapshot) => {},
+                (error) => { reject(error); },
+                () => { resolve(uploadTask); }
+            );
+        });
+        await uploadPromise;
+        const url = await fileRef.getDownloadURL();
+        return url;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+// On edit profile load, initialize photo grid from userProfileData
+function initializePhotoGridFromProfile() {
+    if (!window.userProfileData) return;
+    for (let i = 0; i < NUM_PHOTOS; i++) {
+        const key = `photo${i+1}Url`;
+        photoUrls[i] = window.userProfileData[key] || null;
+        photoStatus[i] = photoUrls[i] ? 'success' : 'empty';
+    }
+    renderPhotoGrid();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializePhotoGridFromProfile();
+});
+
+// When saving profile, update userProfileData with all photo URLs
+async function saveProfileChanges() {
+    try {
+        const currentUser = auth.currentUser;
+        if (!currentUser || !currentUser.email) {
+            alert('Please log in to save changes.');
+            return;
+        }
+        const updatedData = {
+            fullName: document.getElementById('editName').value,
+            age: document.getElementById('editAge').value,
+            gender: document.getElementById('editGender').value,
+            heightFeet: document.getElementById('editHeightFeet').value,
+            heightInches: document.getElementById('editHeightInches').value,
+            datingPreferences: document.getElementById('editDatingPreferences').value,
+            relationshipStatus: document.getElementById('editRelationshipStatus').value,
+            datingIntentions: document.getElementById('editDatingIntentions').value,
+            currentLocation: document.getElementById('editLocation').value,
+            hometown: document.getElementById('editHometown').value,
+            jobTitle: document.getElementById('editJobTitle').value,
+            company: document.getElementById('editCompany').value,
+            school: document.getElementById('editSchool').value,
+            graduationYear: document.getElementById('editGraduationYear').value,
+            highestDegree: document.getElementById('editHighestDegree').value,
+            religion: document.getElementById('editReligion').value,
+            smoking: document.getElementById('editSmoking').value,
+            drinking: document.getElementById('editDrinking').value,
+            bio: document.getElementById('editBio').value,
+            updatedAt: new Date()
+        };
+        // Save the new photo order
+        for (let i = 0; i < NUM_PHOTOS; i++) {
+            updatedData[`photo${i+1}Url`] = photoUrls[i] || null;
+            window.userProfileData[`photo${i+1}Url`] = photoUrls[i] || null;
+        }
+        const userDocRef = db.collection('users').doc(currentUser.email);
+        await userDocRef.set(updatedData, { merge: true });
+        if (window.userProfileData) {
+            Object.assign(window.userProfileData, updatedData);
+        } else {
+            window.userProfileData = updatedData;
+        }
+        alert('Profile updated successfully!');
+        hideEditProfile();
+        loadProfileData(window.userProfileData);
+    } catch (error) {
+        alert('Error saving profile changes. Please try again. Error: ' + error.message);
+    }
 } 
